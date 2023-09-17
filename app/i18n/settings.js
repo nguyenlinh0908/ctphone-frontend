@@ -1,4 +1,4 @@
-export const fallbackLng = "lo";
+export const fallbackLng = "vi";
 export const languages = [fallbackLng, "vi", "en"];
 export const defaultNS = "translation";
 

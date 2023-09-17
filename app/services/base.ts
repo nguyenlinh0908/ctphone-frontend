@@ -21,7 +21,7 @@ let requestCheckCounter = 0;
 
 export class BaseService {
   axiosInstance: AxiosInstance;
-  language = 'lo';
+  language = 'vi';
 
   constructor(baseURL = baseUrl.gateway) {
     this.axiosInstance = axios.create({

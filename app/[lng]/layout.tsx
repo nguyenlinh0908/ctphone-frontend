@@ -6,6 +6,8 @@ import { languages } from '@i18n/settings';
 import '../globals.css';
 import withAuth from '@hocs/withAuth';
 import { AxiosError } from 'axios';
+import LayoutNormal from './layout-normal';
+import LayoutCms from './layout-cms';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -31,12 +33,19 @@ const RootLayout = ({ children, params: { lng } }: { children: React.ReactNode; 
   return (
     <html lang={lng} dir={dir(lng)}>
       <head>
-        <title>TinTin</title>
+        <title>CTPhone</title>
       </head>
       <QueryClientProvider client={queryClient}>
-        <body className={`${inter.className} max-w-2xl mx-auto`}>
+        <body className={`${inter.className} mx-auto`}>
           {/* <SwitcherLanguage lng={lng} /> */}
-          {children}
+          <main>
+            <LayoutNormal
+              children={children}
+              params={{
+                lng: lng,
+              }}
+            />
+          </main>
         </body>
       </QueryClientProvider>
     </html>

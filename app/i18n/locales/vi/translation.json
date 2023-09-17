@@ -1,3 +1,12 @@
 {
-    "welcome":"Xin chao"
+  "welcome": "Xin chào",
+  "login": "Đăng nhập",
+  "forgot_password": "Quên mật khẩu",
+  "register_account_now": "Tạo tài khoản",
+  "you_do_not_account": "Bạn chưa có tài khoản",
+  "required_username": "Vui lòng nhập tên đăng nhập",
+  "required_password": "Vui lòng nhập mật khẩu",
+  "username": "Tên đăng nhập",
+  "password": "Mật khẩu",
+  "remember_me":"Nhớ mật khẩu"
 }

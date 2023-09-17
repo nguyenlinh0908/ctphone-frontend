@@ -1,3 +1,12 @@
 {
-    "welcome":"Welcome"
+  "welcome": "Welcome",
+  "login": "Login",
+  "forgot_password": "Forgot password",
+  "register_account_now": "Register now",
+  "you_do_not_account": "You don't have account",
+  "required_username": "Please input your Username!",
+  "required_password": "Please input your Password!",
+  "username": "Username",
+  "password": "Password",
+  "remember_me":"Remember me"
 }
