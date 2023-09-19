@@ -1,12 +1,41 @@
 'use client';
 
-import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { useTranslation } from '@i18n';
-import { Form, Input, Checkbox, Button, Row, Col, Image } from 'antd';
+import { Row, Col, Image, Form, Input, Button, Checkbox } from 'antd';
 import LoginBanner from '@public/login/VNU_M492_08 1.jpeg';
+import { LockOutlined, UserOutlined } from '@ant-design/icons';
+import { ILoginInput } from '@models/auth/auth.model';
+import { useState } from 'react';
+import { useTranslation } from '@i18n';
+import { useLogin } from './services/apis';
 
-export default function Login({ lng }: { lng: string }) {
+interface ILoginProps {
+  params: { lng: string };
+}
+
+export default function Login({ params: { lng } }: ILoginProps) {
+  const [loginInput, setLoginInput] = useState<ILoginInput>({ username: '', password: '' });
   const { t } = useTranslation(lng);
+  const { mutate: login, isSuccess } = useLogin();
+
+  const handleInputChange = (e: any) => {
+    switch (e.target.name) {
+      case 'username': {
+        setLoginInput((preState) => {
+          return { ...preState, username: e.target.value };
+        });
+        break;
+      }
+      case 'password': {
+        setLoginInput({ ...loginInput, password: e.target.value });
+        break;
+      }
+      default:
+    }
+  };
+
+  const handleSubmit = () => {
+    login(loginInput);
+  };
 
   return (
     <Row>
@@ -34,6 +63,8 @@ export default function Login({ lng }: { lng: string }) {
             <Input
               prefix={<UserOutlined className="site-form-item-icon p-3" />}
               placeholder={t('username') && 'Username'}
+              name="username"
+              onChange={(e) => handleInputChange(e)}
             />
           </Form.Item>
           <Form.Item
@@ -49,6 +80,8 @@ export default function Login({ lng }: { lng: string }) {
               prefix={<LockOutlined className="site-form-item-icon p-3" />}
               type="password"
               placeholder={t('password') && 'Password'}
+              name="password"
+              onChange={(e) => handleInputChange(e)}
             />
           </Form.Item>
           <Form.Item>
@@ -64,7 +97,7 @@ export default function Login({ lng }: { lng: string }) {
           </Form.Item>
 
           <Form.Item>
-            <Button size="large" type="primary" htmlType="submit" className="w-full">
+            <Button onClick={handleSubmit} size="large" type="primary" htmlType="submit" className="w-full">
               {t('login')}
             </Button>
             <div className="py-3 flex items-center">

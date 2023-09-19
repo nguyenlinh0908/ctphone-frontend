@@ -1,16 +1,23 @@
-'use client';
-import { Layout, Menu, Breadcrumb } from 'antd';
-const { Header, Content, Footer, Sider } = Layout;
+'use client'
 
-export default function LayoutNormal({
+import React from 'react';
+import { Breadcrumb, Layout, Menu, theme } from 'antd';
+
+const { Header, Content, Footer } = Layout;
+
+export default function PublicLayout({
   children,
   params: { lng },
 }: {
   children: React.ReactNode;
   params: { lng: string };
 }) {
+  const {
+    token: { colorBgContainer },
+  } = theme.useToken();
+
   return (
-    <Layout className="min-h-screen">
+    <Layout>
       <Header
         style={{
           position: 'sticky',
@@ -33,11 +40,8 @@ export default function LayoutNormal({
         />
       </Header>
       <Content className="site-layout" style={{ padding: '0 50px' }}>
-        <Breadcrumb style={{ margin: '16px 0' }}>
-          <Breadcrumb.Item>Home</Breadcrumb.Item>
-          <Breadcrumb.Item>Login</Breadcrumb.Item>
-        </Breadcrumb>
-        <div style={{ padding: 24, background: '#FFFFFF' }}>{children}</div>
+        <Breadcrumb style={{ margin: '16px 0' }} items={[{title: "Home"},{title: "List"},{title: "App"}]}></Breadcrumb>
+        <div style={{ padding: 24, minHeight: 380, background: colorBgContainer }}>{children}</div>
       </Content>
       <Footer style={{ textAlign: 'center' }}>Ant Design ©2023 Created by Ant UED</Footer>
     </Layout>
