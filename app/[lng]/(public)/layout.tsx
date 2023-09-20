@@ -12,9 +12,6 @@ export default function PublicLayout({
   children: React.ReactNode;
   params: { lng: string };
 }) {
-  const {
-    token: { colorBgContainer },
-  } = theme.useToken();
 
   return (
     <Layout>
@@ -41,7 +38,7 @@ export default function PublicLayout({
       </Header>
       <Content className="site-layout" style={{ padding: '0 50px' }}>
         <Breadcrumb style={{ margin: '16px 0' }} items={[{title: "Home"},{title: "List"},{title: "App"}]}></Breadcrumb>
-        <div style={{ padding: 24, minHeight: 380, background: colorBgContainer }}>{children}</div>
+        <div style={{ padding: 24, minHeight: 380, background: "#FFFFFF" }}>{children}</div>
       </Content>
       <Footer style={{ textAlign: 'center' }}>Ant Design ©2023 Created by Ant UED</Footer>
     </Layout>

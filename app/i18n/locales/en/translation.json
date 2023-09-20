@@ -8,5 +8,13 @@
   "required_password": "Please input your Password!",
   "username": "Username",
   "password": "Password",
-  "remember_me":"Remember me"
+  "remember_me": "Remember me",
+  "full_name": "Full Name",
+  "address": "Address",
+  "gender": "Gender",
+  "phone":"Phone",
+  "citizen_id":"CitizenId",
+  "date_of_birth":"Date Of Birth",
+  "male":"Male",
+  "female":"Female"
 }

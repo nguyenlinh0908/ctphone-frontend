@@ -1,6 +1,6 @@
-import { getAuthLocal } from '@utils/token';
 import { useParams, usePathname, useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import { getCookie } from 'cookies-next';
 
 const withAuth = (Component: any) => {
   // eslint-disable-next-line react/display-name
@@ -8,18 +8,17 @@ const withAuth = (Component: any) => {
     const router = useRouter();
     const { lng } = useParams();
     const pathname = usePathname();
-    const auth = getAuthLocal();
 
-    // useEffect(() => {
-    //   if (auth) {
-    //     if (pathname.endsWith('login')) {
-    //       router.push(`/${lng}`);
-    //     }
-    //   } else {
-    //     router.push(`/${lng}/auth/login`);
-    //   }
-    // }, []);
-
+    useEffect(() => {
+      const refreshToken = getCookie('refreshToken');
+      if (refreshToken) {
+        if (pathname.endsWith('login')) {
+          router.push(`/${lng}/staff`);
+        }
+      } else {
+        router.push(`/${lng}/login`);
+      }
+    }, []);
     return <Component {...props} />;
   };
 };

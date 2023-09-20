@@ -3,10 +3,12 @@
 import { Row, Col, Image, Form, Input, Button, Checkbox } from 'antd';
 import LoginBanner from '@public/login/VNU_M492_08 1.jpeg';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { ILoginInput } from '@models/auth/auth.model';
-import { useState } from 'react';
+import { ILoginInput } from '@interfaces/auth/auth.interface';
+import { useEffect, useState } from 'react';
 import { useTranslation } from '@i18n';
 import { useLogin } from './services/apis';
+import { getCookie } from 'cookies-next';
+import { useRouter } from 'next/navigation';
 
 interface ILoginProps {
   params: { lng: string };
@@ -14,8 +16,14 @@ interface ILoginProps {
 
 export default function Login({ params: { lng } }: ILoginProps) {
   const [loginInput, setLoginInput] = useState<ILoginInput>({ username: '', password: '' });
+  const router = useRouter();
   const { t } = useTranslation(lng);
   const { mutate: login, isSuccess } = useLogin();
+
+  useEffect(() => {
+    const refreshToken = getCookie('refreshToken');
+    if (refreshToken) router.push('/');
+  }, []);
 
   const handleInputChange = (e: any) => {
     switch (e.target.name) {

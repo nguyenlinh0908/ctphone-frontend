@@ -1,12 +1,14 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 // import { getAuthLocal } from '@utils/token';
-console.log('process.env.API_ENDPOINT :>> ', process.env.API_ENDPOINT);
 export const GATEWAY = {
   root: process.env.API_ENDPOINT || 'http:127.0.0.1/api/v1',
   auth: {
     login: '/auth/login',
     logout: '/auth/logout',
   },
+  staff:{
+    staffs: "/staff"
+  }
 };
 
 // let requestCheckCounter = 0;

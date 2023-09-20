@@ -9,6 +9,7 @@ import {
   TeamOutlined,
   UserOutlined,
 } from '@ant-design/icons';
+import withAuth from '@hocs/withAuth';
 import type { MenuProps } from 'antd';
 import { Breadcrumb, Button, Layout, Menu, theme } from 'antd';
 import { useState } from 'react';
@@ -34,7 +35,7 @@ const items: MenuItem[] = [
   getItem('Files', '9', <FileOutlined />),
 ];
 
-export default function CmsLayout({
+ function CmsLayout({
   children,
   params: { lng },
 }: {
@@ -74,3 +75,5 @@ export default function CmsLayout({
     </Layout>
   );
 }
+
+export default withAuth(CmsLayout)
