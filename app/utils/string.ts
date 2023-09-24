@@ -7,3 +7,7 @@ export const timestampMongoToDate = (timestamp: string, format: string = 'DD/MM/
 export const formatPhoneNumber = (phone: string, countryCode: string = '+84') => {
   return phone.replace(countryCode, "0");
 };
+
+export const formatPrice = (price:string)=>{
+  return Number(price).toLocaleString('vi-VI')
+}

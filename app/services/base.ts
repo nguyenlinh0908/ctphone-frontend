@@ -6,9 +6,13 @@ export const GATEWAY = {
     login: '/auth/login',
     logout: '/auth/logout',
   },
-  staff:{
-    staffs: "/staff"
-  }
+  staff: {
+    staffs: '/staff',
+  },
+  product: {
+    all: '/product/all',
+    find_by_id: '/product',
+  },
 };
 
 // let requestCheckCounter = 0;
@@ -20,14 +24,14 @@ export class BaseService {
   constructor(baseURL = GATEWAY.root) {
     this.axiosInstance = axios.create({
       baseURL,
-        headers: {
-          Accept: 'application/json',
-          'Cache-Control': 'no-cache',
-          'Content-Type': 'application/json',
-          'Accept-Language': this.language,
-        },
-        timeout: 60000,
-        // withCredentials: true,
+      headers: {
+        Accept: 'application/json',
+        'Cache-Control': 'no-cache',
+        'Content-Type': 'application/json',
+        'Accept-Language': this.language,
+      },
+      timeout: 60000,
+      // withCredentials: true,
     });
 
     // this.initInterceptor();

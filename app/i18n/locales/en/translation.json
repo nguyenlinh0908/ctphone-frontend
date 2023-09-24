@@ -16,5 +16,9 @@
   "citizen_id":"CitizenId",
   "date_of_birth":"Date Of Birth",
   "male":"Male",
-  "female":"Female"
+  "female":"Female",
+  "storage":"Storage",
+  "color":"Color",
+  "rating":"Rating",
+  "buy_now":"BUY NOW"
 }

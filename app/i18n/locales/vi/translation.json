@@ -8,13 +8,17 @@
   "required_password": "Vui lòng nhập mật khẩu",
   "username": "Tên đăng nhập",
   "password": "Mật khẩu",
-  "remember_me":"Nhớ mật khẩu",
+  "remember_me": "Nhớ mật khẩu",
   "full_name": "Họ tên",
   "address": "Địa chỉ",
   "gender": "Giới tính",
-  "phone":"Số điện thoại",
-  "citizen_id":"Căn cước",
-  "date_of_birth":"Ngày sinh",
-  "male":"Nam",
-  "female":"Nữ"
+  "phone": "Số điện thoại",
+  "citizen_id": "Căn cước",
+  "date_of_birth": "Ngày sinh",
+  "male": "Nam",
+  "female": "Nữ",
+  "storage": "Dung lượng",
+  "color": "Màu sắc",
+  "rating":"Đánh giá",
+  "buy_now":"MUA NGAY"
 }
