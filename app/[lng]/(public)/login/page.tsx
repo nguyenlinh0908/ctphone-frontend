@@ -9,6 +9,7 @@ import { useTranslation } from '@i18n';
 import { useLogin } from './services/apis';
 import { getCookie } from 'cookies-next';
 import { useRouter } from 'next/navigation';
+import { signIn } from 'next-auth/react';
 
 interface ILoginProps {
   params: { lng: string };

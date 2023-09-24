@@ -6,7 +6,6 @@ import type { ColumnsType } from 'antd/es/table';
 import { useGetStaffs } from './services/apis';
 import { IPaginateResponse } from '@interfaces/auth/paginate.interface';
 import { IStaff } from '@interfaces/auth/staff.interface';
-import Column from 'antd/es/table/Column';
 import { useTranslation } from '@i18n';
 import { useParams } from 'next/navigation';
 import { formatPhoneNumber, timestampMongoToDate } from '@utils/string';

@@ -12,7 +12,8 @@ import {
 import withAuth from '@hocs/withAuth';
 import type { MenuProps } from 'antd';
 import { Breadcrumb, Button, Layout, Menu, theme } from 'antd';
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
+import CmsLoading from './loading';
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -35,13 +36,7 @@ const items: MenuItem[] = [
   getItem('Files', '9', <FileOutlined />),
 ];
 
- function CmsLayout({
-  children,
-  params: { lng },
-}: {
-  children: React.ReactNode;
-  params: { lng: string };
-}) {
+function CmsLayout({ children, params: { lng } }: { children: React.ReactNode; params: { lng: string } }) {
   const [collapsed, setCollapsed] = useState(false);
   const {
     token: { colorBgContainer },
@@ -49,31 +44,33 @@ const items: MenuItem[] = [
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
-      <Sider trigger={null} collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
-        <div className="demo-logo-vertical" />
-        <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" items={items} />
-      </Sider>
-      <Layout>
-        <Header style={{ padding: 0, background: colorBgContainer }}>
-          <Button
-            type="text"
-            icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-            onClick={() => setCollapsed(!collapsed)}
-            style={{
-              fontSize: '16px',
-              width: 64,
-              height: 64,
-            }}
-          />
-        </Header>
-        <Content style={{ margin: '0 16px' }}>
-          <Breadcrumb style={{ margin: '16px 0' }} items={[{ title: 'Apple' }, { title: 'Samsung' }]} />
-          <div style={{ padding: 24, minHeight: 360, background: colorBgContainer }}>{children}</div>
-        </Content>
-        <Footer style={{ textAlign: 'center' }}>Ant Design ©2023 Created by Ant UED</Footer>
-      </Layout>
+      <Suspense fallback={<CmsLoading />}>
+        <Sider trigger={null} collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
+          <div className="demo-logo-vertical" />
+          <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" items={items} />
+        </Sider>
+        <Layout>
+          <Header style={{ padding: 0, background: colorBgContainer }}>
+            <Button
+              type="text"
+              icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+              onClick={() => setCollapsed(!collapsed)}
+              style={{
+                fontSize: '16px',
+                width: 64,
+                height: 64,
+              }}
+            />
+          </Header>
+          <Content style={{ margin: '0 16px' }}>
+            <Breadcrumb style={{ margin: '16px 0' }} items={[{ title: 'Apple' }, { title: 'Samsung' }]} />
+            <div style={{ padding: 24, minHeight: 360, background: colorBgContainer }}>{children}</div>
+          </Content>
+          <Footer style={{ textAlign: 'center' }}>Ant Design ©2023 Created by Ant UED</Footer>
+        </Layout>
+      </Suspense>
     </Layout>
   );
 }
 
-export default withAuth(CmsLayout)
+export default withAuth(CmsLayout);

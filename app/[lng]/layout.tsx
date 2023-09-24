@@ -42,4 +42,4 @@ const RootLayout = ({ children, params: { lng } }: { children: React.ReactNode; 
   );
 };
 
-export default withAuth(RootLayout);
+export default RootLayout;
