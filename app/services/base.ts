@@ -13,6 +13,9 @@ export const GATEWAY = {
     all: '/product/all',
     find_by_id: '/product',
   },
+  category: {
+    find: '/category',
+  },
 };
 
 // let requestCheckCounter = 0;
