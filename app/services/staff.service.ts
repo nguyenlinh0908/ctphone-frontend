@@ -1,6 +1,6 @@
-import { IPaginateResponse } from '@interfaces/auth/paginate.interface';
+import { IPaginateResponse } from '@interfaces/paginate.interface';
 import { BaseService, GATEWAY } from './base';
-import { IStaff } from '@interfaces/auth/staff.interface';
+import { IStaff } from '@interfaces/staff/staff.interface';
 
 export class StaffService {
   private staffService: BaseService;

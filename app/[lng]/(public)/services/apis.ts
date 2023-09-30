@@ -1,4 +1,6 @@
-import { IFilterCategory } from '@interfaces/auth/category.interface';
+import { IFilterCategory } from '@interfaces/category/category.interface';
+import { IPaginateDto } from '@interfaces/paginate.interface';
+import { IProductFilter } from '@interfaces/product/product.interface';
 import { CategoryService } from '@services/category.service';
 import { ProductService } from '@services/product.service';
 import { useQuery } from 'react-query';
@@ -10,6 +12,6 @@ export const useNavigationCategories = (filter: IFilterCategory) => {
   return useQuery('navigation', () => categoryService.navigationCategories(filter));
 };
 
-export const useAllProducts = () => {
-  return useQuery('allProducts', () => productService.all());
+export const useProductsLine = (paginate: IPaginateDto, filter: IProductFilter) => {
+  return useQuery('productsLine', () => productService.findLine(paginate, filter));
 };

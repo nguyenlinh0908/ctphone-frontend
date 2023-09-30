@@ -1,4 +1,4 @@
-import { ICategory, IFilterCategory } from '@interfaces/auth/category.interface';
+import { ICategory, IFilterCategory } from '@interfaces/category/category.interface';
 import { BaseService, GATEWAY } from './base';
 
 export class CategoryService {

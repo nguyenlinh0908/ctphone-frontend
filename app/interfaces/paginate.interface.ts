@@ -5,3 +5,9 @@ export interface IPaginateResponse<T> {
   totalPages: number;
   totalRecords: number;
 }
+
+export interface IPaginateDto {
+  limit: number;
+
+  page: number;
+}

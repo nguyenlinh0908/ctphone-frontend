@@ -1,5 +1,6 @@
-import { IProduct } from '@interfaces/auth/product.interface';
+import { IProduct, IProductFilter } from '@interfaces/product/product.interface';
 import { BaseService, GATEWAY } from './base';
+import { IPaginateDto } from '@interfaces/paginate.interface';
 
 export class ProductService {
   private productService: BaseService;
@@ -12,7 +13,20 @@ export class ProductService {
     return this.productService.get<IProduct[]>({ url: `${GATEWAY.product.all}` });
   }
 
-  findById(id:string){
+  findById(id: string) {
     return this.productService.get<IProduct>({ url: `${GATEWAY.product.find_by_id}/${id}` });
+  }
+
+  find(paginate: IPaginateDto, filter: IProductFilter) {
+    return this.productService.get<IProduct[]>({
+      url: `${GATEWAY.product.find}?limit=${paginate.limit}&page=${paginate.page}`,
+      data: { ...filter },
+    });
+  }
+
+  findLine(paginate: IPaginateDto, filter: IProductFilter) {
+    return this.productService.get<IProduct[]>({
+      url: `${GATEWAY.product.line}?limit=${paginate.limit}&page=${paginate.page}&categoryId=${filter.categoryId}`,
+    });
   }
 }

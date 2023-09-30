@@ -1,4 +1,4 @@
-import { IProduct } from '@interfaces/auth/product.interface';
+import { IProduct } from '@interfaces/product/product.interface';
 import { formatPrice } from '@utils/string';
 import { Card } from 'antd';
 import Link from 'next/link';
@@ -12,7 +12,7 @@ export default function ProductCard({ _id, avatar, name, price }: IProduct) {
           hoverable
           style={{ width: 258, minHeight: 423 }}
           cover={
-            <img alt="example" src="https://shopdunk.com/images/thumbs/0008734_iphone-14-pro-128gb_240.png" />
+            <img alt="example" src={avatar} />
           }
         >
           <h3 className="text-left text-lg">{name}</h3>
