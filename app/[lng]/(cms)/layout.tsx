@@ -14,6 +14,7 @@ import type { MenuProps } from 'antd';
 import { Breadcrumb, Button, Layout, Menu, theme } from 'antd';
 import { Suspense, useState } from 'react';
 import CmsLoading from './loading';
+import Link from 'next/link';
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -29,8 +30,8 @@ function getItem(label: React.ReactNode, key: React.Key, icon?: React.ReactNode,
 }
 
 const items: MenuItem[] = [
-  getItem('Dashboard', '1', <PieChartOutlined />),
-  getItem('Staff', '2', <DesktopOutlined />),
+  getItem(<Link href={'/dashboard'}>Dashboard</Link>, '1', <PieChartOutlined />),
+  getItem(<Link href={'/staff'}>Staff</Link>, '2', <DesktopOutlined />),
   getItem('User', 'sub1', <UserOutlined />, [getItem('Tom', '3'), getItem('Bill', '4'), getItem('Alex', '5')]),
   getItem('Team', 'sub2', <TeamOutlined />, [getItem('Team 1', '6'), getItem('Team 2', '8')]),
   getItem('Files', '9', <FileOutlined />),

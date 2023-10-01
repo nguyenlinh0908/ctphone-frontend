@@ -1,6 +1,8 @@
 import { IProduct, IProductFilter } from '@interfaces/product/product.interface';
 import { BaseService, GATEWAY } from './base';
 import { IPaginateDto } from '@interfaces/paginate.interface';
+import { IResAPI } from '@interfaces/base-response.interface';
+import { buildQueryString } from '@utils/string';
 
 export class ProductService {
   private productService: BaseService;
@@ -10,23 +12,18 @@ export class ProductService {
   }
 
   all() {
-    return this.productService.get<IProduct[]>({ url: `${GATEWAY.product.all}` });
+    return this.productService.get<IResAPI<IProduct>>({ url: `${GATEWAY.product.all}` });
   }
 
   findById(id: string) {
-    return this.productService.get<IProduct>({ url: `${GATEWAY.product.find_by_id}/${id}` });
+    return this.productService.get<IResAPI<IProduct>>({ url: `${GATEWAY.product.find_by_id}/${id}` });
   }
 
   find(paginate: IPaginateDto, filter: IProductFilter) {
-    return this.productService.get<IProduct[]>({
-      url: `${GATEWAY.product.find}?limit=${paginate.limit}&page=${paginate.page}`,
-      data: { ...filter },
-    });
-  }
-
-  findLine(paginate: IPaginateDto, filter: IProductFilter) {
-    return this.productService.get<IProduct[]>({
-      url: `${GATEWAY.product.line}?limit=${paginate.limit}&page=${paginate.page}&categoryId=${filter.categoryId}`,
+    const queryString = buildQueryString({ ...paginate, ...filter });
+    console.log('queryString :>> ', queryString);
+    return this.productService.get<IResAPI<IProduct[]>>({
+      url: `${GATEWAY.product.find}${queryString}`,
     });
   }
 }

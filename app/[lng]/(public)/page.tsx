@@ -1,14 +1,14 @@
 'use client';
 
-import { useProductsLine } from './services/apis';
+import { useProducts } from './services/apis';
 import ProductLine from './component/product-line';
 
 export default function HomePage() {
-  const { data: iphones,  } = useProductsLine({ limit: 5, page: 1 }, { categoryId: '6515967d0f823a5d715b7d1e' });
+  const { data: iphones } = useProducts({ limit: 5, page: 1 }, { categoryId: '651857d727a7af5ea5e39958' });
 
   return (
     <>
-      <ProductLine categoryId='6515967d0f823a5d715b7d1e' title={'IPhone'} products={iphones || []} />
+      <ProductLine categoryId="651857d727a7af5ea5e39958" title={'IPhone'} products={iphones?.data || []} />
     </>
   );
 }

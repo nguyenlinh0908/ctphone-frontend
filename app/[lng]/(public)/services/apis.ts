@@ -12,6 +12,6 @@ export const useNavigationCategories = (filter: IFilterCategory) => {
   return useQuery('navigation', () => categoryService.navigationCategories(filter));
 };
 
-export const useProductsLine = (paginate: IPaginateDto, filter: IProductFilter) => {
-  return useQuery('productsLine', () => productService.findLine(paginate, filter));
+export const useProducts = (paginate: IPaginateDto, filter: IProductFilter) => {
+  return useQuery([`products`, filter], () => productService.find(paginate, filter));
 };

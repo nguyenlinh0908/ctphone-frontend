@@ -13,12 +13,13 @@ const withAuth = (Component: any) => {
       const refreshToken = getCookie('refreshToken');
       if (refreshToken) {
         if (pathname.endsWith('login')) {
-          router.push(`/${lng}/staff`);
+          router.push(`/${lng}/dashboard`);
         }
       } else {
         router.push(`/${lng}/login`);
       }
     }, []);
+
     return <Component {...props} />;
   };
 };

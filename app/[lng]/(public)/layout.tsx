@@ -1,9 +1,12 @@
 'use client';
 
 import React, { useEffect } from 'react';
-import { Breadcrumb, Layout, Menu, Space, theme } from 'antd';
+import { Breadcrumb, Layout, Menu, MenuProps, Space, theme } from 'antd';
 import { useNavigationCategories } from './services/apis';
 import { useParams } from 'next/navigation';
+import Link from 'next/link';
+import MenuItem from 'antd/es/menu/MenuItem';
+import { HomeOutlined, MailOutlined } from '@ant-design/icons';
 
 const { Header, Content, Footer } = Layout;
 
@@ -35,17 +38,30 @@ export default function PublicLayout({
           mode="horizontal"
           defaultSelectedKeys={['2']}
           items={
-            categories &&
-            categories.map((category, idx) => ({
-              key: category._id,
-              label: category.name,
-            }))
+            categories && [
+              {
+                key: 'home',
+                label: (
+                  <Link href={'/'}>
+                    <HomeOutlined />
+                  </Link>
+                ),
+              },
+              ...categories.data.map((category, idx) => ({
+                key: category._id,
+                label: (
+                  <>
+                    <Link href={`/category/${category._id}`}>{category.name}</Link>
+                  </>
+                ),
+              })),
+            ]
           }
         />
       </Header>
       <Content className="site-layout" style={{ padding: '0 50px' }}>
-        <Breadcrumb className="m-3" items={[{ title: 'Home' }, { title: 'List' }, { title: 'App' }]}></Breadcrumb>
-        <div className='px-60 min-h-[75vh]'>{children}</div>
+        <Breadcrumb className="m-3" items={[{ title: 'Home' }, { title: 'List' }]}></Breadcrumb>
+        <div className="px-60 min-h-[100vh]">{children}</div>
       </Content>
       <Footer className="text-center">CTPhone</Footer>
     </Layout>

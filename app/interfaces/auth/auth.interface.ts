@@ -6,6 +6,10 @@ export interface ILoginInput {
 export interface ILoginResponse {
   accessToken: string;
   refreshToken: string;
-  accessTokenExpiresIn: number;
-  refreshTokenExpiresIn: number;
+  accessTokenExpiresAt: number;
+  refreshTokenExpiresAt: number;
+}
+
+export interface IGenAccessTokenInput {
+  refreshToken: string;
 }

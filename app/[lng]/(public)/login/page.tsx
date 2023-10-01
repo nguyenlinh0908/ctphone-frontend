@@ -9,7 +9,6 @@ import { useTranslation } from '@i18n';
 import { useLogin } from './services/apis';
 import { getCookie } from 'cookies-next';
 import { useRouter } from 'next/navigation';
-import { signIn } from 'next-auth/react';
 
 interface ILoginProps {
   params: { lng: string };
@@ -48,10 +47,10 @@ export default function Login({ params: { lng } }: ILoginProps) {
 
   return (
     <Row>
-      <Col span={12}>
+      <Col>
         <Image preview={false} className="w-full" src={LoginBanner.src} />
       </Col>
-      <Col span={12}>
+      <Col>
         <Form
           name="normal_login"
           className="login-form"
