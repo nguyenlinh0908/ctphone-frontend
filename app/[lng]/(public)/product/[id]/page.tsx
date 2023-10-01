@@ -20,10 +20,6 @@ export default function ProductDetail() {
     { sku: product?.data.sku },
   );
 
-  useEffect(() => {
-    console.log('products :>> ', products);
-  }, [productsSuccess]);
-
   return (
     <>
       {isSuccess && (

@@ -2,9 +2,8 @@
 
 import { useTranslation } from '@i18n';
 import { IProduct } from '@interfaces/product/product.interface';
-import { Button } from 'antd';
+import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import { useState } from 'react';
 
 export default function Attributes({ primaryProduct, products }: { primaryProduct: IProduct; products: IProduct[] }) {
   const { lng } = useParams();
@@ -23,7 +22,7 @@ export default function Attributes({ primaryProduct, products }: { primaryProduc
                   i._id == primaryProduct._id ? 'border-blue-300' : 'border-gray-300'
                 } rounded-md w-20 px-3 py-2 text-center `}
               >
-                {i.rom}
+                <Link href={`/product/${i._id}`}>{i.rom}</Link>
               </li>
             );
           })}
@@ -34,13 +33,17 @@ export default function Attributes({ primaryProduct, products }: { primaryProduc
         <div className="flex justify-start gap-3 mt-3">
           {products.map((i, idx) => {
             return (
-              <div
-                key={idx}
-                className={`w-7 h-7 rounded-full ${
-                  i._id == primaryProduct._id && ' border-1 border-solid border-blue-300'
-                }`}
-                style={{ backgroundColor: i.colorCode }}
-              ></div>
+              <>
+                <Link href={`/product/${i._id}`}>
+                  <div
+                    key={idx}
+                    className={`w-7 h-7 rounded-full ${
+                      i._id == primaryProduct._id && ' border-1 border-solid border-blue-300'
+                    }`}
+                    style={{ backgroundColor: i.colorCode }}
+                  ></div>
+                </Link>
+              </>
             );
           })}
         </div>

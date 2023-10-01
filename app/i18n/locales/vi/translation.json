@@ -19,7 +19,16 @@
   "female": "Nữ",
   "storage": "Dung lượng",
   "color": "Màu sắc",
-  "rating":"Đánh giá",
-  "buy_now":"MUA NGAY",
-  "see_more":"Xem thêm"
+  "rating": "Đánh giá",
+  "buy_now": "MUA NGAY",
+  "see_more": "Xem thêm",
+  "photo": "Hình ảnh",
+  "product_name": "Tên sản phẩm",
+  "price": "Giá bán",
+  "quantity": "Số lượng",
+  "total": "Tổng cộng",
+  "sub_total": "Tổng phụ",
+  "checkout": "Tiến hành đặt hàng",
+  "coupon": "Mã giảm giá",
+  "apply": "Áp dụng"
 }

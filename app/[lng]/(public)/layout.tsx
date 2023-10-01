@@ -6,7 +6,7 @@ import { useNavigationCategories } from './services/apis';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import MenuItem from 'antd/es/menu/MenuItem';
-import { HomeOutlined, MailOutlined } from '@ant-design/icons';
+import { HomeOutlined, MailOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 
 const { Header, Content, Footer } = Layout;
 
@@ -34,6 +34,7 @@ export default function PublicLayout({
       >
         <div className="demo-logo" />
         <Menu
+          className="w-full"
           theme="dark"
           mode="horizontal"
           defaultSelectedKeys={['2']}
@@ -55,6 +56,16 @@ export default function PublicLayout({
                   </>
                 ),
               })),
+              {
+                key: 'cart',
+                label: (
+                  <>
+                    <Link href={'/cart'}>
+                      <ShoppingCartOutlined />
+                    </Link>
+                  </>
+                ),
+              },
             ]
           }
         />
