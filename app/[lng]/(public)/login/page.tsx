@@ -46,11 +46,11 @@ export default function Login({ params: { lng } }: ILoginProps) {
   };
 
   return (
-    <Row>
-      <Col>
-        <Image preview={false} className="w-full" src={LoginBanner.src} />
+    <Row gutter={16}>
+      <Col span={12}>
+        <Image preview={false} className="w-50" src={LoginBanner.src} />
       </Col>
-      <Col>
+      <Col span={24-12}>
         <Form
           name="normal_login"
           className="login-form"

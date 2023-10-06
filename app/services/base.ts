@@ -22,6 +22,13 @@ export const GATEWAY = {
   category: {
     find: '/category',
   },
+  order: {
+    cart: {
+      update: '/order/cart',
+      my_cart: '/order/cart',
+      my_cart_detail: '/order/cart/detail',
+    },
+  },
 };
 
 let requestCheckCounter = 0;
@@ -53,11 +60,10 @@ export class BaseService {
       }
       const refreshToken = getCookie('refreshToken');
       let accessToken = getCookie('accessToken');
-      const accessTokenExpiresAt = getCookie('accessTokenExpireAt') || 0;
-      const refreshTokenExpiresAt = getCookie('refreshTokenExpireAt') || 0;
+      const accessTokenExpiresAt = getCookie('accessTokenExpiresAt') || 0;
+      const refreshTokenExpiresAt = getCookie('refreshTokenExpiresAt') || 0;
 
       const currentTime = new Date().getTime();
-
       if (refreshToken && +refreshTokenExpiresAt > currentTime) {
         request.headers.Authorization = `Bearer ${accessToken}`;
         if (+accessTokenExpiresAt < currentTime) {
@@ -73,16 +79,16 @@ export class BaseService {
                 if (res.data.accessToken) {
                   setCookie('accessToken', res.data.accessToken);
                   setCookie('refreshToken', res.data.refreshToken);
-                  setCookie('accessTokenExpireAt', res.data.accessTokenExpiresAt);
-                  setCookie('refreshTokenExpireAt', res.data.refreshTokenExpiresAt);
+                  setCookie('accessTokenExpiresAt', res.data.accessTokenExpiresAt);
+                  setCookie('refreshTokenExpiresAt', res.data.refreshTokenExpiresAt);
                 }
               })
               .catch(() => {
                 requestCheckCounter = 0;
                 deleteCookie('accessToken');
                 deleteCookie('refreshToken');
-                deleteCookie('accessTokenExpireAt');
-                deleteCookie('refreshTokenExpireAt');
+                deleteCookie('accessTokenExpiresAt');
+                deleteCookie('refreshTokenExpiresAt');
 
                 window.location.replace(`/${this.language}/login`);
               });

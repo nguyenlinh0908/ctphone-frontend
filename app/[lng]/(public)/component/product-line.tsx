@@ -39,8 +39,7 @@ export default function ProductLine({ title, products, categoryId }: IProductLin
                   avatar={'https://shopdunk.com/images/thumbs/0008734_iphone-14-pro-128gb_240.png'}
                   name={product.name}
                   price={product.price}
-                  _id={product._id}
-                />
+                  _id={product._id} rom={0} ram={0}                />
               );
             })}
         </div>
