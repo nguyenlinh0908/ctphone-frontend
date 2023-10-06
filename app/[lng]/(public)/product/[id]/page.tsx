@@ -2,23 +2,32 @@
 
 import { useParams } from 'next/navigation';
 import { useEffect } from 'react';
-import { useProductDetail } from './services/api';
-import { Col, Row } from 'antd';
+import { useMyCart, useProductDetail, useUpdateCart } from './services/api';
+import { Button, Col, Row, Space } from 'antd';
 import ImageGallery from './component/image-gallery';
 import WrapperInfo from './component/wrapper-info';
 import Prices from './component/prices';
 import Attributes from './component/attributes';
-import ActionButton from './component/action-button';
 import { useProducts } from '@lng/(public)/services/apis';
+import { useTranslation } from '@i18n';
+import { CartAction } from '@interfaces/order/create-cart.interface';
 
 export default function ProductDetail() {
   const { id, lng } = useParams();
-  const { data: product, isSuccess } = useProductDetail(id);
+  const { t } = useTranslation(lng);
 
+  const { data: product, isSuccess } = useProductDetail(id);
   const { data: products, isSuccess: productsSuccess } = useProducts(
     { limit: 10, page: 1 },
     { sku: product?.data.sku },
   );
+  const { data: updateCartData, isSuccess: updateCartSuccess, mutate: updateCartMutate } = useUpdateCart();
+  const { data: myCart, isSuccess: isGetMyCartSuccess, refetch: refetchMyCart } = useMyCart();
+
+  const handleAddToCart = async (productId: string) => {
+    updateCartMutate({ productId, action: CartAction.ADD });
+    refetchMyCart();
+  };
 
   return (
     <>
@@ -32,7 +41,18 @@ export default function ProductDetail() {
               <WrapperInfo name={product?.data.name || ''} rate={'4.5'} />
               <Prices price={product?.data.price || ''} oldPrice={'40000000'} />
               {productsSuccess && <Attributes primaryProduct={product.data} products={products.data} />}
-              <ActionButton id={product?.data._id || ''} />
+              <Space className="py-3" direction="vertical" style={{ width: '100%' }}>
+                <Button
+                  onClick={() => handleAddToCart(product.data._id)}
+                  className="font-bold bg-[#0066cc]"
+                  type="primary"
+                  size="large"
+                  block
+                  style={{ height: 64 }}
+                >
+                  {t('buy_now')}
+                </Button>
+              </Space>
             </Col>
           </Row>
         </>
