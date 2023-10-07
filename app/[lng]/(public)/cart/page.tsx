@@ -7,57 +7,71 @@ import { useParams } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { DeleteOutlined, MinusOutlined, PlusOutlined } from '@ant-design/icons';
-
-interface DataType {
-  key: string;
-  photo: string;
-  productName: string;
-  price: number;
-  quantity: number;
-  option: string;
-}
+import { useCartDetail, useMyCart, useUpdateCart } from '../product/[id]/services/api';
+import { useEffect } from 'react';
+import { IOrderItem } from '@interfaces/order/order-item.interface';
+import { CartAction } from '@interfaces/order/create-cart.interface';
+import { formatPrice } from '@utils/string';
 
 export default function CartPage() {
   const { lng } = useParams();
   const { t } = useTranslation(lng);
+  const { data: myCart, isSuccess: isGetCartSuccess } = useMyCart();
+  const { data: cartDetail, isSuccess: isGetCartDetailSuccess } = useCartDetail(myCart?.data._id || '');
+  const { mutate: updateCartMutate } = useUpdateCart();
 
-  const columns: ColumnsType<DataType> = [
+  useEffect(() => {}, [isGetCartDetailSuccess]);
+
+  const handleDeleteCartItem = (cartItemId: string) => {
+    console.log(cartItemId);
+  };
+
+  const handleUpdateCartItem = (productId: string, action: CartAction) => {
+    updateCartMutate({ productId, action });
+  };
+
+  const columns: ColumnsType<IOrderItem> = [
     {
       title: t('photo'),
       dataIndex: 'photo',
       key: 'photo',
-      render: (img) => (
+      render: () => (
         <>
-          <Image alt="image" src={img} width={80} height={80} />
+          <Image
+            alt="image"
+            src={'https://shopdunk.com/images/thumbs/0020320_iphone-15-128gb_240.webp'}
+            width={80}
+            height={80}
+          />
         </>
       ),
     },
     {
       title: t('product_name'),
-      dataIndex: 'productName',
-      key: 'productName',
-      render: (text) => (
+      dataIndex: 'productId.name',
+      key: 'productId.name',
+      render: (text, record, idx) => (
         <>
           <Link className="text-base font-bold text-black" href={`/product/${'6518588127a7af5ea5e3996a'}`}>
-            {text}
+            {record.productId.name}
           </Link>
         </>
       ),
     },
     {
       title: t('price'),
-      dataIndex: 'price',
-      key: 'price',
-      render: (text) => <span className="text-base font-bold text-black">{text}</span>,
+      dataIndex: 'amount',
+      key: 'amount',
+      render: (text, record, idx) => <span className="text-base font-bold text-black">{text}</span>,
     },
     {
       title: t('quantity'),
       key: 'quantity',
       dataIndex: 'quantity',
-      render: (text) => (
+      render: (text, record, idx) => (
         <div className="w-28 p-3 flex bg-gray-300 rounded-md justify-between items-center gap-3">
           <div>
-            <MinusOutlined />
+            <MinusOutlined onClick={() => handleUpdateCartItem(record.productId._id, CartAction.MINUS)} />
           </div>
           <Input
             style={{ width: 45, textAlign: 'center' }}
@@ -67,7 +81,10 @@ export default function CartPage() {
             value={text}
           />
           <div>
-            <PlusOutlined className="cursor-pointer" />
+            <PlusOutlined
+              className="cursor-pointer"
+              onClick={() => handleUpdateCartItem(record.productId._id, CartAction.ADD)}
+            />
           </div>
         </div>
       ),
@@ -76,34 +93,13 @@ export default function CartPage() {
       title: '',
       key: 'delete',
       dataIndex: 'delete',
-      render: (i) => <DeleteOutlined />,
-    },
-  ];
-
-  const data: DataType[] = [
-    {
-      key: '1',
-      photo: 'https://shopdunk.com/images/thumbs/0008734_iphone-14-pro-128gb_80.png',
-      productName: 'IPhone 15',
-      price: 32000000,
-      quantity: 1,
-      option: '',
-    },
-    {
-      key: '2',
-      photo: 'https://shopdunk.com/images/thumbs/0008734_iphone-14-pro-128gb_80.png',
-      productName: 'IPhone 15 Pro',
-      price: 35000000,
-      quantity: 1,
-      option: '',
-    },
-    {
-      key: '3',
-      photo: 'https://shopdunk.com/images/thumbs/0008734_iphone-14-pro-128gb_80.png',
-      productName: 'IPhone 15 Pro Max',
-      price: 40000000,
-      quantity: 1,
-      option: '',
+      render: (i, record, idx) => {
+        return (
+          <>
+            <DeleteOutlined onClick={() => handleDeleteCartItem(record._id)} />
+          </>
+        );
+      },
     },
   ];
 
@@ -111,7 +107,7 @@ export default function CartPage() {
     <>
       <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
         <Col className="gutter-row" span={16}>
-          <Table pagination={false} columns={columns} dataSource={data} />
+          <Table pagination={false} columns={columns} dataSource={cartDetail?.data} />
         </Col>
         <Col className="gutter-row" span={8}>
           <div className="w-full bg-white p-5 rounded-md">
@@ -129,7 +125,11 @@ export default function CartPage() {
                       <label className="text-gray-600">{t('sub_total')}</label>
                     </td>
                     <td className="text-right">
-                      <span className="font-bold">500</span>
+                      <span className="font-bold">
+                        {myCart?.data.totalAmountBeforeDiscount
+                          ? formatPrice(myCart?.data.totalAmountAfterDiscount.toString())
+                          : 0}
+                      </span>
                     </td>
                   </tr>
                   <tr>
@@ -137,7 +137,11 @@ export default function CartPage() {
                       <label className="font-bold text-lg">{t('total')}</label>
                     </td>
                     <td className="text-right">
-                      <span className="font-bold text-lg text-[#0066CC]">1000</span>
+                      <span className="font-bold text-lg text-[#0066CC]">
+                        {myCart?.data.totalAmountAfterDiscount
+                          ? formatPrice(myCart?.data.totalAmountAfterDiscount.toString())
+                          : 0}
+                      </span>
                     </td>
                   </tr>
                 </tbody>
