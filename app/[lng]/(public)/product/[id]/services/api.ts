@@ -1,7 +1,9 @@
+import { IResAPI } from '@interfaces/base-response.interface';
 import { IUpdateCart } from '@interfaces/order/create-cart.interface';
+import { IOrder } from '@interfaces/order/order.interface';
 import { OrderService } from '@services/cart.service';
 import { ProductService } from '@services/product.service';
-import { useMutation, useQuery } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 
 const productDetailService = new ProductService();
 const orderService = new OrderService();
@@ -11,7 +13,13 @@ export const useProductDetail = (id: string) => {
 };
 
 export const useUpdateCart = () => {
-  return useMutation('updateCart', (data: IUpdateCart) => orderService.updateCart(data));
+  const queryClient = useQueryClient();
+  return useMutation('updateCart', (data: IUpdateCart) => orderService.updateCart(data), {
+    onSuccess: (data: IResAPI<IOrder>) => {
+      queryClient.invalidateQueries(`cartDetail${data.data._id}`);
+      queryClient.invalidateQueries('myCart');
+    },
+  });
 };
 
 export const useMyCart = () => {
@@ -19,5 +27,5 @@ export const useMyCart = () => {
 };
 
 export const useCartDetail = (cartId: string) => {
-  return useQuery('cartDetail', () => orderService.getCartDetail(cartId));
+  return useQuery(`cartDetail${cartId}`, () => orderService.getCartDetail(cartId));
 };

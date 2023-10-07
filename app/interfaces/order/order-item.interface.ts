@@ -1,5 +1,9 @@
+import { IProduct } from '@interfaces/product/product.interface';
+
 export interface IOrderItem {
-  productId: string;
+  _id: string;
+
+  productId: IProduct;
 
   amount: number;
 

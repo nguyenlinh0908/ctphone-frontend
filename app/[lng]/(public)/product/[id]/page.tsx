@@ -1,6 +1,6 @@
 'use client';
 
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { useMyCart, useProductDetail, useUpdateCart } from './services/api';
 import { Button, Col, Row, Space } from 'antd';
@@ -15,18 +15,23 @@ import { CartAction } from '@interfaces/order/create-cart.interface';
 export default function ProductDetail() {
   const { id, lng } = useParams();
   const { t } = useTranslation(lng);
+  const router = useRouter();
 
   const { data: product, isSuccess } = useProductDetail(id);
   const { data: products, isSuccess: productsSuccess } = useProducts(
     { limit: 10, page: 1 },
     { sku: product?.data.sku },
   );
-  const { data: updateCartData, isSuccess: updateCartSuccess, mutate: updateCartMutate } = useUpdateCart();
-  const { data: myCart, isSuccess: isGetMyCartSuccess, refetch: refetchMyCart } = useMyCart();
+  const { data: updateCartData, isSuccess: updateCartSuccess, mutateAsync: updateCartMutateAsync } = useUpdateCart();
 
   const handleAddToCart = async (productId: string) => {
-    updateCartMutate({ productId, action: CartAction.ADD });
-    refetchMyCart();
+    updateCartMutateAsync({ productId, action: CartAction.ADD })
+      .then(() => {
+        router.push('/cart');
+      })
+      .catch(() => {
+        router.push('/login');
+      });
   };
 
   return (
