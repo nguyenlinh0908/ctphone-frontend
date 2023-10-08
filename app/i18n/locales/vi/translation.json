@@ -32,6 +32,9 @@
   "coupon": "Mã giảm giá",
   "apply": "Áp dụng",
   "login_fail": "Đăng nhập thất bại",
-  "delete_product_confirm":"Bạn muốn xóa sản phẩm này ?"
-
+  "delete_product_confirm": "Bạn muốn xóa sản phẩm này ?",
+  "billing_information": "Thông tin thanh toán",
+  "select_your_payment": "Vui lòng chọn hình thức thanh toán",
+  "money_cash": "Tiền mặt",
+  "vnpay": "Vnpay"
 }

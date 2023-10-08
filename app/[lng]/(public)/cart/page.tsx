@@ -1,18 +1,21 @@
 'use client';
 
 import { useTranslation } from '@i18n';
-import { Row, Col, Button, Table, Input, Popconfirm } from 'antd';
+import { Row, Col, Button, Table, Input, Popconfirm, Space, Radio } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { useParams } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-import { DeleteOutlined, MinusOutlined, PlusOutlined } from '@ant-design/icons';
+import { DeleteOutlined, DollarOutlined, MinusOutlined, PlusOutlined } from '@ant-design/icons';
 import { useCartDetail, useMyCart, useUpdateCart } from '../product/[id]/services/api';
 import { useEffect } from 'react';
 import { IOrderItem } from '@interfaces/order/order-item.interface';
 import { CartAction } from '@interfaces/order/create-cart.interface';
 import { formatPrice } from '@utils/string';
 import { useDeleteCartDetail } from './services/apis';
+import Card from 'antd/es/card/Card';
+import vnpayLogo from '@public/payment/logo-vnpay.png';
+import cashLogo from '@public/payment/cash-logo.png';
 
 export default function CartPage() {
   const { lng } = useParams();
@@ -117,7 +120,27 @@ export default function CartPage() {
     <>
       <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
         <Col className="gutter-row" span={16}>
-          <Table pagination={false} columns={columns} dataSource={cartDetail?.data} />
+          <Space className="w-full" direction="vertical">
+            <Table pagination={false} columns={columns} dataSource={cartDetail?.data} />
+            <Card title={t('billing_information') || ''} bordered={false}>
+              <span>{t('select_your_payment')}</span>
+              <Row gutter={[16, 16]} justify="space-between">
+                <Col>
+                  <div className="flex justify-start items-center px-2 py-1 border border-solid border-gray-600 rounded-md">
+                    <Radio></Radio>
+                    <Image src={vnpayLogo} width={64} height={32} alt={'vnpay logo'} />
+                    <span className="inline-block">{t('money cash')}</span>
+                  </div>
+                </Col>
+                <Col>
+                  <div className="flex justify-start items-center px-2 py-1 border border-solid border-gray-600 rounded-md">
+                    <Radio></Radio>
+                    <span className="inline-block">{t('vnpay')}</span>
+                  </div>
+                </Col>
+              </Row>
+            </Card>
+          </Space>
         </Col>
         <Col className="gutter-row" span={8}>
           <div className="w-full bg-white p-5 rounded-md">
