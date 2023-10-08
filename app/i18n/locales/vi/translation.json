@@ -30,5 +30,8 @@
   "sub_total": "Tổng phụ",
   "checkout": "Tiến hành đặt hàng",
   "coupon": "Mã giảm giá",
-  "apply": "Áp dụng"
+  "apply": "Áp dụng",
+  "login_fail": "Đăng nhập thất bại",
+  "delete_product_confirm":"Bạn muốn xóa sản phẩm này ?"
+
 }

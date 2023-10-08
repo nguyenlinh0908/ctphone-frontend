@@ -27,6 +27,7 @@ export const GATEWAY = {
       update: '/order/cart',
       my_cart: '/order/cart',
       my_cart_detail: '/order/cart/detail',
+      delete_cart_detail:"/order/cart/detail"
     },
   },
 };
