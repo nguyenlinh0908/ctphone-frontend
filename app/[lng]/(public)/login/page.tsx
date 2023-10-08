@@ -1,9 +1,9 @@
 'use client';
 
-import { Row, Col, Image, Form, Input, Button, Checkbox } from 'antd';
+import { Row, Col, Image, Form, Input, Button, Checkbox, notification } from 'antd';
 import LoginBanner from '@public/login/VNU_M492_08 1.jpeg';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { ILoginInput } from '@interfaces/auth/auth.interface';
+import { ILoginInput, Role } from '@interfaces/auth/auth.interface';
 import { useEffect, useState } from 'react';
 import { useTranslation } from '@i18n';
 import { useLogin } from './services/apis';
@@ -18,12 +18,21 @@ export default function Login({ params: { lng } }: ILoginProps) {
   const [loginInput, setLoginInput] = useState<ILoginInput>({ username: '', password: '' });
   const router = useRouter();
   const { t } = useTranslation(lng);
-  const { mutate: login, isSuccess } = useLogin();
+  const { mutateAsync: loginAsync, isSuccess } = useLogin();
+  const [api, contextHolder] = notification.useNotification();
 
   useEffect(() => {
     const refreshToken = getCookie('refreshToken');
     if (refreshToken) router.push('/');
   }, []);
+
+  const openNotification = (message: string) => {
+    api.open({
+      message,
+      description: '',
+      duration: 1,
+    });
+  };
 
   const handleInputChange = (e: any) => {
     switch (e.target.name) {
@@ -42,79 +51,93 @@ export default function Login({ params: { lng } }: ILoginProps) {
   };
 
   const handleSubmit = () => {
-    login(loginInput);
+    loginAsync(loginInput)
+      .then((data) => {
+        const roles = data.data.me.roles;
+        if (roles.includes(Role.ADMIN)) {
+          router.push('/dashboard');
+        } else {
+          router.push('/');
+        }
+      })
+      .catch((err) => {
+        openNotification(t('login_fail'));
+      });
   };
 
   return (
-    <Row gutter={16}>
-      <Col span={12}>
-        <Image preview={false} className="w-50" src={LoginBanner.src} />
-      </Col>
-      <Col span={24-12}>
-        <Form
-          name="normal_login"
-          className="login-form"
-          initialValues={{
-            remember: true,
-          }}
-        >
-          <h1>{t('login')}</h1>
-          <Form.Item
-            name="username"
-            rules={[
-              {
-                required: true,
-                message: t('required_username') && ' Please input your Username!',
-              },
-            ]}
+    <>
+      {contextHolder}
+      <Row gutter={16}>
+        <Col span={12}>
+          <Image preview={false} className="w-50" src={LoginBanner.src} />
+        </Col>
+        <Col span={24 - 12}>
+          <Form
+            name="normal_login"
+            className="login-form"
+            initialValues={{
+              remember: true,
+            }}
           >
-            <Input
-              prefix={<UserOutlined className="site-form-item-icon p-3" />}
-              placeholder={t('username') && 'Username'}
+            <h1>{t('login')}</h1>
+            <Form.Item
               name="username"
-              onChange={(e) => handleInputChange(e)}
-            />
-          </Form.Item>
-          <Form.Item
-            name="password"
-            rules={[
-              {
-                required: true,
-                message: t('required_password') && 'Please input your Password!',
-              },
-            ]}
-          >
-            <Input
-              prefix={<LockOutlined className="site-form-item-icon p-3" />}
-              type="password"
-              placeholder={t('password') && 'Password'}
+              rules={[
+                {
+                  required: true,
+                  message: t('required_username') && ' Please input your Username!',
+                },
+              ]}
+            >
+              <Input
+                prefix={<UserOutlined className="site-form-item-icon p-3" />}
+                placeholder={t('username') && 'Username'}
+                name="username"
+                onChange={(e) => handleInputChange(e)}
+              />
+            </Form.Item>
+            <Form.Item
               name="password"
-              onChange={(e) => handleInputChange(e)}
-            />
-          </Form.Item>
-          <Form.Item>
-            <div className="flex justify-between">
-              <Form.Item name="remember" valuePropName="checked" noStyle>
-                <Checkbox>{t('remember_me')}</Checkbox>
-              </Form.Item>
+              rules={[
+                {
+                  required: true,
+                  message: t('required_password') && 'Please input your Password!',
+                },
+              ]}
+            >
+              <Input
+                prefix={<LockOutlined className="site-form-item-icon p-3" />}
+                type="password"
+                placeholder={t('password') && 'Password'}
+                name="password"
+                onChange={(e) => handleInputChange(e)}
+              />
+            </Form.Item>
+            <Form.Item>
+              <div className="flex justify-between">
+                <Form.Item name="remember" valuePropName="checked" noStyle>
+                  <Checkbox>{t('remember_me')}</Checkbox>
+                </Form.Item>
 
-              <a className="login-form-forgot" href="">
-                {t('forgot_password')}
-              </a>
-            </div>
-          </Form.Item>
+                <a className="login-form-forgot" href="">
+                  {t('forgot_password')}
+                </a>
+              </div>
+            </Form.Item>
 
-          <Form.Item>
-            <Button onClick={handleSubmit} size="large" type="primary" htmlType="submit" className="w-full">
-              {t('login')}
-            </Button>
-            <div className="py-3 flex items-center">
-              <label htmlFor="">{t('you_do_not_account')}</label>
-              <Button type="link">{t('register_account_now')}</Button>
-            </div>
-          </Form.Item>
-        </Form>
-      </Col>
-    </Row>
+            <Form.Item>
+              <Button onClick={handleSubmit} size="large" type="primary" htmlType="submit" className="w-full">
+                {t('login')}
+              </Button>
+              <div className="py-3 flex items-center">
+                <label htmlFor="">{t('you_do_not_account')}</label>
+                <Button type="link">{t('register_account_now')}</Button>
+              </div>
+            </Form.Item>
+          </Form>
+        </Col>
+      </Row>
+    </>
   );
 }

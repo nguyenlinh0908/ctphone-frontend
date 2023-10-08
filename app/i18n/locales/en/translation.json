@@ -30,5 +30,7 @@
   "sub_total": "Sub-Total",
   "checkout": "Checkout",
   "coupon": "Coupon code",
-  "apply": "Apply"
+  "apply": "Apply",
+  "login_fail": "Login Fail",
+  "delete_product_confirm":"You want to delete this product ?"
 }

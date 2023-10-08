@@ -1,7 +1,7 @@
 'use client';
 
 import { useTranslation } from '@i18n';
-import { Row, Col, Button, Table, Input } from 'antd';
+import { Row, Col, Button, Table, Input, Popconfirm } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { useParams } from 'next/navigation';
 import Image from 'next/image';
@@ -12,6 +12,7 @@ import { useEffect } from 'react';
 import { IOrderItem } from '@interfaces/order/order-item.interface';
 import { CartAction } from '@interfaces/order/create-cart.interface';
 import { formatPrice } from '@utils/string';
+import { useDeleteCartDetail } from './services/apis';
 
 export default function CartPage() {
   const { lng } = useParams();
@@ -19,11 +20,12 @@ export default function CartPage() {
   const { data: myCart, isSuccess: isGetCartSuccess } = useMyCart();
   const { data: cartDetail, isSuccess: isGetCartDetailSuccess } = useCartDetail(myCart?.data._id || '');
   const { mutate: updateCartMutate } = useUpdateCart();
+  const { mutate: deleteCartDetailMutate } = useDeleteCartDetail();
 
   useEffect(() => {}, [isGetCartDetailSuccess]);
 
   const handleDeleteCartItem = (cartItemId: string) => {
-    console.log(cartItemId);
+    deleteCartDetailMutate(cartItemId);
   };
 
   const handleUpdateCartItem = (productId: string, action: CartAction) => {
@@ -96,7 +98,15 @@ export default function CartPage() {
       render: (i, record, idx) => {
         return (
           <>
-            <DeleteOutlined onClick={() => handleDeleteCartItem(record._id)} />
+            <Popconfirm
+              placement="right"
+              onConfirm={() => handleDeleteCartItem(record._id)}
+              okText="Yes"
+              cancelText="No"
+              title={t('delete_product_confirm')}
+            >
+              <DeleteOutlined />
+            </Popconfirm>
           </>
         );
       },

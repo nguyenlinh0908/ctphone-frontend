@@ -21,7 +21,10 @@ export class OrderService {
   }
 
   getCartDetail(cartId: string) {
-    console.log('cartId :>> ', cartId);
     return this.orderService.get<IResAPI<IOrderItem[]>>({ url: `${GATEWAY.order.cart.my_cart_detail}/${cartId}` });
+  }
+
+  deleteCartDetail(cartDetailId:string) {
+    return this.orderService.delete<IResAPI<IOrderItem>>({ url: `${GATEWAY.order.cart.delete_cart_detail}/${cartDetailId}` });
   }
 }
