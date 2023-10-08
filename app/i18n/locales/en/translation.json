@@ -32,5 +32,9 @@
   "coupon": "Coupon code",
   "apply": "Apply",
   "login_fail": "Login Fail",
-  "delete_product_confirm":"You want to delete this product ?"
+  "delete_product_confirm": "You want to delete this product ?",
+  "billing_information": "Billing information",
+  "select_your_payment": "Select your payment",
+  "money_cash": "Money cash",
+  "vnpay": "Vnpay"
 }
