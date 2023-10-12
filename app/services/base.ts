@@ -29,6 +29,9 @@ export const GATEWAY = {
       my_cart_detail: '/order/cart/detail',
       delete_cart_detail:"/order/cart/detail"
     },
+    cms:{
+      list: "/order/cms"
+    }
   },
 };
 

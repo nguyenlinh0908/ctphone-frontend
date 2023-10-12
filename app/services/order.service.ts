@@ -27,4 +27,8 @@ export class OrderService {
   deleteCartDetail(cartDetailId:string) {
     return this.orderService.delete<IResAPI<IOrderItem>>({ url: `${GATEWAY.order.cart.delete_cart_detail}/${cartDetailId}` });
   }
+
+  getOrdersInCms(){
+    return this.orderService.get<IResAPI<IOrder[]>>({url: GATEWAY.order.cms.list})
+  }
 }
