@@ -1,7 +1,7 @@
 import { IResAPI } from '@interfaces/base-response.interface';
 import { IUpdateCart } from '@interfaces/order/create-cart.interface';
 import { IOrder } from '@interfaces/order/order.interface';
-import { OrderService } from '@services/cart.service';
+import { OrderService } from '@services/order.service';
 import { ProductService } from '@services/product.service';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 

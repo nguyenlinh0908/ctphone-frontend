@@ -8,6 +8,7 @@ import {
   PieChartOutlined,
   TeamOutlined,
   UserOutlined,
+  ShoppingCartOutlined
 } from '@ant-design/icons';
 import withAuth from '@hocs/withAuth';
 import type { MenuProps } from 'antd';
@@ -32,6 +33,7 @@ function getItem(label: React.ReactNode, key: React.Key, icon?: React.ReactNode,
 const items: MenuItem[] = [
   getItem(<Link href={'/dashboard'}>Dashboard</Link>, '1', <PieChartOutlined />),
   getItem(<Link href={'/staff'}>Staff</Link>, '2', <DesktopOutlined />),
+  getItem(<Link href={'/order'}>Order</Link>, '3',<ShoppingCartOutlined />),
   getItem('User', 'sub1', <UserOutlined />, [getItem('Tom', '3'), getItem('Bill', '4'), getItem('Alex', '5')]),
   getItem('Team', 'sub2', <TeamOutlined />, [getItem('Team 1', '6'), getItem('Team 2', '8')]),
   getItem('Files', '9', <FileOutlined />),
