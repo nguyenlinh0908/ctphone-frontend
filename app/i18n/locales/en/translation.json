@@ -37,7 +37,14 @@
   "select_your_payment": "Select your payment",
   "money_cash": "Money cash",
   "vnpay": "Vnpay",
-  "code":"Code",
-  "amount":"Amount",
-  "order_data":"Order date"
+  "code": "Code",
+  "amount": "Amount",
+  "order_date": "Order date",
+  "action": "Action",
+  "success": "Success",
+  "cancel": "Cancel",
+  "pending": "Pending",
+  "status": "Status",
+  "order_success": "Order Success",
+  "something_wrong":"Something wrong"
 }

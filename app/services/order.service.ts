@@ -24,11 +24,19 @@ export class OrderService {
     return this.orderService.get<IResAPI<IOrderItem[]>>({ url: `${GATEWAY.order.cart.my_cart_detail}/${cartId}` });
   }
 
-  deleteCartDetail(cartDetailId:string) {
-    return this.orderService.delete<IResAPI<IOrderItem>>({ url: `${GATEWAY.order.cart.delete_cart_detail}/${cartDetailId}` });
+  deleteCartDetail(cartDetailId: string) {
+    return this.orderService.delete<IResAPI<IOrderItem>>({
+      url: `${GATEWAY.order.cart.delete_cart_detail}/${cartDetailId}`,
+    });
   }
 
-  getOrdersInCms(){
-    return this.orderService.get<IResAPI<IOrder[]>>({url: GATEWAY.order.cms.list})
+  getOrdersInCms() {
+    return this.orderService.get<IResAPI<IOrder[]>>({ url: GATEWAY.order.cms.list });
+  }
+
+  checkout(orderId: string) {
+    return this.orderService.patch<{ orderId: string }, IResAPI<IOrder>>({
+      url: `${GATEWAY.order.checkout.replace(':id', orderId)}`,
+    });
   }
 }

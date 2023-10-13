@@ -37,7 +37,14 @@
   "select_your_payment": "Vui lòng chọn hình thức thanh toán",
   "money_cash": "Tiền mặt",
   "vnpay": "Vnpay",
-  "code":"Mã",
-  "amount":"Giá tiền",
-  "order_data":"Ngày đặt hàng"
+  "code": "Mã",
+  "amount": "Giá tiền",
+  "order_date": "Ngày đặt hàng",
+  "action": "Hành động",
+  "success": "Hoàn thành",
+  "cancel": "Hủy bỏ",
+  "pending": "Đang chờ",
+  "status": "Trạng thái",
+  "order_success": "Đặt hàng thành công",
+  "something_wrong":"Có lỗi xảy ra"
 }

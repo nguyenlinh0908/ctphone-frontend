@@ -15,3 +15,13 @@ export const useDeleteCartDetail = () => {
     },
   });
 };
+
+export const useCheckout = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation(`checkout`, (orderId: string) => orderService.checkout(orderId), {
+    onSuccess: () => {
+      queryClient.invalidateQueries('myCart');
+    },
+  });
+};

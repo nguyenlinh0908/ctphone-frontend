@@ -1,29 +1,31 @@
 'use client';
 
+import { DeleteOutlined, MinusOutlined, PlusOutlined } from '@ant-design/icons';
 import { useTranslation } from '@i18n';
-import { Row, Col, Button, Table, Input, Popconfirm, Space, Radio } from 'antd';
+import { CartAction } from '@interfaces/order/create-cart.interface';
+import { IOrderItem } from '@interfaces/order/order-item.interface';
+import vnpayLogo from '@public/payment/logo-vnpay.png';
+import { formatPrice } from '@utils/string';
+import { Button, Col, Input, Popconfirm, Radio, Row, Space, Table, message } from 'antd';
+import Card from 'antd/es/card/Card';
 import { ColumnsType } from 'antd/es/table';
-import { useParams } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-import { DeleteOutlined, DollarOutlined, MinusOutlined, PlusOutlined } from '@ant-design/icons';
-import { useCartDetail, useMyCart, useUpdateCart } from '../product/[id]/services/api';
+import { useParams, useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import { IOrderItem } from '@interfaces/order/order-item.interface';
-import { CartAction } from '@interfaces/order/create-cart.interface';
-import { formatPrice } from '@utils/string';
-import { useDeleteCartDetail } from './services/apis';
-import Card from 'antd/es/card/Card';
-import vnpayLogo from '@public/payment/logo-vnpay.png';
-import cashLogo from '@public/payment/cash-logo.png';
+import { useCartDetail, useMyCart, useUpdateCart } from '../product/[id]/services/api';
+import { useCheckout, useDeleteCartDetail } from './services/apis';
 
 export default function CartPage() {
   const { lng } = useParams();
   const { t } = useTranslation(lng);
+  const router = useRouter();
+  const [messageApi, contextHolder] = message.useMessage();
   const { data: myCart, isSuccess: isGetCartSuccess } = useMyCart();
   const { data: cartDetail, isSuccess: isGetCartDetailSuccess } = useCartDetail(myCart?.data._id || '');
   const { mutate: updateCartMutate } = useUpdateCart();
   const { mutate: deleteCartDetailMutate } = useDeleteCartDetail();
+  const { mutateAsync: checkoutMutateAsync, isSuccess: checkoutSuccess } = useCheckout();
 
   useEffect(() => {}, [isGetCartDetailSuccess]);
 
@@ -33,6 +35,22 @@ export default function CartPage() {
 
   const handleUpdateCartItem = (productId: string, action: CartAction) => {
     updateCartMutate({ productId, action });
+  };
+
+  const handleCheckout = (orderId: string) => {
+    checkoutMutateAsync(orderId)
+      .then(() => {
+        messageApi.open({
+          type: 'success',
+          content: t('order_success'),
+        });
+      })
+      .catch((err) =>
+        messageApi.open({
+          type: 'error',
+          content: t('something_wrong'),
+        }),
+      );
   };
 
   const columns: ColumnsType<IOrderItem> = [
@@ -118,6 +136,7 @@ export default function CartPage() {
 
   return (
     <>
+      {contextHolder}
       <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
         <Col className="gutter-row" span={16}>
           <Space className="w-full" direction="vertical">
@@ -180,7 +199,16 @@ export default function CartPage() {
                 </tbody>
               </table>
             </div>
-            <Button className="font-bold bg-[#0066cc]" type="primary" size="large" block style={{ height: 64 }}>
+            <Button
+              loading={checkoutSuccess}
+              disabled={checkoutSuccess}
+              onClick={() => myCart && handleCheckout(myCart.data._id)}
+              className="font-bold bg-[#0066cc]"
+              type="primary"
+              size="large"
+              block
+              style={{ height: 64 }}
+            >
               {t('checkout')}
             </Button>
           </div>

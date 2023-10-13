@@ -2,12 +2,13 @@ export enum OrderStatus {
   CART = 'CART',
   PENDING = 'PENDING',
   SUCCESS = 'SUCCESS',
+  CANCEL = 'CANCEL',
 }
 
 export interface IOrder {
   _id: string;
 
-  code: string
+  code: string;
 
   status: OrderStatus;
 
@@ -17,5 +18,5 @@ export interface IOrder {
 
   totalAmountAfterDiscount: number;
 
-  createdAt?:Date
+  createdAt?: Date;
 }

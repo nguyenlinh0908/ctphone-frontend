@@ -27,11 +27,12 @@ export const GATEWAY = {
       update: '/order/cart',
       my_cart: '/order/cart',
       my_cart_detail: '/order/cart/detail',
-      delete_cart_detail:"/order/cart/detail"
+      delete_cart_detail: '/order/cart/detail',
     },
-    cms:{
-      list: "/order/cms"
-    }
+    cms: {
+      list: '/order/cms',
+    },
+    checkout: '/order/:id/checkout',
   },
 };
 

@@ -23,9 +23,13 @@ export const useUpdateCart = () => {
 };
 
 export const useMyCart = () => {
-  return useQuery('myCart', () => orderService.getMyCart());
+  return useQuery('myCart', () => orderService.getMyCart(), {
+    onSettled(data, error) {
+      return [];
+    },
+  });
 };
 
-export const useCartDetail = (cartId: string) => {
-  return useQuery(`cartDetail${cartId}`, () => orderService.getCartDetail(cartId));
+export const useCartDetail = (cartId: any) => {
+  return useQuery(`cartDetail${cartId}`, () => orderService.getCartDetail(cartId), { enabled: !!cartId });
 };
