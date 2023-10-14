@@ -1,12 +1,18 @@
-import { IGenAccessTokenInput, ILoginInput, ILoginResponse } from '@interfaces/auth/auth.interface';
-import { BaseService, GATEWAY } from './base';
 import { IResAPI } from '@interfaces/base-response.interface';
 import { IUpdateCart } from '@interfaces/order/create-cart.interface';
-import { IOrder } from '@interfaces/order/order.interface';
 import { IOrderItem } from '@interfaces/order/order-item.interface';
+import { IOrder, OrderStatus } from '@interfaces/order/order.interface';
+import { BaseService, GATEWAY } from './base';
 
 export class OrderService {
   private orderService: BaseService;
+  public readonly orderStatusSteps: OrderStatus[] = [
+    OrderStatus.CART,
+    OrderStatus.PENDING,
+    OrderStatus.PREPARES_PACKAGE,
+    OrderStatus.IN_TRANSPORT,
+    OrderStatus.SUCCESS,
+  ];
 
   constructor() {
     this.orderService = new BaseService();
@@ -37,6 +43,13 @@ export class OrderService {
   checkout(orderId: string) {
     return this.orderService.patch<{ orderId: string }, IResAPI<IOrder>>({
       url: `${GATEWAY.order.checkout.replace(':id', orderId)}`,
+    });
+  }
+
+  changeOrderStatus(orderId: string, status: OrderStatus) {
+    return this.orderService.patch<any, IResAPI<IOrder>>({
+      url: `${GATEWAY.order.confirm.replace(':id', orderId)}`,
+      data: { status },
     });
   }
 }

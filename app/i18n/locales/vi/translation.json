@@ -46,5 +46,13 @@
   "pending": "Đang chờ",
   "status": "Trạng thái",
   "order_success": "Đặt hàng thành công",
-  "something_wrong":"Có lỗi xảy ra"
+  "something_wrong": "Có lỗi xảy ra",
+  "update_order_status_success": "Cập nhật trạng thái đơn hàng thành công",
+  "update_order_status_fail": "Cập nhật trạng thái đơn hàng thất bại",
+  "do_want_change_order_status": "Bạn có muốn thay đổi trạng thái hóa đơn không ?",
+  "change_order_status": "Thay đổi trạng thái hóa đơn",
+  "yes": "Có",
+  "no": "Không",
+  "prepares_package": "Đang chuẩn bị hàng",
+  "in_transport": "Đang vận chuyển"
 }

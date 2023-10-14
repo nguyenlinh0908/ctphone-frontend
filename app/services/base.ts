@@ -33,6 +33,7 @@ export const GATEWAY = {
       list: '/order/cms',
     },
     checkout: '/order/:id/checkout',
+    confirm:"/order/:id/confirm"
   },
 };
 

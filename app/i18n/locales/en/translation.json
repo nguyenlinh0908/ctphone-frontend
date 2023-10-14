@@ -46,5 +46,13 @@
   "pending": "Pending",
   "status": "Status",
   "order_success": "Order Success",
-  "something_wrong":"Something wrong"
+  "something_wrong": "Something wrong",
+  "update_order_status_success": "Update order status success",
+  "update_order_status_fail": "Update order status fail",
+  "do_want_change_order_status": "Do you want change order status ?",
+  "change_order_status": "Change order status",
+  "yes": "Yes",
+  "no": "No",
+  "prepares_package": "Prepares package",
+  "in_transport": "In transport"
 }
