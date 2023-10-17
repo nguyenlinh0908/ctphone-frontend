@@ -16,8 +16,13 @@ export const useLogin = () => {
       onSuccess: (data: IResAPI<ILoginResponse>) => {
         setCookie('accessToken', data.data.accessToken, { expires: new Date(data.data.accessTokenExpiresAt) });
         setCookie('refreshToken', data.data.refreshToken, { expires: new Date(data.data.refreshTokenExpiresAt) });
-        setCookie('accessTokenExpiresAt', data.data.accessTokenExpiresAt,{ expires: new Date(data.data.accessTokenExpiresAt) });
-        setCookie('refreshTokenExpiresAt', data.data.refreshTokenExpiresAt, { expires: new Date(data.data.refreshTokenExpiresAt) });
+        setCookie('accessTokenExpiresAt', data.data.accessTokenExpiresAt, {
+          expires: new Date(data.data.accessTokenExpiresAt),
+        });
+        setCookie('refreshTokenExpiresAt', data.data.refreshTokenExpiresAt, {
+          expires: new Date(data.data.refreshTokenExpiresAt),
+        });
+        setCookie('me', data.data.me, { expires: new Date(data.data.refreshTokenExpiresAt) });
       },
     },
   );

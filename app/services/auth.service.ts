@@ -1,4 +1,4 @@
-import { IGenAccessTokenInput, ILoginInput, ILoginResponse } from '@interfaces/auth/auth.interface';
+import { IGenAccessTokenInput, ILoginInput, ILoginResponse, IProfile } from '@interfaces/auth/auth.interface';
 import { BaseService, GATEWAY } from './base';
 import { IResAPI } from '@interfaces/base-response.interface';
 
@@ -17,6 +17,17 @@ export class AuthService {
     return this.accountService.post<IGenAccessTokenInput, IResAPI<ILoginResponse>>({
       url: GATEWAY.auth.gen_access_token,
       data: genAccessTokenInput,
+    });
+  }
+
+  profile() {
+    return this.accountService.get<IResAPI<IProfile>>({ url: GATEWAY.auth.profile });
+  }
+
+  logout(data: { accessToken: string; refreshToken: string }) {
+    return this.accountService.post<{ accessToken: string; refreshToken: string }, IResAPI<boolean>>({
+      url: GATEWAY.auth.logout,
+      data,
     });
   }
 }

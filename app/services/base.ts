@@ -9,6 +9,7 @@ export const GATEWAY = {
     login: '/auth/login',
     logout: '/auth/logout',
     gen_access_token: '/auth/gen-access',
+    profile: "/auth/profile"
   },
   staff: {
     staffs: '/staff',
@@ -33,7 +34,7 @@ export const GATEWAY = {
       list: '/order/cms',
     },
     checkout: '/order/:id/checkout',
-    confirm:"/order/:id/confirm"
+    confirm: '/order/:id/confirm',
   },
 };
 
@@ -83,10 +84,17 @@ export class BaseService {
               .then((res: IResAPI<ILoginResponse>) => {
                 requestCheckCounter = 0;
                 if (res.data.accessToken) {
-                  setCookie('accessToken', res.data.accessToken);
-                  setCookie('refreshToken', res.data.refreshToken);
-                  setCookie('accessTokenExpiresAt', res.data.accessTokenExpiresAt);
-                  setCookie('refreshTokenExpiresAt', res.data.refreshTokenExpiresAt);
+                  setCookie('accessToken', res.data.accessToken, { expires: new Date(res.data.accessTokenExpiresAt) });
+                  setCookie('refreshToken', res.data.refreshToken, {
+                    expires: new Date(res.data.refreshTokenExpiresAt),
+                  });
+                  setCookie('accessTokenExpiresAt', res.data.accessTokenExpiresAt, {
+                    expires: new Date(res.data.accessTokenExpiresAt),
+                  });
+                  setCookie('refreshTokenExpiresAt', res.data.refreshTokenExpiresAt, {
+                    expires: new Date(res.data.refreshTokenExpiresAt),
+                  });
+                  setCookie('me', res.data.me, { expires: new Date(res.data.refreshTokenExpiresAt) });
                 }
               })
               .catch(() => {

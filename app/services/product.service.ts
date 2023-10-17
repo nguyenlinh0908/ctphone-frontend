@@ -21,7 +21,6 @@ export class ProductService {
 
   find(paginate: IPaginateDto, filter: IProductFilter) {
     const queryString = buildQueryString({ ...paginate, ...filter });
-    console.log('queryString :>> ', queryString);
     return this.productService.get<IResAPI<IProduct[]>>({
       url: `${GATEWAY.product.find}${queryString}`,
     });
