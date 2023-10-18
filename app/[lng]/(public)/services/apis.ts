@@ -4,6 +4,7 @@ import { IProductFilter } from '@interfaces/product/product.interface';
 import { AuthService } from '@services/auth.service';
 import { CategoryService } from '@services/category.service';
 import { ProductService } from '@services/product.service';
+import { deleteCookie } from 'cookies-next';
 import { useMutation, useQuery } from 'react-query';
 
 const productService = new ProductService();
@@ -23,7 +24,16 @@ export const useProfile = () => {
 };
 
 export const useLogout = () => {
-  return useMutation('logout', ({ accessToken, refreshToken }: { accessToken: string; refreshToken: string }) =>
-    authService.logout({ accessToken, refreshToken }),
+  return useMutation(
+    'logout',
+    ({ accessToken, refreshToken }: { accessToken: string; refreshToken: string }) =>
+      authService.logout({ accessToken, refreshToken }),
+    { onSuccess: () => {
+      deleteCookie("accessToken")
+      deleteCookie("refreshToken")
+      deleteCookie("accessTokenExpiresAt")
+      deleteCookie("refreshTokenExpiresAt")
+      deleteCookie("me")
+    } },
   );
 };

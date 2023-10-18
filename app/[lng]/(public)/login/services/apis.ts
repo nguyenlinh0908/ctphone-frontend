@@ -1,12 +1,14 @@
 import { ILoginInput, ILoginResponse } from '@interfaces/auth/auth.interface';
 import { AuthService } from '@services/auth.service';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { setCookie } from 'cookies-next';
 import { IResAPI } from '@interfaces/base-response.interface';
 
 const authService = new AuthService();
 
 export const useLogin = () => {
+  const queryClient = useQueryClient()
+
   return useMutation(
     'login',
     (body: ILoginInput): Promise<IResAPI<ILoginResponse>> => {
@@ -23,6 +25,8 @@ export const useLogin = () => {
           expires: new Date(data.data.refreshTokenExpiresAt),
         });
         setCookie('me', data.data.me, { expires: new Date(data.data.refreshTokenExpiresAt) });
+       
+        queryClient.invalidateQueries("profile")
       },
     },
   );
