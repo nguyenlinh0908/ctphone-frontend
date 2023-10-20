@@ -12,12 +12,13 @@ import {
 import { useTranslation } from '@i18n';
 import { IOrder, OrderStatus } from '@interfaces/order/order.interface';
 import { formatPrice, timestampMongoToDate } from '@utils/string';
-import { Button, Popconfirm, Space, Table, message } from 'antd';
+import { Button, Col, Modal, Popconfirm, Row, Space, Table, message } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { useParams } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useOrderCms, orderStatusSteps, useConfirmOrder } from './sevices/apis';
 import * as _ from 'lodash';
+import modal from 'antd/es/modal';
 
 export default function CmsOrderPage() {
   const { lng } = useParams();
@@ -27,6 +28,8 @@ export default function CmsOrderPage() {
     mutateAsync: confirmOrderMutateAsync,
     isSuccess: confirmOrderSuccess,
   } = useConfirmOrder();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const nextOrderStatusSteps = [
     <ShoppingCartOutlined />,
     <ClockCircleOutlined />,
@@ -137,7 +140,21 @@ export default function CmsOrderPage() {
 
   useEffect(() => {}, [isSuccess]);
 
-  const handleViewDetail = (id: string) => {};
+  const handleViewDetail = (id: string) => {
+    showModal();
+  };
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
 
   const handleChangeStatus = (orderId: string, nextOrderStatus: OrderStatus) => {
     confirmOrderMutateAsync({ orderId, status: nextOrderStatus })
@@ -147,6 +164,17 @@ export default function CmsOrderPage() {
 
   return (
     <>
+      <Modal title={t('order_info')} centered open={isModalOpen} onOk={handleOk} onCancel={handleCancel} width={1000}>
+        <Row>
+          <Col></Col>
+          <Col></Col>
+        </Row>
+        <Row>
+          <Col></Col>
+          <Col></Col>
+        </Row>
+      </Modal>
+
       <Table columns={columns} dataSource={orders?.data} />
     </>
   );

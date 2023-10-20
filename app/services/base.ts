@@ -9,7 +9,7 @@ export const GATEWAY = {
     login: '/auth/login',
     logout: '/auth/logout',
     gen_access_token: '/auth/gen-access',
-    profile: "/auth/profile"
+    profile: '/auth/profile',
   },
   staff: {
     staffs: '/staff',
@@ -35,6 +35,9 @@ export const GATEWAY = {
     },
     checkout: '/order/:id/checkout',
     confirm: '/order/:id/confirm',
+  },
+  payment: {
+    vnpay_create_payment_url: '/payment/vnp/create_payment',
   },
 };
 

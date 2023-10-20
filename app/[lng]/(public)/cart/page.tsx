@@ -4,7 +4,8 @@ import { DeleteOutlined, MinusOutlined, PlusOutlined } from '@ant-design/icons';
 import { useTranslation } from '@i18n';
 import { CartAction } from '@interfaces/order/create-cart.interface';
 import { IOrderItem } from '@interfaces/order/order-item.interface';
-import vnpayLogo from '@public/payment/logo-vnpay.png';
+import vnpayLogo from '@public/payment/logo-vnpay.svg';
+import cashLogo from "@public/payment/cash-logo.svg"
 import { formatPrice } from '@utils/string';
 import { Button, Col, Input, Popconfirm, Radio, Row, Space, Table, message } from 'antd';
 import Card from 'antd/es/card/Card';
@@ -12,9 +13,12 @@ import { ColumnsType } from 'antd/es/table';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useCartDetail, useMyCart, useUpdateCart } from '../product/[id]/services/api';
-import { useCheckout, useDeleteCartDetail } from './services/apis';
+import { useCheckout, useCreatePaymentVnpayUrl, useDeleteCartDetail } from './services/apis';
+import type { RadioChangeEvent } from 'antd';
+import { IResAPI } from '@interfaces/base-response.interface';
+import { ICreatePaymentVnpayUrlRes } from '@interfaces/payment/payment.interface';
 
 export default function CartPage() {
   const { lng } = useParams();
@@ -26,8 +30,18 @@ export default function CartPage() {
   const { mutate: updateCartMutate } = useUpdateCart();
   const { mutate: deleteCartDetailMutate } = useDeleteCartDetail();
   const { mutateAsync: checkoutMutateAsync, isSuccess: checkoutSuccess } = useCheckout();
+  const {
+    data: createPaymentVnpayUrlData,
+    mutate: createPaymentVnpayMutate,
+    isSuccess: createPaymentVnpayUrlSuccess,
+  } = useCreatePaymentVnpayUrl();
+  const [paymentMethod, setPaymentMethod] = useState(0);
 
-  useEffect(() => {}, [isGetCartDetailSuccess]);
+  useEffect(() => {
+    if (createPaymentVnpayUrlSuccess) {
+      router.push(createPaymentVnpayUrlData?.data.url);
+    }
+  }, [createPaymentVnpayUrlSuccess]);
 
   const handleDeleteCartItem = (cartItemId: string) => {
     deleteCartDetailMutate(cartItemId);
@@ -38,19 +52,27 @@ export default function CartPage() {
   };
 
   const handleCheckout = (orderId: string) => {
-    checkoutMutateAsync(orderId)
-      .then(() => {
-        messageApi.open({
-          type: 'success',
-          content: t('order_success'),
-        });
-      })
-      .catch((err) =>
-        messageApi.open({
-          type: 'error',
-          content: t('something_wrong'),
-        }),
-      );
+    if (paymentMethod == 1) {
+      createPaymentVnpayMutate({ orderId, bankCode: '' });
+    } else {
+      checkoutMutateAsync(orderId)
+        .then(() => {
+          messageApi.open({
+            type: 'success',
+            content: t('order_success'),
+          });
+        })
+        .catch((err) =>
+          messageApi.open({
+            type: 'error',
+            content: t('something_wrong'),
+          }),
+        );
+    }
+  };
+
+  const handleChoosePaymentMethod = (e: RadioChangeEvent) => {
+    setPaymentMethod(e.target.value);
   };
 
   const columns: ColumnsType<IOrderItem> = [
@@ -142,22 +164,25 @@ export default function CartPage() {
           <Space className="w-full" direction="vertical">
             <Table pagination={false} columns={columns} dataSource={cartDetail?.data} />
             <Card title={t('billing_information') || ''} bordered={false}>
-              <span>{t('select_your_payment')}</span>
-              <Row gutter={[16, 16]} justify="space-between">
-                <Col>
-                  <div className="flex justify-start items-center px-2 py-1 border border-solid border-gray-600 rounded-md">
-                    <Radio></Radio>
-                    <Image src={vnpayLogo} width={64} height={32} alt={'vnpay logo'} />
-                    <span className="inline-block">{t('money cash')}</span>
-                  </div>
-                </Col>
-                <Col>
-                  <div className="flex justify-start items-center px-2 py-1 border border-solid border-gray-600 rounded-md">
-                    <Radio></Radio>
-                    <span className="inline-block">{t('vnpay')}</span>
-                  </div>
-                </Col>
-              </Row>
+              <span className="block">{t('select_your_payment')}</span>
+              <Radio.Group className="w-full my-3" onChange={handleChoosePaymentMethod} value={paymentMethod}>
+                <Row gutter={[16, 16]} justify={'space-between'} align={'middle'}>
+                  <Col span={12}>
+                    <div className="min-h-36 w-full flex gap-2 justify-start items-center px-2 py-1 border border-solid border-gray-600 rounded-md">
+                      <Radio value={0}></Radio>
+                      <Image src={cashLogo} width={36} height={36} alt={'vnpay logo'} />
+                      <span className="inline-block font-bold">{t('money_cash')}</span>
+                    </div>
+                  </Col>
+                  <Col span={12}>
+                    <div className="min-h-36 w-full flex gap-2 justify-start items-center px-2 py-1 border border-solid border-gray-600 rounded-md">
+                      <Radio value={1}></Radio>
+                      <Image src={vnpayLogo} width={36} height={36} alt={'vnpay logo'} />
+                      <span className="inline-block font-bold">{t('vnpay')}</span>
+                    </div>
+                  </Col>
+                </Row>
+              </Radio.Group>
             </Card>
           </Space>
         </Col>

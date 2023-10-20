@@ -36,7 +36,7 @@
   "billing_information": "Thông tin thanh toán",
   "select_your_payment": "Vui lòng chọn hình thức thanh toán",
   "money_cash": "Tiền mặt",
-  "vnpay": "Vnpay",
+  "vnpay": "VNPAY",
   "code": "Mã",
   "amount": "Giá tiền",
   "order_date": "Ngày đặt hàng",
@@ -58,5 +58,6 @@
   "profile": "Hồ sơ",
   "cart": "Giỏ hàng",
   "register": "Đăng ký",
-  "logout": "Đăng xuất"
+  "logout": "Đăng xuất",
+  "order_info": "Thông tin đơn hàng"
 }

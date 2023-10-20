@@ -36,7 +36,7 @@
   "billing_information": "Billing information",
   "select_your_payment": "Select your payment",
   "money_cash": "Money cash",
-  "vnpay": "Vnpay",
+  "vnpay": "VNPAY",
   "code": "Code",
   "amount": "Amount",
   "order_date": "Order date",
@@ -58,5 +58,6 @@
   "profile": "Profile",
   "cart": "Cart",
   "register": "Register",
-  "logout": "Logout"
+  "logout": "Logout",
+  "order_info": "Order Info"
 }
