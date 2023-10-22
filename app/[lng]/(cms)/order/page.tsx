@@ -8,17 +8,26 @@ import {
   DropboxOutlined,
   EyeOutlined,
   ShoppingCartOutlined,
+  StopOutlined,
 } from '@ant-design/icons';
 import { useTranslation } from '@i18n';
+import { IOrderItem } from '@interfaces/order/order-item.interface';
 import { IOrder, OrderStatus } from '@interfaces/order/order.interface';
 import { formatPrice, timestampMongoToDate } from '@utils/string';
-import { Button, Col, Modal, Popconfirm, Row, Space, Table, message } from 'antd';
+import { Button, Col, Descriptions, DescriptionsProps, Modal, Popconfirm, Row, Space, Table, message } from 'antd';
 import { ColumnsType } from 'antd/es/table';
-import { useParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { useOrderCms, orderStatusSteps, useConfirmOrder } from './sevices/apis';
 import * as _ from 'lodash';
-import modal from 'antd/es/modal';
+import { useParams } from 'next/navigation';
+import { useState } from 'react';
+import {
+  orderStatusSteps,
+  useConfirmOrder,
+  useCustomerInfo,
+  useOrderCms,
+  useOrderInfo,
+  useStaffInfo,
+} from './sevices/apis';
+import { useOrderDetail } from '@lng/(public)/purchase_history/services/apis';
 
 export default function CmsOrderPage() {
   const { lng } = useParams();
@@ -29,6 +38,11 @@ export default function CmsOrderPage() {
     isSuccess: confirmOrderSuccess,
   } = useConfirmOrder();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [viewOrderId, setViewOrderId] = useState('');
+  const { data: orderDetail } = useOrderDetail(viewOrderId);
+  const { data: orderInfo } = useOrderInfo(viewOrderId);
+  const { data: ownerOrderInfo } = useCustomerInfo(orderInfo?.data?.ownerId?.userId || '');
+  const { data: merchandiserOrderInfo } = useStaffInfo(orderInfo?.data?.merchandiserId?.userId || '');
 
   const nextOrderStatusSteps = [
     <ShoppingCartOutlined />,
@@ -36,17 +50,10 @@ export default function CmsOrderPage() {
     <DropboxOutlined />,
     <CarOutlined />,
     <CheckCircleOutlined />,
-    <CheckCircleOutlined />,
+    <StopOutlined />,
   ];
-  const orderStatusTxt = ['', t('pending'), t('prepares_package'), t('in_transport'), t('success'), t('success')];
-  const orderStatusColors = [
-    '',
-    'text-yellow-600',
-    'text-cyan-600',
-    'text-blue-600',
-    'text-green-600',
-    'text-green-600',
-  ];
+  const orderStatusTxt = ['', t('pending'), t('prepares_package'), t('in_transport'), t('success'), t('cancel')];
+  const orderStatusColors = ['', 'text-yellow-600', 'text-cyan-600', 'text-blue-600', 'text-green-600', 'text-red-600'];
   const columns: ColumnsType<IOrder> = [
     {
       title: '#',
@@ -109,22 +116,32 @@ export default function CmsOrderPage() {
           <>
             <Space size={'small'}>
               <Button onClick={() => handleViewDetail(record._id)} type="primary" size="large" icon={<EyeOutlined />} />
-              <Popconfirm
-                title={t('change_order_status')}
-                description={t('do_want_change_order_status')}
-                onConfirm={() => handleChangeStatus(record._id, nextOrderStatusStep)}
-                onCancel={() => {}}
-                okText={t('yes')}
-                cancelText={t('no')}
-                disabled={orderStatusStepIdx >= orderStatusSteps.length - 1}
-              >
+              {record.status != OrderStatus.CANCEL ? (
+                <Popconfirm
+                  title={t('change_order_status')}
+                  description={t('do_want_change_order_status')}
+                  onConfirm={() => handleChangeStatus(record._id, nextOrderStatusStep)}
+                  onCancel={() => {}}
+                  okText={t('yes')}
+                  cancelText={t('no')}
+                  disabled={orderStatusStepIdx >= orderStatusSteps.length - 2}
+                >
+                  <Button
+                    type="primary"
+                    className="bg-green-600 text-white hover:!text-white hover:!bg-green-500"
+                    size="large"
+                    icon={nextOrderStatusSteps[orderStatusStepIdx + 1]}
+                  />
+                </Popconfirm>
+              ) : (
                 <Button
+                  disabled
                   type="primary"
-                  className="bg-green-600 text-white hover:!text-white hover:!bg-green-500"
+                  className="bg-red-600 text-white hover:!text-white hover:!bg-red-500"
                   size="large"
-                  icon={nextOrderStatusSteps[orderStatusStepIdx + 1]}
+                  icon={<StopOutlined />}
                 />
-              </Popconfirm>
+              )}
 
               {orderStatusStepIdx <= 1 && (
                 <Button onClick={() => {}} type="primary" danger size="large" icon={<DeleteOutlined />} />
@@ -136,11 +153,73 @@ export default function CmsOrderPage() {
     },
   ];
 
+  const columnsOrderDetail: ColumnsType<IOrderItem> = [
+    {
+      title: '#',
+      key: 'index',
+      width: '5%',
+      render: (text, record, index) => ++index,
+    },
+    {
+      title: t('code'),
+      key: 'code',
+      width: '20%',
+      render: (text, record, index) => record.productId.name,
+    },
+    {
+      title: t('quantity'),
+      key: 'totalQuantity',
+      render: (text, record, index) => record.quantity,
+      width: '10%',
+    },
+    {
+      title: t('amount'),
+      key: 'totalAmount',
+      width: '10%',
+      render: (text, record, index) => formatPrice(record.amount.toString()),
+    },
+  ];
+
+  const customerInfoItems: DescriptionsProps['items'] = [
+    {
+      key: 'fullName',
+      label: t('full_name'),
+      children: <p>{ownerOrderInfo?.data.fullName}</p>,
+    },
+    {
+      key: 'phone',
+      label: t('phone'),
+      children: <p>{ownerOrderInfo?.data.phone}</p>,
+    },
+    {
+      key: 'address',
+      label: t('address'),
+      children: <p>{ownerOrderInfo?.data.address}</p>,
+    },
+  ];
+
+  const orderInfoItems: DescriptionsProps['items'] = [
+    {
+      key: 'merchandiser',
+      label: t('merchandiser'),
+      children: <p>{merchandiserOrderInfo?.data.fullName}</p>,
+    },
+    {
+      key: 'quantity',
+      label: t('quantity'),
+      children: <p>{orderInfo?.data.totalQuantity}</p>,
+    },
+    {
+      key: 'amount',
+      label: t('amount'),
+      children: <p>{formatPrice(orderInfo?.data.totalAmountAfterDiscount.toString() || '')}</p>,
+    },
+  ];
+
   const { data: orders, isSuccess } = useOrderCms();
 
-  useEffect(() => {}, [isSuccess]);
-
   const handleViewDetail = (id: string) => {
+    setViewOrderId(id);
     showModal();
   };
 
@@ -166,13 +245,14 @@ export default function CmsOrderPage() {
     <>
       <Modal title={t('order_info')} centered open={isModalOpen} onOk={handleOk} onCancel={handleCancel} width={1000}>
         <Row>
-          <Col></Col>
-          <Col></Col>
+          <Col>
+            <Descriptions size="small" layout={"vertical"} title={t('customer')} items={customerInfoItems} />
+          </Col>
+          <Col>
+            <Descriptions size="small" layout={"vertical"} title={t('order_info')} items={orderInfoItems} />
+          </Col>
         </Row>
-        <Row>
-          <Col></Col>
-          <Col></Col>
-        </Row>
+        <Table columns={columnsOrderDetail} dataSource={orderDetail?.data} />
       </Modal>
 
       <Table columns={columns} dataSource={orders?.data} />

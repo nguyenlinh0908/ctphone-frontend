@@ -13,6 +13,10 @@ export const GATEWAY = {
   },
   staff: {
     staffs: '/staff',
+    info: '/staff/:id',
+  },
+  customer: {
+    info: '/customer/:id',
   },
   product: {
     all: '/product/all',
@@ -27,14 +31,18 @@ export const GATEWAY = {
     cart: {
       update: '/order/cart',
       my_cart: '/order/cart',
-      my_cart_detail: '/order/cart/detail',
-      delete_cart_detail: '/order/cart/detail',
+      my_cart_detail: '/order/cart/:id/detail',
+      delete_cart_detail: '/order/cart/detail/:id',
     },
     cms: {
-      list: '/order/cms',
+      list: '/order/all',
     },
+    purchase_history: '/order/purchase_history',
     checkout: '/order/:id/checkout',
     confirm: '/order/:id/confirm',
+    detail: '/order/:id/detail',
+    cancel: '/order/:id/cancel',
+    info: '/order/:id',
   },
   payment: {
     vnpay_create_payment_url: '/payment/vnp/create_payment',

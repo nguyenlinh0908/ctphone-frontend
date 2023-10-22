@@ -59,5 +59,9 @@
   "cart": "Cart",
   "register": "Register",
   "logout": "Logout",
-  "order_info": "Order Info"
+  "order_info": "Order Info",
+  "purchase_history": "Purchase history",
+  "do_want_cancel_order": "Do you want to cancel order",
+  "customer": "Customer",
+  "merchandiser": "Merchandiser"
 }

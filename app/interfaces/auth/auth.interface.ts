@@ -26,3 +26,9 @@ export enum Role {
   STAFF = 'STAFF',
   ADMIN = 'ADMIN',
 }
+
+export interface IAccount {
+  _id: string;
+  username: string;
+  userId: string;
+}

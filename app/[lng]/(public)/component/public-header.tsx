@@ -1,12 +1,14 @@
 'use client';
 
 import {
+  FieldTimeOutlined,
   HomeOutlined,
   KeyOutlined,
   ShoppingCartOutlined,
   SolutionOutlined,
   UserAddOutlined,
   UserOutlined,
+  LoginOutlined
 } from '@ant-design/icons';
 import { useTranslation } from '@i18n';
 import { Menu, message } from 'antd';
@@ -106,10 +108,20 @@ export default function PublicHeader() {
                       ),
                     },
                     {
+                      key: 'purchaseHistory',
+                      label: (
+                        <>
+                          <Link href={"/purchase_history"}>
+                            <FieldTimeOutlined /> {t('purchase_history')}
+                          </Link>
+                        </>
+                      ),
+                    },
+                    {
                       key: 'logout',
                       label: (
                         <>
-                          <KeyOutlined />
+                          <LoginOutlined />
                           {t('logout')}
                         </>
                       ),

@@ -1,7 +1,7 @@
 import { IResAPI } from '@interfaces/base-response.interface';
 import { IUpdateCart } from '@interfaces/order/create-cart.interface';
 import { IOrderItem } from '@interfaces/order/order-item.interface';
-import { IOrder, OrderStatus } from '@interfaces/order/order.interface';
+import { IOrder, IOrderInfo, OrderStatus } from '@interfaces/order/order.interface';
 import { BaseService, GATEWAY } from './base';
 
 export class OrderService {
@@ -12,6 +12,7 @@ export class OrderService {
     OrderStatus.PREPARES_PACKAGE,
     OrderStatus.IN_TRANSPORT,
     OrderStatus.SUCCESS,
+    OrderStatus.CANCEL,
   ];
 
   constructor() {
@@ -27,12 +28,14 @@ export class OrderService {
   }
 
   getCartDetail(cartId: string) {
-    return this.orderService.get<IResAPI<IOrderItem[]>>({ url: `${GATEWAY.order.cart.my_cart_detail}/${cartId}` });
+    return this.orderService.get<IResAPI<IOrderItem[]>>({
+      url: `${GATEWAY.order.cart.my_cart_detail.replace(':id', cartId)}`,
+    });
   }
 
   deleteCartDetail(cartDetailId: string) {
     return this.orderService.delete<IResAPI<IOrderItem>>({
-      url: `${GATEWAY.order.cart.delete_cart_detail}/${cartDetailId}`,
+      url: `${GATEWAY.order.cart.delete_cart_detail.replace(':id', cartDetailId)}`,
     });
   }
 
@@ -51,5 +54,21 @@ export class OrderService {
       url: `${GATEWAY.order.confirm.replace(':id', orderId)}`,
       data: { status },
     });
+  }
+
+  purchaseHistory() {
+    return this.orderService.get<IResAPI<IOrder[]>>({ url: `${GATEWAY.order.purchase_history}` });
+  }
+
+  detail(orderId: string) {
+    return this.orderService.get<IResAPI<IOrderItem[]>>({ url: `${GATEWAY.order.detail.replace(':id', orderId)}` });
+  }
+
+  cancel(orderId: string) {
+    return this.orderService.patch<any, IResAPI<IOrder>>({ url: `${GATEWAY.order.cancel.replace(':id', orderId)}` });
+  }
+
+  info(orderId: string) {
+    return this.orderService.get<IResAPI<IOrderInfo>>({ url: GATEWAY.order.info.replace(':id', orderId) });
   }
 }

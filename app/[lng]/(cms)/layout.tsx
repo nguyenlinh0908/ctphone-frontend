@@ -6,14 +6,19 @@ import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   PieChartOutlined,
-  ShoppingCartOutlined
+  ShoppingCartOutlined,
+  UserOutlined,
+  LogoutOutlined
 } from '@ant-design/icons';
 import withAuth from '@hocs/withAuth';
 import type { MenuProps } from 'antd';
-import { Breadcrumb, Button, Layout, Menu, theme } from 'antd';
+import { Breadcrumb, Button, Layout, Menu, message, theme } from 'antd';
 import Link from 'next/link';
-import { Suspense, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import CmsLoading from './loading';
+import { getCookie } from 'cookies-next';
+import { useLogout } from '@lng/(public)/services/apis';
+import { useRouter } from 'next/navigation';
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -32,21 +37,45 @@ const items: MenuItem[] = [
   getItem(<Link href={'/dashboard'}>Dashboard</Link>, '1', <PieChartOutlined />),
   getItem(<Link href={'/staff'}>Staff</Link>, '2', <DesktopOutlined />),
   getItem(<Link href={'/order'}>Order</Link>, '3', <ShoppingCartOutlined />),
-  getItem(<Link href={'/dashboard'} />, '4', <FileOutlined />),
+  getItem('Logout', '4', <LogoutOutlined />),
 ];
 
 function CmsLayout({ children, params: { lng } }: { children: React.ReactNode; params: { lng: string } }) {
   const [collapsed, setCollapsed] = useState(false);
+  const router = useRouter();
   const {
     token: { colorBgContainer },
   } = theme.useToken();
+  const { mutate: logoutMutate, data: logoutData } = useLogout();
+  const me = getCookie('me');
+
+  const handleClickMenuItem = (key: any) => {
+    switch (key.key) {
+      case '4':
+        const accessToken = getCookie('accessToken');
+        const refreshToken = getCookie('refreshToken');
+        if (accessToken && refreshToken) {
+          logoutMutate({ accessToken, refreshToken });
+          message.success('logout success');
+          router.push('/');
+        }
+        break;
+      default:
+    }
+  };
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Suspense fallback={<CmsLoading />}>
         <Sider trigger={null} collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
           <div className="demo-logo-vertical" />
-          <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" items={items} />
+          <Menu
+            onClick={(key) => handleClickMenuItem(key)}
+            theme="dark"
+            defaultSelectedKeys={['1']}
+            mode="inline"
+            items={[getItem(me && JSON.parse(me)?.username, '0', <UserOutlined />), ...items]}
+          />
         </Sider>
         <Layout>
           <Header style={{ padding: 0, background: colorBgContainer }}>
