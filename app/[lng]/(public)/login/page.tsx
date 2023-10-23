@@ -18,13 +18,31 @@ export default function Login({ params: { lng } }: ILoginProps) {
   const [loginInput, setLoginInput] = useState<ILoginInput>({ username: '', password: '' });
   const router = useRouter();
   const { t } = useTranslation(lng);
-  const { mutateAsync: loginAsync, isSuccess } = useLogin();
+  const {
+    data: loginData,
+    mutateAsync: loginAsync,
+    mutate: LoginMutate,
+    isSuccess: isLoginSuccess,
+    isError: isLoginError,
+  } = useLogin();
   const [api, contextHolder] = notification.useNotification();
 
   useEffect(() => {
     const refreshToken = getCookie('refreshToken');
     if (refreshToken) router.push('/');
   }, []);
+
+  useEffect(() => {
+    if (isLoginSuccess) {
+      const roles = loginData.data.me.roles;
+      if (roles.includes(Role.ADMIN)) {
+        router.push('/dashboard');
+      } else {
+        router.push('/');
+      }
+    }
+    if (isLoginError) openNotification(t('login_fail'));
+  }, [isLoginSuccess]);
 
   const openNotification = (message: string) => {
     api.open({
@@ -51,18 +69,7 @@ export default function Login({ params: { lng } }: ILoginProps) {
   };
 
   const handleSubmit = () => {
-    loginAsync(loginInput)
-      .then((data) => {
-        const roles = data.data.me.roles;
-        if (roles.includes(Role.ADMIN)) {
-          router.push('/dashboard');
-        } else {
-          router.push('/');
-        }
-      })
-      .catch((err) => {
-        openNotification(t('login_fail'));
-      });
+    LoginMutate(loginInput);
   };
 
   return (

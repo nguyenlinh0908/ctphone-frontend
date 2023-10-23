@@ -63,5 +63,6 @@
   "purchase_history":"Lịch sử mua hàng",
   "do_want_cancel_order":"Bạn có muốn hủy đơn hàng",
   "customer":"Khách hàng",
-  "merchandiser":"Người phụ trách"
+  "merchandiser":"Người phụ trách",
+  "verify_password":"Xác nhận mật khẩu"
 }

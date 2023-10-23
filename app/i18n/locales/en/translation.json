@@ -63,5 +63,6 @@
   "purchase_history": "Purchase history",
   "do_want_cancel_order": "Do you want to cancel order",
   "customer": "Customer",
-  "merchandiser": "Merchandiser"
+  "merchandiser": "Merchandiser",
+  "verify_password":"Verify Password"
 }
