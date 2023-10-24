@@ -64,5 +64,7 @@
   "do_want_cancel_order": "Do you want to cancel order",
   "customer": "Customer",
   "merchandiser": "Merchandiser",
-  "verify_password":"Verify Password"
+  "verify_password": "Verify Password",
+  "register_account_success": "Register account success",
+  "register_account_fail": "Register account fail. Please, try again"
 }

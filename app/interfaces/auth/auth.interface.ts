@@ -1,3 +1,4 @@
+import { Gender } from '@interfaces/customer/customer.interface';
 export interface ILoginInput {
   username: string;
   password: string;
@@ -31,4 +32,14 @@ export interface IAccount {
   _id: string;
   username: string;
   userId: string;
+}
+
+export interface IRegisterCustomerAccountInput {
+  fullName:string;
+  gender: Gender;
+  dateOfBirth:string;
+  address:string;
+  phone:string
+  username: string;
+  password: string;
 }

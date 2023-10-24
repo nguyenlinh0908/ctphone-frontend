@@ -10,6 +10,8 @@ export const GATEWAY = {
     logout: '/auth/logout',
     gen_access_token: '/auth/gen-access',
     profile: '/auth/profile',
+    register_customer_account: '/auth/customer/account/register',
+    register_staff_account: '/auth/staff/account/register',
   },
   staff: {
     staffs: '/staff',

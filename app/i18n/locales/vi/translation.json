@@ -60,9 +60,11 @@
   "register": "Đăng ký",
   "logout": "Đăng xuất",
   "order_info": "Thông tin đơn hàng",
-  "purchase_history":"Lịch sử mua hàng",
-  "do_want_cancel_order":"Bạn có muốn hủy đơn hàng",
-  "customer":"Khách hàng",
-  "merchandiser":"Người phụ trách",
-  "verify_password":"Xác nhận mật khẩu"
+  "purchase_history": "Lịch sử mua hàng",
+  "do_want_cancel_order": "Bạn có muốn hủy đơn hàng",
+  "customer": "Khách hàng",
+  "merchandiser": "Người phụ trách",
+  "verify_password": "Xác nhận mật khẩu",
+  "register_account_success": "Tạo tài khoản thành công",
+  "register_account_fail": "Tạo tài khoản không thành công,Vui lòng thử lại"
 }

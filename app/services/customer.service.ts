@@ -1,5 +1,5 @@
 import { IResAPI } from '@interfaces/base-response.interface';
-import { ICustomer } from '@interfaces/customer/customer.interface';
+import { ICreateCustomerInput, ICustomer } from '@interfaces/customer/customer.interface';
 import { BaseService, GATEWAY } from './base';
 
 export class CustomerService {
@@ -7,6 +7,10 @@ export class CustomerService {
 
   constructor() {
     this.customerService = new BaseService();
+  }
+
+  create(createCustomerInput: ICreateCustomerInput) {
+    return this.customerService.post<ICreateCustomerInput, IResAPI<ICustomer>>({ url: GATEWAY.customer.create });
   }
 
   info(staffId: string) {

@@ -1,6 +1,13 @@
-import { IGenAccessTokenInput, ILoginInput, ILoginResponse, IProfile } from '@interfaces/auth/auth.interface';
-import { BaseService, GATEWAY } from './base';
+import {
+  IAccount,
+  IGenAccessTokenInput,
+  ILoginInput,
+  ILoginResponse,
+  IProfile,
+  IRegisterCustomerAccountInput
+} from '@interfaces/auth/auth.interface';
 import { IResAPI } from '@interfaces/base-response.interface';
+import { BaseService, GATEWAY } from './base';
 
 export class AuthService {
   private accountService: BaseService;
@@ -28,6 +35,12 @@ export class AuthService {
     return this.accountService.post<{ accessToken: string; refreshToken: string }, IResAPI<boolean>>({
       url: GATEWAY.auth.logout,
       data,
+    });
+  }
+
+  registerCustomerAccount(registerCustomerAccountInput: IRegisterCustomerAccountInput) {
+    return this.accountService.post<IRegisterCustomerAccountInput, IResAPI<IAccount>>({
+      url: GATEWAY.auth.register_customer_account, data: registerCustomerAccountInput
     });
   }
 }
