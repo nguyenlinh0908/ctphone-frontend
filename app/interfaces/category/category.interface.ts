@@ -15,3 +15,8 @@ export interface IFilterCategory {
 
   dept?: number;
 }
+
+export interface ICreateCategoryInput {
+  name: string;
+  parentId: string;
+}

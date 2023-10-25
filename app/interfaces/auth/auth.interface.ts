@@ -20,7 +20,7 @@ export interface IGenAccessTokenInput {
 export interface IProfile {
   _id: string;
   username: string;
-  roles?: Role[];
+  roles: Role[];
   userId?: ICustomer | IStaff
 }
 

@@ -28,6 +28,8 @@ export const GATEWAY = {
   },
   category: {
     find: '/category',
+    all: '/category/all',
+    create: '/category',
   },
   order: {
     cart: {

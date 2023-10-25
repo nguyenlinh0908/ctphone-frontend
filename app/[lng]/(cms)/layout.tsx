@@ -8,7 +8,8 @@ import {
   PieChartOutlined,
   ShoppingCartOutlined,
   UserOutlined,
-  LogoutOutlined
+  LogoutOutlined,
+  SwitcherOutlined,
 } from '@ant-design/icons';
 import withAuth from '@hocs/withAuth';
 import type { MenuProps } from 'antd';
@@ -34,10 +35,11 @@ function getItem(label: React.ReactNode, key: React.Key, icon?: React.ReactNode,
 }
 
 const items: MenuItem[] = [
-  getItem(<Link href={'/dashboard'}>Dashboard</Link>, '1', <PieChartOutlined />),
-  getItem(<Link href={'/staff'}>Staff</Link>, '2', <DesktopOutlined />),
-  getItem(<Link href={'/order'}>Order</Link>, '3', <ShoppingCartOutlined />),
-  getItem('Logout', '4', <LogoutOutlined />),
+  getItem(<Link href={'/dashboard'}>Tổng quan</Link>, 'dashboard', <PieChartOutlined />),
+  getItem(<Link href={'/staff'}>Nhân viên</Link>, 'staff', <DesktopOutlined />),
+  getItem(<Link href={'/order'}>Đơn bán hàng</Link>, 'order', <ShoppingCartOutlined />),
+  getItem(<Link href={'/category'}>Danh mục</Link>, 'category', <SwitcherOutlined />),
+  getItem('Logout', 'logout', <LogoutOutlined />),
 ];
 
 function CmsLayout({ children, params: { lng } }: { children: React.ReactNode; params: { lng: string } }) {
