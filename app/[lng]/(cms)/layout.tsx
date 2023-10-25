@@ -53,7 +53,7 @@ function CmsLayout({ children, params: { lng } }: { children: React.ReactNode; p
 
   const handleClickMenuItem = (key: any) => {
     switch (key.key) {
-      case '4':
+      case 'logout':
         const accessToken = getCookie('accessToken');
         const refreshToken = getCookie('refreshToken');
         if (accessToken && refreshToken) {

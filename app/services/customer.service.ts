@@ -9,10 +9,6 @@ export class CustomerService {
     this.customerService = new BaseService();
   }
 
-  create(createCustomerInput: ICreateCustomerInput) {
-    return this.customerService.post<ICreateCustomerInput, IResAPI<ICustomer>>({ url: GATEWAY.customer.create });
-  }
-
   info(staffId: string) {
     return this.customerService.get<IResAPI<ICustomer>>({ url: GATEWAY.customer.info.replace(':id', staffId) });
   }

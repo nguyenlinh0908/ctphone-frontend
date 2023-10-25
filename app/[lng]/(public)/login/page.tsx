@@ -18,6 +18,13 @@ export default function Login({ params: { lng } }: ILoginProps) {
   const [loginInput, setLoginInput] = useState<ILoginInput>({ username: '', password: '' });
   const router = useRouter();
   const { t } = useTranslation(lng);
+  const openNotification = (message: string) => {
+    api.open({
+      message,
+      description: '',
+      duration: 1,
+    });
+  };
   const {
     data: loginData,
     mutateAsync: loginAsync,
@@ -30,7 +37,7 @@ export default function Login({ params: { lng } }: ILoginProps) {
   useEffect(() => {
     const refreshToken = getCookie('refreshToken');
     if (refreshToken) router.push('/');
-  }, []);
+  }, [router]);
 
   useEffect(() => {
     if (isLoginSuccess) {
@@ -42,15 +49,7 @@ export default function Login({ params: { lng } }: ILoginProps) {
       }
     }
     if (isLoginError) openNotification(t('login_fail'));
-  }, [isLoginSuccess]);
-
-  const openNotification = (message: string) => {
-    api.open({
-      message,
-      description: '',
-      duration: 1,
-    });
-  };
+  }, [isLoginSuccess, router, t, openNotification, isLoginError, loginData]);
 
   const handleInputChange = (e: any) => {
     switch (e.target.name) {

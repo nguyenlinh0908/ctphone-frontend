@@ -41,7 +41,7 @@ export default function CartPage() {
     if (createPaymentVnpayUrlSuccess) {
       router.push(createPaymentVnpayUrlData?.data.url);
     }
-  }, [createPaymentVnpayUrlSuccess]);
+  }, [createPaymentVnpayUrlSuccess,createPaymentVnpayUrlData, router]);
 
   const handleDeleteCartItem = (cartItemId: string) => {
     deleteCartDetailMutate(cartItemId);

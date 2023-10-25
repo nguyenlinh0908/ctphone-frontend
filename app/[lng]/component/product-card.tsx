@@ -1,8 +1,8 @@
 import { IProduct } from '@interfaces/product/product.interface';
 import { formatPrice } from '@utils/string';
 import { Card } from 'antd';
+import Image from 'next/image';
 import Link from 'next/link';
-
 export default function ProductCard({ _id, avatar, name, price }: IProduct) {
   return (
     <>
@@ -12,7 +12,7 @@ export default function ProductCard({ _id, avatar, name, price }: IProduct) {
           hoverable
           style={{ width: 258, minHeight: 423 }}
           cover={
-            <img alt="example" src={avatar} />
+            <Image width={258} height={258} src={avatar} alt={'product image'}/>
           }
         >
           <h3 className="text-left text-lg">{name}</h3>

@@ -18,7 +18,7 @@ const withAuth = (Component: any) => {
       } else {
         router.push(`/${lng}/login`);
       }
-    }, []);
+    }, [lng, router, pathname]);
 
     return <Component {...props} />;
   };

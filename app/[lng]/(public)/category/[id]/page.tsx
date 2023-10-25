@@ -11,7 +11,7 @@ export default function CategoryPage() {
 
   return (
     <>
-      <ProductGrid categoryId={categoryId} title={''} products={products?.data || []} changeProducts={()=> {clo}} />
+      <ProductGrid categoryId={categoryId} title={''} products={products?.data || []}/>
     </>
   );
 }
