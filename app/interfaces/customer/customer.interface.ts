@@ -5,6 +5,7 @@ export interface ICustomer {
   address: string;
   dateOfBirth: string;
   phone: string;
+  email?:string
 }
 
 export interface ICreateCustomerInput {

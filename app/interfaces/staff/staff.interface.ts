@@ -6,4 +6,5 @@ export interface IStaff {
   address: string;
   dateOfBirth: string;
   phone: string;
+  email?:string
 }

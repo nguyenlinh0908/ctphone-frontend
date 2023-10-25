@@ -1,4 +1,5 @@
-import { Gender } from '@interfaces/customer/customer.interface';
+import { Gender, ICustomer } from '@interfaces/customer/customer.interface';
+import { IStaff } from '@interfaces/staff/staff.interface';
 export interface ILoginInput {
   username: string;
   password: string;
@@ -19,7 +20,8 @@ export interface IGenAccessTokenInput {
 export interface IProfile {
   _id: string;
   username: string;
-  roles: Role[];
+  roles?: Role[];
+  userId?: ICustomer | IStaff
 }
 
 export enum Role {

@@ -66,5 +66,8 @@
   "merchandiser": "Người phụ trách",
   "verify_password": "Xác nhận mật khẩu",
   "register_account_success": "Tạo tài khoản thành công",
-  "register_account_fail": "Tạo tài khoản không thành công,Vui lòng thử lại"
+  "register_account_fail": "Tạo tài khoản không thành công,Vui lòng thử lại",
+  "user_info": "Thông tin người dùng",
+  "MALE": "Male",
+  "FEMALE": "Female"
 }
