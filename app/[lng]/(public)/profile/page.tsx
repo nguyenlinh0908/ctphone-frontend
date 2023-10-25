@@ -15,16 +15,15 @@ export default function ProfilePage() {
   return (
     <>
       <Descriptions className="my-5" title={t('user_info')} layout="vertical">
-        <DescriptionsItem label={t('username')} children={profile?.data.username} />
-        <DescriptionsItem label={t('full_name')} children={profile?.data.userId?.fullName} />
-        <DescriptionsItem label={t('gender')} children={profile?.data.userId?.gender} />
-        <DescriptionsItem label={t('address')} children={profile?.data.userId?.address} />
-        <DescriptionsItem label={"Email"} children={profile?.data?.userId?.email} />
-        <DescriptionsItem
-          label={t('date_of_birth')}
-          children={dayjs(profile?.data.userId?.dateOfBirth).format('DD/MM/YYYY')}
-        />
-        <DescriptionsItem label={t('phone')} children={profile?.data.userId?.phone} />
+        <DescriptionsItem label={t('username')}>profile?.data.username</DescriptionsItem>
+        <DescriptionsItem label={t('full_name')}>{profile?.data.userId?.fullName}</DescriptionsItem>
+        <DescriptionsItem label={t('gender')}>{profile?.data.userId?.gender}</DescriptionsItem>
+        <DescriptionsItem label={t('address')}>{profile?.data.userId?.address}</DescriptionsItem>
+        <DescriptionsItem label={'Email'}>{profile?.data?.userId?.email}</DescriptionsItem>
+        <DescriptionsItem label={t('date_of_birth')}>
+          {dayjs(profile?.data.userId?.dateOfBirth).format('DD/MM/YYYY')}
+        </DescriptionsItem>
+        <DescriptionsItem label={t('phone')}>{profile?.data.userId?.phone} </DescriptionsItem>
       </Descriptions>
     </>
   );

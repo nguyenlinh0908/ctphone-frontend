@@ -19,7 +19,7 @@ export default function StaffPage() {
     {
       title: '#',
       key: 'index',
-      render: (text, record, index) => ((staffList?.page || 0) - 1) * (staffList?.limit || 0) + index + 1,
+      render: (text, record, index) => ((staffList?.data.page || 0) - 1) * (staffList?.data.limit || 0) + index + 1,
       width: 50,
     },
     {
@@ -58,8 +58,10 @@ export default function StaffPage() {
   ];
 
   useEffect(() => {
-    setStaffs(staffList);
-  }, [isSuccess]);
+    if (isSuccess) {
+      setStaffs(staffList?.data);
+    }
+  }, [isSuccess, staffList?.data]);
 
   return (
     <>

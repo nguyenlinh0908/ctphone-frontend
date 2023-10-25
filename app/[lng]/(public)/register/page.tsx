@@ -29,7 +29,7 @@ export default function RegisterPage() {
       router.push('/login');
     }
     if (registerCustomerAccountError) message.error(t('register_account_fail'));
-  }, [registerCustomerAccountSuccess, registerCustomerAccountError]);
+  }, [registerCustomerAccountSuccess, registerCustomerAccountError, t, router]);
 
   const registerAccount = async () => {
     try {

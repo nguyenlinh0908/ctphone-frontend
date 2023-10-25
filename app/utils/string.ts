@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import * as _ from 'lodash';
+import _ from 'lodash';
 
 export const timestampMongoToDate = (timestamp: string, format: string = 'DD/MM/YYYY') => {
   return dayjs(timestamp).format(format);
@@ -16,7 +16,7 @@ export const formatPrice = (price: string) => {
 export const buildQueryString = (obj: Object) => {
   let queryString = '';
   _(obj)
-    .toPairs(obj)
+    .toPairs()
     .forEach((i: any, idx: number) => {
       if (i[1]) {
         queryString += `${idx > 0 ? '&' : '?'}${i[0]}=${i[1]}`;

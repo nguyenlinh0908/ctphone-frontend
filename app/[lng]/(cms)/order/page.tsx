@@ -45,12 +45,12 @@ export default function CmsOrderPage() {
   const { data: merchandiserOrderInfo } = useStaffInfo(orderInfo?.data?.merchandiserId?.userId || '');
 
   const nextOrderStatusSteps = [
-    <ShoppingCartOutlined />,
-    <ClockCircleOutlined />,
-    <DropboxOutlined />,
-    <CarOutlined />,
-    <CheckCircleOutlined />,
-    <StopOutlined />,
+    <ShoppingCartOutlined key="1" />,
+    <ClockCircleOutlined key="1"/>,
+    <DropboxOutlined key="1"/>,
+    <CarOutlined key="1"/>,
+    <CheckCircleOutlined key="1"/>,
+    <StopOutlined key="1"/>,
   ];
   const orderStatusTxt = ['', t('pending'), t('prepares_package'), t('in_transport'), t('success'), t('cancel')];
   const orderStatusColors = ['', 'text-yellow-600', 'text-cyan-600', 'text-blue-600', 'text-green-600', 'text-red-600'];

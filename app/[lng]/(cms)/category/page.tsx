@@ -21,7 +21,7 @@ export default function CategoryPage() {
 
   useEffect(() => {
     if (createCategorySuccess) message.success(t('success'));
-  }, [createCategorySuccess]);
+  }, [createCategorySuccess, t]);
 
   const columns: ColumnsType<ICategory> = [
     {
@@ -37,7 +37,7 @@ export default function CategoryPage() {
       render: (text, record, index) => record.name,
     },
     {
-      title: t('category_name'),
+      title: t('category_parent'),
       key: 'categoryName',
       width: '25%',
       render: (text, record, index) => record.dept,
@@ -49,15 +49,8 @@ export default function CategoryPage() {
       render: (text, record, index) => record.dept,
     },
     {
-      title: t('category_parent'),
-      key: 'categoryParent',
-      render: (text, record, index) => '',
-      width: '30%',
-    },
-    {
       title: t('action'),
       key: 'action',
-      width: '5%',
       render: (text, record, index) => (
         <Space size={'small'}>
           <Button
@@ -87,10 +80,10 @@ export default function CategoryPage() {
   return (
     <>
       <Row>
-        <Col span={18}>
+        <Col span={14}>
           <Table columns={columns} dataSource={allCategories?.data} />
         </Col>
-        <Col span={24 - 18}>
+        <Col span={24 - 14}>
           <Form form={form} layout="vertical">
             <FormItem label={t('category_name')} name={'name'}>
               <Input type="text" />

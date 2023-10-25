@@ -30,9 +30,9 @@ export default function ProductLine({ title, products, categoryId }: IProductLin
     <>
       <Row className='mb-5' gutter={[8, 8]} align={"middle"} justify={'start'}>
         {products.length > 0 &&
-          products.map((product) => {
+          products.map((product, idx) => {
             return (
-              <Col sm={'50%'} md={'33.33%'} lg={'25%'} xl={'20%'} xxl={'20%'}>
+              <Col key={idx} sm={'50%'} md={'33.33%'} lg={'25%'} xl={'20%'} xxl={'20%'}>
                 <ProductCard
                   key={product._id}
                   avatar={'https://shopdunk.com/images/thumbs/0008734_iphone-14-pro-128gb_240.png'}

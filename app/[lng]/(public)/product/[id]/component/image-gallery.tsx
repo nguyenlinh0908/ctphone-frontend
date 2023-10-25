@@ -11,6 +11,7 @@ export default function ImageGallery() {
         ]}
       >
         <Image
+          alt="product intro"
           width={550}
           height={550}
           src="https://shopdunk.com/images/thumbs/0008734_iphone-14-pro-128gb_240.png"
