@@ -32,8 +32,12 @@ export default function ProductGrid({ products }: IProductGridProps) {
                   name={product.name}
                   price={product.price}
                   _id={product._id}
-                  rom={0}
-                  ram={0}
+                  rom={product.rom}
+                  ram={product.ram}
+                  enable={false}
+                  romUnit={product.romUnit}
+                  ramUnit={product.ramUnit}
+                  categoryId={product.categoryId}
                 />
               </Col>
             );

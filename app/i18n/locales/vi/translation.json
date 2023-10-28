@@ -73,5 +73,14 @@
   "category_name": "Tên danh mục ",
   "category_parent": "Danh mục cha",
   "submit": "Xác nhận",
-  "dept":"Độ sâu"
+  "dept": "Độ sâu",
+  "memory": "Bộ nhớ",
+  "change_product_status": "Thay đổi trạng thái sản phẩm",
+  "do_want_change_product_status": "Bạn có muốn thay đổi trạng thái sản phẩm ?",
+  "unit": "Đơn vị",
+  "color_name": "Màu",
+  "color_code": "Mã màu",
+  "product_info": "Thông tin sản phẩm",
+  "create_product_success": "Tạo sản phẩm thành công",
+  "create_product_fail": "Tạo sản phẩm thất bại"
 }

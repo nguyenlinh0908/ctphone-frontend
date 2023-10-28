@@ -25,6 +25,8 @@ export const GATEWAY = {
     find_by_id: '/product',
     find: '/product',
     line: '/product/category/line',
+    update_status: '/product/:id/status',
+    create: '/product',
   },
   category: {
     find: '/category',

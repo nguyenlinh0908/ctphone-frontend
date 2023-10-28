@@ -28,7 +28,8 @@ export default function ProductLine({ title, products, categoryId }: IProductLin
 
   return (
     <>
-      <Row className='mb-5' gutter={[8, 8]} align={"middle"} justify={'start'}>
+      <h3 className="text-center">{products[0].categoryId.name}</h3>
+      <Row className="mb-5" gutter={[8, 8]} align={'middle'} justify={'start'}>
         {products.length > 0 &&
           products.map((product, idx) => {
             return (
@@ -39,14 +40,18 @@ export default function ProductLine({ title, products, categoryId }: IProductLin
                   name={product.name}
                   price={product.price}
                   _id={product._id}
-                  rom={0}
-                  ram={0}
+                  rom={product.rom}
+                  ram={product.ram}
+                  enable={false}
+                  romUnit={product.romUnit}
+                  ramUnit={product.ramUnit}
+                  categoryId={product.categoryId}
                 />
               </Col>
             );
           })}
       </Row>
-      <Row align={"middle"} justify={'center'}>
+      <Row align={'middle'} justify={'center'}>
         <Col span={'100%'}>
           <Button
             size="large"
