@@ -11,6 +11,7 @@ import {
   LogoutOutlined,
   SwitcherOutlined,
   CoffeeOutlined,
+  PlusSquareOutlined
 } from '@ant-design/icons';
 import withAuth from '@hocs/withAuth';
 import type { MenuProps } from 'antd';
@@ -41,7 +42,7 @@ const items: MenuItem[] = [
   getItem(<Link href={'/order'}>Đơn bán hàng</Link>, 'order', <ShoppingCartOutlined />),
   getItem(<Link href={'/category'}>Danh mục</Link>, 'category', <SwitcherOutlined />),
   getItem(<Link href={'/product'}>Sản phẩm</Link>, 'product', <CoffeeOutlined />),
-
+  getItem(<Link href={'/warehouse_receipt'}>Đơn nhập hàng</Link>, 'warehouse_receipt', <PlusSquareOutlined />),
   getItem('Logout', 'logout', <LogoutOutlined />),
 ];
 

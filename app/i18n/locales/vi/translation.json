@@ -82,5 +82,10 @@
   "color_code": "Mã màu",
   "product_info": "Thông tin sản phẩm",
   "create_product_success": "Tạo sản phẩm thành công",
-  "create_product_fail": "Tạo sản phẩm thất bại"
+  "create_product_fail": "Tạo sản phẩm thất bại",
+  "deliverer_name": "Người giao hàng",
+  "delivery_date": "Ngày giao hàng",
+  "warehouse_receipt_info": "Thông tin đơn nhập hàng",
+  "product": "Sản phẩm",
+  "select_product": "Chọn sản phẩm"
 }

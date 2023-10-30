@@ -53,6 +53,12 @@ export const GATEWAY = {
   payment: {
     vnpay_create_payment_url: '/payment/vnp/create_payment',
   },
+  warehouse_receipt: {
+    create: '/warehouse-receipt',
+    all: '/warehouse-receipt/all',
+    detail: '/warehouse-receipt/:id/detail',
+    update: '/warehouse-receipt/:id/status',
+  },
 };
 
 let requestCheckCounter = 0;
