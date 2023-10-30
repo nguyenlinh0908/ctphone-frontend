@@ -3,7 +3,7 @@
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { useMyCart, useProductDetail, useUpdateCart } from './services/api';
-import { Button, Col, Row, Space } from 'antd';
+import { Button, Col, Row, Space, message } from 'antd';
 import ImageGallery from './component/image-gallery';
 import WrapperInfo from './component/wrapper-info';
 import Prices from './component/prices';
@@ -29,8 +29,8 @@ export default function ProductDetail() {
       .then(() => {
         router.push('/cart');
       })
-      .catch(() => {
-        router.push('/login');
+      .catch((err) => {
+        message.error(err.response.data.message);
       });
   };
 

@@ -5,7 +5,7 @@ import { useTranslation } from '@i18n';
 import { CartAction } from '@interfaces/order/create-cart.interface';
 import { IOrderItem } from '@interfaces/order/order-item.interface';
 import vnpayLogo from '@public/payment/logo-vnpay.svg';
-import cashLogo from "@public/payment/cash-logo.svg"
+import cashLogo from '@public/payment/cash-logo.svg';
 import { formatPrice } from '@utils/string';
 import { Button, Col, Input, Popconfirm, Radio, Row, Space, Table, message } from 'antd';
 import Card from 'antd/es/card/Card';
@@ -27,7 +27,7 @@ export default function CartPage() {
   const [messageApi, contextHolder] = message.useMessage();
   const { data: myCart, isSuccess: isGetCartSuccess } = useMyCart();
   const { data: cartDetail, isSuccess: isGetCartDetailSuccess } = useCartDetail(myCart?.data._id || '');
-  const { mutate: updateCartMutate } = useUpdateCart();
+  const { mutateAsync: updateCartMutateAsync } = useUpdateCart();
   const { mutate: deleteCartDetailMutate } = useDeleteCartDetail();
   const { mutateAsync: checkoutMutateAsync, isSuccess: checkoutSuccess } = useCheckout();
   const {
@@ -41,14 +41,16 @@ export default function CartPage() {
     if (createPaymentVnpayUrlSuccess) {
       router.push(createPaymentVnpayUrlData?.data.url);
     }
-  }, [createPaymentVnpayUrlSuccess,createPaymentVnpayUrlData, router]);
+  }, [createPaymentVnpayUrlSuccess, createPaymentVnpayUrlData, router]);
 
   const handleDeleteCartItem = (cartItemId: string) => {
     deleteCartDetailMutate(cartItemId);
   };
 
   const handleUpdateCartItem = (productId: string, action: CartAction) => {
-    updateCartMutate({ productId, action });
+    updateCartMutateAsync({ productId, action })
+      .then(() => {})
+      .catch((err) => message.error(err.response.data.message));
   };
 
   const handleCheckout = (orderId: string) => {
