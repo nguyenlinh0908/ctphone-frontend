@@ -1,8 +1,8 @@
 'use client';
 
-import { useParams } from 'next/navigation';
-import { useAllProducts, useCreateProduct, useUpdateProductStatus } from './services/apis';
+import { CheckOutlined, CloseOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { useTranslation } from '@i18n';
+import { IProduct } from '@interfaces/product/product.interface';
 import {
   Button,
   ColorPicker,
@@ -19,14 +19,16 @@ import {
   UploadFile,
   message,
 } from 'antd';
-import { ColumnsType } from 'antd/es/table';
-import { IProduct } from '@interfaces/product/product.interface';
-import { CheckOutlined, CloseOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
-import { useEffect, useMemo, useState } from 'react';
-import { RcFile, UploadProps } from 'antd/es/upload';
-import { useAllCategories } from '../category/services/apis';
-import { useForm } from 'antd/es/form/Form';
 import { Color } from 'antd/es/color-picker';
+import { useForm } from 'antd/es/form/Form';
+import { ColumnsType } from 'antd/es/table';
+import { RcFile, UploadProps } from 'antd/es/upload';
+import { useParams } from 'next/navigation';
+import { useEffect, useMemo, useState } from 'react';
+import { useAllCategories } from '../category/services/apis';
+import { useAllProducts, useCreateProduct, useUpdateProductStatus } from './services/apis';
+import { GATEWAY } from '@services/base';
+import { getCookie } from 'cookies-next';
 
 const getBase64 = (file: RcFile): Promise<string> =>
   new Promise((resolve, reject) => {
@@ -147,6 +149,7 @@ export default function ProductPage() {
   ];
 
   const hexString = useMemo(() => (typeof colorHex === 'string' ? colorHex : colorHex.toHexString()), [colorHex]);
+
   const handlePreview = async (file: UploadFile) => {
     if (!file.url && !file.preview) {
       file.preview = await getBase64(file.originFileObj as RcFile);
@@ -163,20 +166,30 @@ export default function ProductPage() {
 
   const handleActionWithProduct = async () => {
     const values = await form.validateFields();
-
     if (values) {
       if (values.colorCode) {
         values.colorCode = `#${typeof colorHex == 'string' ? colorHex : colorHex.toHex()}`;
       }
-      createProductMutateAsync(values)
-        .then(() => message.success(t('create_product_success')))
+      const mediaIds = fileList.map((i) => i.response.data._id);
+
+      createProductMutateAsync({ ...values, mediaIds })
+        .then(() => {
+          message.success(t('create_product_success'));
+          form.resetFields();
+          setFileList([]);
+          setOpenModal(false);
+        })
         .catch(() => {
           message.destroy('create_product_fail');
         });
     }
   };
 
-  const handleChangeImageList: UploadProps['onChange'] = ({ fileList: newFileList }) => setFileList(newFileList);
+  const handleChangeImageList: UploadProps['onChange'] = ({ fileList: newFileList }) => {
+    console.log(newFileList);
+    setFileList(newFileList);
+  };
+
   return (
     <>
       <div className="w-full flex justify-end">
@@ -189,21 +202,28 @@ export default function ProductPage() {
         centered
         open={openModal}
         onOk={() => handleActionWithProduct()}
-        onCancel={() => setOpenModal(false)}
+        onCancel={() => {
+          form.resetFields();
+          setFileList([]);
+          setOpenModal(false);
+        }}
         width={1000}
       >
+        <Upload
+          action={`${GATEWAY.root}${GATEWAY.upload.single_upload}`}
+          headers={{
+            'Accept-Language': window.location.pathname.slice(1, 3),
+            Authorization: `Bearer ${getCookie('accessToken')}`,
+          }}
+          listType="picture-card"
+          fileList={fileList}
+          onPreview={handlePreview}
+          onChange={handleChangeImageList}
+        >
+          {fileList.length >= 8 ? null : uploadButton}
+        </Upload>
         <Form layout="vertical" form={form}>
           <Form.Item>
-            <Form.Item>
-              <Upload
-                listType="picture-card"
-                fileList={fileList}
-                onPreview={handlePreview}
-                onChange={handleChangeImageList}
-              >
-                {fileList.length >= 8 ? null : uploadButton}
-              </Upload>
-            </Form.Item>
             <Form.Item label={'SKU'} name={'sku'}>
               <Input />
             </Form.Item>

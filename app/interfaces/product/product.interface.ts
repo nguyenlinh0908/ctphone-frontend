@@ -1,4 +1,5 @@
 import { ICategory } from '@interfaces/category/category.interface';
+import { IMedia } from '@interfaces/upload/media.interface';
 
 export interface IProduct {
   _id: string;
@@ -26,6 +27,8 @@ export interface IProduct {
   colorName?: string;
 
   categoryId: ICategory;
+
+  media?: IMedia[];
 }
 
 export interface IProductFilter {
@@ -42,7 +45,7 @@ export interface IUpdateProductStatusInput {
   status: boolean;
 }
 
-export interface ICreateProductInput{
+export interface ICreateProductInput {
   name: string;
 
   price: string;
@@ -62,4 +65,6 @@ export interface ICreateProductInput{
   colorName: string;
 
   categoryId: ICategory;
+
+  mediaIds?: string[];
 }

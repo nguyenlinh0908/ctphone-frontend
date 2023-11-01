@@ -28,7 +28,7 @@ export default function ProductGrid({ products }: IProductGridProps) {
               <Col key={idx} sm={'50%'} md={'33.33%'} lg={'25%'} xl={'25%'} xxl={'25%'}>
                 <ProductCard
                   key={product._id}
-                  avatar={'https://shopdunk.com/images/thumbs/0008734_iphone-14-pro-128gb_240.png'}
+                  avatar={product.media ? process.env.NEXT_PUBLIC_ACCESS_FILE+product.media[0].url : ""}
                   name={product.name}
                   price={product.price}
                   _id={product._id}

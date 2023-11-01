@@ -5,7 +5,7 @@ const nextConfig = {
         API_ENDPOINT: process.env.NEXT_PUBLIC_API_ENDPOINT,
     },
     images:{
-        domains:['shopdunk.com']
+        domains:['shopdunk.com',"127.0.0.1"],
     }
 }
 

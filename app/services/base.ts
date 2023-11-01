@@ -59,6 +59,9 @@ export const GATEWAY = {
     detail: '/warehouse-receipt/:id/detail',
     update: '/warehouse-receipt/:id/status',
   },
+  upload: {
+    single_upload: '/upload',
+  },
 };
 
 let requestCheckCounter = 0;

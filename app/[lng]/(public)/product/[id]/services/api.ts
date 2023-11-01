@@ -9,7 +9,7 @@ const productDetailService = new ProductService();
 const orderService = new OrderService();
 
 export const useProductDetail = (id: string) => {
-  return useQuery('productDetail', () => productDetailService.findById(id));
+  return useQuery('productDetail', () => productDetailService.findById(id), {enabled:!!id});
 };
 
 export const useUpdateCart = () => {

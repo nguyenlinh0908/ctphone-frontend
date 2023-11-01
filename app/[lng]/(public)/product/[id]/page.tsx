@@ -23,7 +23,9 @@ export default function ProductDetail() {
     { sku: product?.data.sku },
   );
   const { data: updateCartData, isSuccess: updateCartSuccess, mutateAsync: updateCartMutateAsync } = useUpdateCart();
-
+  useEffect(() => {
+    console.log('product', product);
+  }, [isSuccess]);
   const handleAddToCart = async (productId: string) => {
     updateCartMutateAsync({ productId, action: CartAction.ADD })
       .then(() => {
@@ -40,11 +42,15 @@ export default function ProductDetail() {
         <>
           <Row justify={'center'}>
             <Col className="flex justify-center" span={12}>
-              <ImageGallery />
+              <ImageGallery
+                media={
+                  product.data?.media ? product.data.media?.map((i) => process.env.NEXT_PUBLIC_ACCESS_FILE + i.url) : []
+                }
+              />
             </Col>
             <Col span={12}>
-              <WrapperInfo name={product?.data.name || ''} rate={'4.5'} />
-              <Prices price={product?.data.price || ''} oldPrice={'40000000'} />
+              <WrapperInfo name={product.data.name || ''} rate={'4.5'} />
+              <Prices price={product.data.price || ''} oldPrice={'40000000'} />
               {productsSuccess && <Attributes primaryProduct={product.data} products={products.data} />}
               <Space className="py-3" direction="vertical" style={{ width: '100%' }}>
                 <Button

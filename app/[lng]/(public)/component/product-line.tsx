@@ -36,7 +36,7 @@ export default function ProductLine({ title, products, categoryId }: IProductLin
               <Col key={idx} sm={'50%'} md={'33.33%'} lg={'25%'} xl={'20%'} xxl={'20%'}>
                 <ProductCard
                   key={product._id}
-                  avatar={'https://shopdunk.com/images/thumbs/0008734_iphone-14-pro-128gb_240.png'}
+                  avatar={`${process.env.NEXT_PUBLIC_ACCESS_FILE}${product.media ? product.media[0].url : ''}`}
                   name={product.name}
                   price={product.price}
                   _id={product._id}
