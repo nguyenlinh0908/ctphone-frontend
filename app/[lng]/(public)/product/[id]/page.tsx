@@ -23,9 +23,7 @@ export default function ProductDetail() {
     { sku: product?.data.sku },
   );
   const { data: updateCartData, isSuccess: updateCartSuccess, mutateAsync: updateCartMutateAsync } = useUpdateCart();
-  useEffect(() => {
-    console.log('product', product);
-  }, [isSuccess]);
+
   const handleAddToCart = async (productId: string) => {
     updateCartMutateAsync({ productId, action: CartAction.ADD })
       .then(() => {
@@ -40,7 +38,7 @@ export default function ProductDetail() {
     <>
       {isSuccess && (
         <>
-          <Row justify={'center'}>
+          <Row justify={'center'} gutter={32}>
             <Col className="flex justify-center" span={12}>
               <ImageGallery
                 media={
@@ -51,9 +49,10 @@ export default function ProductDetail() {
             <Col span={12}>
               <WrapperInfo name={product.data.name || ''} rate={'4.5'} />
               <Prices price={product.data.price || ''} oldPrice={'40000000'} />
-              {productsSuccess && <Attributes primaryProduct={product.data} products={products.data} />}
+              {productsSuccess && <Attributes primaryProduct={product.data} products={products.data.data} />}
               <Space className="py-3" direction="vertical" style={{ width: '100%' }}>
                 <Button
+                  disabled={!product.data.enable}
                   onClick={() => handleAddToCart(product.data._id)}
                   className="font-bold bg-[#0066cc]"
                   type="primary"
@@ -61,7 +60,7 @@ export default function ProductDetail() {
                   block
                   style={{ height: 64 }}
                 >
-                  {t('buy_now')}
+                  {product.data.enable ? t('buy_now'):t('product_unavailable')}
                 </Button>
               </Space>
             </Col>

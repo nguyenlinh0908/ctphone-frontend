@@ -87,5 +87,6 @@
   "delivery_date":"Delivery date",
   "warehouse_receipt_info":"Warehouse receipt info",
   "product":"Product",
-  "select_product":"Select product"
+  "select_product":"Select product",
+  "product_unavailable":"Product unavailable"
 }

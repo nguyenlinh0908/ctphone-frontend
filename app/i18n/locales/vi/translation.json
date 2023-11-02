@@ -87,5 +87,7 @@
   "delivery_date": "Ngày giao hàng",
   "warehouse_receipt_info": "Thông tin đơn nhập hàng",
   "product": "Sản phẩm",
-  "select_product": "Chọn sản phẩm"
+  "select_product": "Chọn sản phẩm",
+  "product_unavailable":"Sản phẩm không khả dụng"
+
 }

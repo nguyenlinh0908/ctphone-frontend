@@ -212,7 +212,7 @@ export default function ProductPage() {
         <Upload
           action={`${GATEWAY.root}${GATEWAY.upload.single_upload}`}
           headers={{
-            'Accept-Language': window.location.pathname.slice(1, 3),
+            'Accept-Language':"vi",
             Authorization: `Bearer ${getCookie('accessToken')}`,
           }}
           listType="picture-card"

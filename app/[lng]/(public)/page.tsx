@@ -12,27 +12,27 @@ export default function HomePage() {
 
   return (
     <>
-      {productsLine1?.data && productsLine1?.data.length > 0 && (
+      {productsLine1?.data && productsLine1?.data.data.length > 0 && (
         <ProductLine
           categoryId={categories?.data[0]._id || '1'}
           title={categories?.data[0].name || ''}
-          products={productsLine1?.data || []}
+          products={productsLine1?.data.data || []}
         />
       )}
 
-      {productsLine2?.data && productsLine2?.data.length > 0 && (
+      {productsLine2?.data && productsLine2?.data.data.length > 0 && (
         <ProductLine
           categoryId={categories?.data[1]._id || '1'}
           title={categories?.data[1].name || ''}
-          products={productsLine2?.data || []}
+          products={productsLine2?.data.data || []}
         />
       )}
 
-      {productsLine3?.data && productsLine3?.data.length > 0 && (
+      {productsLine3?.data && productsLine3?.data.data.length > 0 && (
         <ProductLine
           categoryId={categories?.data[2]._id || '1'}
           title={categories?.data[2].name || ''}
-          products={productsLine3?.data || []}
+          products={productsLine3?.data.data || []}
         />
       )}
     </>

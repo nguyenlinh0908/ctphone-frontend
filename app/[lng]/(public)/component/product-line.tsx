@@ -7,7 +7,7 @@ import ProductCard from '@lng/component/product-card';
 import { Button, Col, Row } from 'antd';
 import { useParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
-
+import vercelSvg from "@public/vercel.svg"
 export interface IProductLineProps {
   categoryId: string;
 
@@ -36,7 +36,7 @@ export default function ProductLine({ title, products, categoryId }: IProductLin
               <Col key={idx} sm={'50%'} md={'33.33%'} lg={'25%'} xl={'20%'} xxl={'20%'}>
                 <ProductCard
                   key={product._id}
-                  avatar={`${process.env.NEXT_PUBLIC_ACCESS_FILE}${product.media ? product.media[0].url : ''}`}
+                  avatar={product.media && product.media.length > 0 ? process.env.NEXT_PUBLIC_ACCESS_FILE + product.media[0].url : vercelSvg}
                   name={product.name}
                   price={product.price}
                   _id={product._id}

@@ -5,7 +5,7 @@ import {
   IUpdateProductStatusInput,
 } from '@interfaces/product/product.interface';
 import { BaseService, GATEWAY } from './base';
-import { IPaginateDto } from '@interfaces/paginate.interface';
+import { IPaginateDto, IPaginateResponse } from '@interfaces/paginate.interface';
 import { IResAPI } from '@interfaces/base-response.interface';
 import { buildQueryString } from '@utils/string';
 
@@ -26,7 +26,7 @@ export class ProductService {
 
   find(paginate: IPaginateDto, filter: IProductFilter) {
     const queryString = buildQueryString({ ...paginate, ...filter });
-    return this.productService.get<IResAPI<IProduct[]>>({
+    return this.productService.get<IResAPI<IPaginateResponse<IProduct>>>({
       url: `${GATEWAY.product.find}${queryString}`,
     });
   }

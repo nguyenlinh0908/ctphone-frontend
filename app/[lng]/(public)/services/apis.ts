@@ -16,7 +16,7 @@ export const useNavigationCategories = (filter: IFilterCategory) => {
 };
 
 export const useProducts = (paginate: IPaginateDto, filter: IProductFilter) => {
-  return useQuery([`products`, filter], () => productService.find(paginate, filter), { enabled: !!filter });
+  return useQuery([`products`, filter, paginate], () => productService.find(paginate, filter), { enabled: !!filter });
 };
 
 export const useProfile = () => {
