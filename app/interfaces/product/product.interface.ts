@@ -37,6 +37,10 @@ export interface IProductFilter {
   categoryId?: string;
 
   sku?: string;
+
+  order?:string
+  
+  dir?:string
 }
 
 export interface IUpdateProductStatusInput {
