@@ -6,7 +6,7 @@ import { IPaginateDto } from '@interfaces/paginate.interface';
 import { IProductFilter } from '@interfaces/product/product.interface';
 import ProductGrid from '@lng/(public)/component/product-grid';
 import { useProducts } from '@lng/(public)/services/apis';
-import { Button, Flex, Select } from 'antd';
+import { Select } from 'antd';
 import { useParams } from 'next/navigation';
 import { useState } from 'react';
 

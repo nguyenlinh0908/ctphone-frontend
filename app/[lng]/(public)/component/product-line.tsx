@@ -28,7 +28,7 @@ export default function ProductLine({ title, products, categoryId }: IProductLin
 
   return (
     <>
-      <h3 className="text-center">{products[0].categoryId.name}</h3>
+      <h2 className="text-center font-bold text-3xl">{products[0].categoryId.name}</h2>
       <Row className="mb-5" gutter={[8, 8]} align={'middle'} justify={'start'}>
         {products.length > 0 &&
           products.map((product, idx) => {

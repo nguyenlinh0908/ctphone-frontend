@@ -11,7 +11,7 @@ export const formatPhoneNumber = (phone: string, countryCode: string = '+84') =>
 
 export const formatPrice = (price: string) => {
   const currency =  Number(price).toLocaleString('vi-VI');
-  return `${currency} VND`
+  return `${currency} đ`
 };
 
 export const buildQueryString = (obj: Object) => {

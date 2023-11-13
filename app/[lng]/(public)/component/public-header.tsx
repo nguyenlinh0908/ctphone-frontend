@@ -4,23 +4,20 @@ import {
   FieldTimeOutlined,
   HomeOutlined,
   KeyOutlined,
+  LoginOutlined,
   ShoppingCartOutlined,
   SolutionOutlined,
   UserAddOutlined,
   UserOutlined,
-  LoginOutlined,
-  SearchOutlined,
 } from '@ant-design/icons';
 import { useTranslation } from '@i18n';
-import { Col, Input, Menu, Row, Select, message } from 'antd';
+import { Menu, message } from 'antd';
+import Search from 'antd/es/input/Search';
 import { Header } from 'antd/es/layout/layout';
 import { getCookie } from 'cookies-next';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
-import { useLogout, useNavigationCategories, useProducts, useProfile } from '../services/apis';
-import { useEffect, useState } from 'react';
-import Image from 'next/image';
-import { formatPrice } from '@utils/string';
+import { useLogout, useNavigationCategories } from '../services/apis';
 
 export default function PublicHeader() {
   const { lng } = useParams();
@@ -29,8 +26,6 @@ export default function PublicHeader() {
   const { mutate: logoutMutate, data: logoutData } = useLogout();
   const { data: categories, isSuccess } = useNavigationCategories({ dept: 1 }); // dept of category level 1 => navigation category
   const me = getCookie('me');
-  const [searchValue, setSearchValue] = useState<string>();
-  const { data: searchingProductData } = useProducts({ page: 1, limit: 9 }, { name: searchValue });
 
   const handleClickMenuItem = (key: any) => {
     switch (key.key) {
@@ -48,11 +43,7 @@ export default function PublicHeader() {
   };
 
   const handleSearch = (newValue: string) => {
-    setSearchValue(newValue);
-  };
-
-  const handleChange = (newValue: string) => {
-    setSearchValue(newValue);
+    router.push(`search?q=${newValue}`);
   };
 
   return (
@@ -166,39 +157,9 @@ export default function PublicHeader() {
             {
               key: 'search',
               label: (
-                <Select
-                  placeholder={'Search'}
-                  style={{ width: 200 }}
-                  defaultActiveFirstOption={false}
-                  suffixIcon={null}
-                  filterOption={false}
-                  onSearch={handleSearch}
-                  onChange={handleChange}
-                  notFoundContent={null}
-                  autoClearSearchValue
-                  value={""}
-                  options={(searchingProductData?.data.data || []).map((d) => ({
-                    value: d.name,
-                    label: (
-                      <Link className="text-black" href={`product/${d._id}`} >
-                        <Row gutter={3} align="middle" justify="center">
-                          <Col span={9} className={"flex justify-center items-center"}>
-                          <Image
-                              alt="product intro"
-                              width={32}
-                              height={32}
-                              src={d.media && d.media.length > 0 ? process.env.NEXT_PUBLIC_ACCESS_FILE +d.media[0].url : ''}
-                            />
-                          </Col>
-                          <Col span={15}>
-                            <h5>{d.name}</h5>
-                            <span>{formatPrice(d.price)}</span>
-                          </Col>
-                        </Row>
-                      </Link>
-                    ),
-                  }))}
-                />
+                <div className="flex justify-center items-center h-full">
+                  <Search onSearch={handleSearch} placeholder="Search" loading={false} />
+                </div>
               ),
             },
           ]
