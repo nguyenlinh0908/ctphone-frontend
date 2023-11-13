@@ -51,6 +51,7 @@ export default function ProductGrid({ products, limit, totalRecords, handleChang
                   romUnit={product.romUnit}
                   ramUnit={product.ramUnit}
                   categoryId={product.categoryId}
+                  quantity={product.quantity}
                 />
               </Col>
             );

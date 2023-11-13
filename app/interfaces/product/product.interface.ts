@@ -29,6 +29,8 @@ export interface IProduct {
   categoryId: ICategory;
 
   media?: IMedia[];
+
+  quantity: number;
 }
 
 export interface IProductFilter {
@@ -38,9 +40,9 @@ export interface IProductFilter {
 
   sku?: string;
 
-  order?:string
-  
-  dir?:string
+  order?: string;
+
+  dir?: string;
 }
 
 export interface IUpdateProductStatusInput {

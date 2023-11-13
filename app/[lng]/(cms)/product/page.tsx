@@ -80,6 +80,11 @@ export default function ProductPage() {
       render: (text, record, index) => record.name,
     },
     {
+      title: t('quantity'),
+      key: 'quantity',
+      render: (text, record, index) => record.quantity,
+    },
+    {
       title: t('color'),
       key: 'color',
       render: (text, record, index) => (
@@ -186,7 +191,6 @@ export default function ProductPage() {
   };
 
   const handleChangeImageList: UploadProps['onChange'] = ({ fileList: newFileList }) => {
-    console.log(newFileList);
     setFileList(newFileList);
   };
 
@@ -212,7 +216,7 @@ export default function ProductPage() {
         <Upload
           action={`${GATEWAY.root}${GATEWAY.upload.single_upload}`}
           headers={{
-            'Accept-Language':"vi",
+            'Accept-Language': 'vi',
             Authorization: `Bearer ${getCookie('accessToken')}`,
           }}
           listType="picture-card"
