@@ -19,6 +19,7 @@ export const GATEWAY = {
   },
   customer: {
     info: '/customer/:id',
+    quantity: '/customer/statistical/quantity',
   },
   product: {
     all: '/product/all',
@@ -49,6 +50,8 @@ export const GATEWAY = {
     detail: '/order/:id/detail',
     cancel: '/order/:id/cancel',
     info: '/order/:id',
+    quantity: '/order/statistical/quantity',
+    revenue: '/order/statistical/revenue',
   },
   payment: {
     vnpay_create_payment_url: '/payment/vnp/create_payment',

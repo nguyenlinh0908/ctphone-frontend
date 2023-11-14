@@ -11,11 +11,12 @@ import {
   LogoutOutlined,
   SwitcherOutlined,
   CoffeeOutlined,
-  PlusSquareOutlined
+  PlusSquareOutlined,
+  BellOutlined
 } from '@ant-design/icons';
 import withAuth from '@hocs/withAuth';
 import type { MenuProps } from 'antd';
-import { Breadcrumb, Button, Layout, Menu, message, theme } from 'antd';
+import { Avatar, Badge, Breadcrumb, Button, Layout, Menu, message, theme } from 'antd';
 import Link from 'next/link';
 import { Suspense, useEffect, useState } from 'react';
 import CmsLoading from './loading';
@@ -85,22 +86,21 @@ function CmsLayout({ children, params: { lng } }: { children: React.ReactNode; p
         </Sider>
         <Layout>
           <Header style={{ padding: 0, background: colorBgContainer }}>
-            <Button
-              type="text"
-              icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-              onClick={() => setCollapsed(!collapsed)}
-              style={{
-                fontSize: '16px',
-                width: 64,
-                height: 64,
-              }}
-            />
+              <Button
+                type="text"
+                icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+                onClick={() => setCollapsed(!collapsed)}
+                style={{
+                  fontSize: '16px',
+                  width: 64,
+                  height: 64,
+                }}
+              />
           </Header>
           <Content style={{ margin: '0 16px' }}>
-            <Breadcrumb style={{ margin: '16px 0' }} items={[{ title: 'Apple' }, { title: 'Samsung' }]} />
             <div style={{ padding: 24, minHeight: 360, background: colorBgContainer }}>{children}</div>
           </Content>
-          <Footer style={{ textAlign: 'center' }}>Ant Design ©2023 Created by Ant UED</Footer>
+          <Footer style={{ textAlign: 'center' }}>CTPHONE CMS</Footer>
         </Layout>
       </Suspense>
     </Layout>

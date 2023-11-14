@@ -82,7 +82,9 @@ export default function ProductPage() {
     {
       title: t('quantity'),
       key: 'quantity',
-      render: (text, record, index) => record.quantity,
+      render: (text, record, index) => (
+        <span className={record.quantity < 5 ? "text-yellow-600" : ""}>{record.quantity}</span>
+      ),
     },
     {
       title: t('color'),

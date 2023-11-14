@@ -1,4 +1,4 @@
-import { IResAPI } from '@interfaces/base-response.interface';
+import { IQuantity, IResAPI, IRevenue } from '@interfaces/base-response.interface';
 import { IUpdateCart } from '@interfaces/order/create-cart.interface';
 import { IOrderItem } from '@interfaces/order/order-item.interface';
 import { IOrder, IOrderInfo, OrderStatus } from '@interfaces/order/order.interface';
@@ -70,5 +70,13 @@ export class OrderService {
 
   info(orderId: string) {
     return this.orderService.get<IResAPI<IOrderInfo>>({ url: GATEWAY.order.info.replace(':id', orderId) });
+  }
+
+  quantity() {
+    return this.orderService.get<IResAPI<IQuantity>>({ url: GATEWAY.order.quantity });
+  }
+
+  revenue() {
+    return this.orderService.get<IResAPI<IRevenue>>({ url: GATEWAY.order.revenue });
   }
 }
