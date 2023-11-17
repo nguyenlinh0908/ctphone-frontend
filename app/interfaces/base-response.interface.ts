@@ -9,5 +9,11 @@ export interface IQuantity {
 }
 
 export interface IRevenue {
+  month: number;
+  amount: number;
+}
+
+export interface ICost {
+  month: number;
   amount: number;
 }

@@ -52,6 +52,7 @@ export const GATEWAY = {
     info: '/order/:id',
     quantity: '/order/statistical/quantity',
     revenue: '/order/statistical/revenue',
+    revenue_by_months: '/order/statistical/revenue/months',
   },
   payment: {
     vnpay_create_payment_url: '/payment/vnp/create_payment',
@@ -61,6 +62,8 @@ export const GATEWAY = {
     all: '/warehouse-receipt/all',
     detail: '/warehouse-receipt/:id/detail',
     update: '/warehouse-receipt/:id/status',
+    cost: '/warehouse-receipt/statistical/cost',
+    cost_by_months: '/warehouse-receipt/statistical/cost/months',
   },
   upload: {
     single_upload: '/upload',

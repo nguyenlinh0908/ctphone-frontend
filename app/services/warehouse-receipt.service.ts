@@ -1,4 +1,4 @@
-import { IResAPI } from '@interfaces/base-response.interface';
+import { ICost, IResAPI } from '@interfaces/base-response.interface';
 import {
   IUpdateWarehouseReceiptProductInput,
   IWarehouseReceipt,
@@ -39,5 +39,13 @@ export class WarehouseReceiptService {
       url: GATEWAY.warehouse_receipt.update.replace(':id', id || ''),
       data,
     });
+  }
+
+  totalCost() {
+    return this.warehouseReceiptService.get<IResAPI<ICost>>({ url: GATEWAY.warehouse_receipt.cost });
+  }
+
+  costByMonths() {
+    return this.warehouseReceiptService.get<IResAPI<ICost[]>>({ url: GATEWAY.warehouse_receipt.cost_by_months });
   }
 }

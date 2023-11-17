@@ -238,7 +238,9 @@ export default function CmsOrderPage() {
   const handleChangeStatus = (orderId: string, nextOrderStatus: OrderStatus) => {
     confirmOrderMutateAsync({ orderId, status: nextOrderStatus })
       .then(() => message.success(t('update_order_status_success')))
-      .catch(() => message.error('update_order_status_fail'));
+      .catch((err) => {
+        message.error(err.response.data.message)
+      });
   };
 
   return (

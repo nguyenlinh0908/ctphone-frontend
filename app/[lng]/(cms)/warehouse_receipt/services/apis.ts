@@ -2,7 +2,7 @@ import {
   IUpdateWarehouseReceiptProductInput,
   IWarehouseReceiptInput,
 } from '@interfaces/warehouse_receipt/warehouse-receipt.interface';
-import { WarehouseReceiptService } from '@services/warehouse--receipt.service';
+import { WarehouseReceiptService } from '@services/warehouse-receipt.service';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 
 const warehouseReceiptService = new WarehouseReceiptService();

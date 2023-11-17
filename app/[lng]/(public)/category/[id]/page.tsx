@@ -14,7 +14,7 @@ export default function CategoryPage() {
   const { lng } = useParams();
   const { t } = useTranslation(lng);
   const { id: categoryId } = useParams();
-  const [paginate, setPaginate] = useState<IPaginateDto>({ limit: 2, page: 1 });
+  const [paginate, setPaginate] = useState<IPaginateDto>({ limit: 13, page: 1 });
   const [filter, setFilter] = useState<IProductFilter>();
   const { data: products } = useProducts(paginate, { categoryId: categoryId, ...filter });
 

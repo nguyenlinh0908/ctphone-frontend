@@ -79,4 +79,8 @@ export class OrderService {
   revenue() {
     return this.orderService.get<IResAPI<IRevenue>>({ url: GATEWAY.order.revenue });
   }
+
+  revenueByMonths() {
+    return this.orderService.get<IResAPI<IRevenue[]>>({ url: GATEWAY.order.revenue_by_months });
+  }
 }

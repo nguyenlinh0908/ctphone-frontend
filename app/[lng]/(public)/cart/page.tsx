@@ -82,11 +82,11 @@ export default function CartPage() {
       title: t('photo'),
       dataIndex: 'photo',
       key: 'photo',
-      render: () => (
+      render: (text,record,idx) => (
         <>
           <Image
             alt="image"
-            src={'https://shopdunk.com/images/thumbs/0020320_iphone-15-128gb_240.webp'}
+            src={record.productId.avatar}
             width={80}
             height={80}
           />
