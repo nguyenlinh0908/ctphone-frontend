@@ -42,7 +42,7 @@ export default function WarehouseReceiptPage() {
   const [formAddProduct] = useForm<IWarehouseReceiptProductInput>();
   const [warehouseReceiptInput, setWarehouseReceiptInput] = useState<IWarehouseReceiptInput>({
     delivererName: '',
-    deliveryDate: '',
+    deliveryTime: '',
     products: [],
   });
   const { data: allProducts } = useAllProducts();
@@ -69,7 +69,7 @@ export default function WarehouseReceiptPage() {
       title: t('delivery_date'),
       key: 'deliveryDate',
       width: '25%',
-      render: (text, record, index) => dayjs(record.deliveryDate).format("DD/MM/YYYY"),
+      render: (text, record, index) => dayjs(record.deliveryTime).format("DD/MM/YYYY"),
     },
     {
       title: t('status'),
@@ -282,7 +282,7 @@ export default function WarehouseReceiptPage() {
           <Form.Item label={t('deliverer_name')} name={'delivererName'}>
             <Input />
           </Form.Item>
-          <Form.Item label={t('delivery_date')} name={'deliveryDate'}>
+          <Form.Item label={t('delivery_date')} name={'deliveryTime'}>
             <DatePicker format={'DD/MM/YYYY'} />
           </Form.Item>
         </Form>

@@ -2,7 +2,7 @@ import { IProduct } from '@interfaces/product/product.interface';
 
 export interface IWarehouseReceiptInput {
   delivererName: string;
-  deliveryDate: string;
+  deliveryTime: string;
   products: IWarehouseReceiptProductInput[];
 }
 
@@ -16,7 +16,7 @@ export interface IWarehouseReceiptProductInput {
 export interface IWarehouseReceipt {
   _id: string;
   delivererName: string;
-  deliveryDate: string;
+  deliveryTime: string;
   totalQuantity: number;
   totalAmount: number;
   accountId: string;

@@ -128,7 +128,7 @@ export default function ProductPage() {
     },
     {
       title: t('status'),
-      key: 'status',
+      key: 'enable',
       render: (text, record, index) => (
         <Switch
           checkedChildren={<CheckOutlined />}

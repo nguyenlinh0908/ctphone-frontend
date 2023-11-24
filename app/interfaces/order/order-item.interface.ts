@@ -1,5 +1,6 @@
 import { IProduct } from '@interfaces/product/product.interface';
 import { IOrder } from './order.interface';
+import { IMedia } from '@interfaces/upload/media.interface';
 
 export interface IOrderItem {
   _id: string;
@@ -12,5 +13,5 @@ export interface IOrderItem {
 
   quantity: number;
 
-  
+  media?: IMedia[];
 }

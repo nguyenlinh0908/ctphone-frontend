@@ -46,11 +46,11 @@ export default function CmsOrderPage() {
 
   const nextOrderStatusSteps = [
     <ShoppingCartOutlined key="1" />,
-    <ClockCircleOutlined key="1"/>,
-    <DropboxOutlined key="1"/>,
-    <CarOutlined key="1"/>,
-    <CheckCircleOutlined key="1"/>,
-    <StopOutlined key="1"/>,
+    <ClockCircleOutlined key="1" />,
+    <DropboxOutlined key="1" />,
+    <CarOutlined key="1" />,
+    <CheckCircleOutlined key="1" />,
+    <StopOutlined key="1" />,
   ];
   const orderStatusTxt = ['', t('pending'), t('prepares_package'), t('in_transport'), t('success'), t('cancel')];
   const orderStatusColors = ['', 'text-yellow-600', 'text-cyan-600', 'text-blue-600', 'text-green-600', 'text-red-600'];
@@ -89,12 +89,11 @@ export default function CmsOrderPage() {
       title: t('status'),
       key: 'status',
       align: 'center',
-      width: '10%',
       render: (text, record, index) => {
         const orderStatusStepIdx = _.indexOf(orderStatusSteps, record.status);
         return (
           <span className={`text-bold ${orderStatusColors[orderStatusStepIdx]}`}>
-            {orderStatusTxt[orderStatusStepIdx]}
+            {orderStatusTxt[orderStatusStepIdx]} ({t(`payment_${record.paymentStatus.toLowerCase()}`)})
           </span>
         );
       },
@@ -239,7 +238,7 @@ export default function CmsOrderPage() {
     confirmOrderMutateAsync({ orderId, status: nextOrderStatus })
       .then(() => message.success(t('update_order_status_success')))
       .catch((err) => {
-        message.error(err.response.data.message)
+        message.error(err.response.data.message);
       });
   };
 
@@ -248,10 +247,10 @@ export default function CmsOrderPage() {
       <Modal title={t('order_info')} centered open={isModalOpen} onOk={handleOk} onCancel={handleCancel} width={1000}>
         <Row>
           <Col>
-            <Descriptions size="small" layout={"vertical"} title={t('customer')} items={customerInfoItems} />
+            <Descriptions size="small" layout={'vertical'} title={t('customer')} items={customerInfoItems} />
           </Col>
           <Col>
-            <Descriptions size="small" layout={"vertical"} title={t('order_info')} items={orderInfoItems} />
+            <Descriptions size="small" layout={'vertical'} title={t('order_info')} items={orderInfoItems} />
           </Col>
         </Row>
         <Table columns={columnsOrderDetail} dataSource={orderDetail?.data} />

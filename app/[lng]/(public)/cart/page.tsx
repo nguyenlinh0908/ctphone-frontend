@@ -4,9 +4,11 @@ import { DeleteOutlined, MinusOutlined, PlusOutlined } from '@ant-design/icons';
 import { useTranslation } from '@i18n';
 import { CartAction } from '@interfaces/order/create-cart.interface';
 import { IOrderItem } from '@interfaces/order/order-item.interface';
-import vnpayLogo from '@public/payment/logo-vnpay.svg';
 import cashLogo from '@public/payment/cash-logo.svg';
+import vnpayLogo from '@public/payment/logo-vnpay.svg';
+import vercelSvg from '@public/vercel.svg';
 import { formatPrice } from '@utils/string';
+import type { RadioChangeEvent } from 'antd';
 import { Button, Col, Input, Popconfirm, Radio, Row, Space, Table, message } from 'antd';
 import Card from 'antd/es/card/Card';
 import { ColumnsType } from 'antd/es/table';
@@ -16,9 +18,6 @@ import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useCartDetail, useMyCart, useUpdateCart } from '../product/[id]/services/api';
 import { useCheckout, useCreatePaymentVnpayUrl, useDeleteCartDetail } from './services/apis';
-import type { RadioChangeEvent } from 'antd';
-import { IResAPI } from '@interfaces/base-response.interface';
-import { ICreatePaymentVnpayUrlRes } from '@interfaces/payment/payment.interface';
 
 export default function CartPage() {
   const { lng } = useParams();
@@ -85,8 +84,8 @@ export default function CartPage() {
       render: (text,record,idx) => (
         <>
           <Image
-            alt="image"
-            src={record.productId.avatar}
+            alt={`media${idx}`}
+            src={record.productId.media && record.productId.media.length > 0 ?  process.env.NEXT_PUBLIC_ACCESS_FILE + record.productId.media[0].url : vercelSvg}
             width={80}
             height={80}
           />

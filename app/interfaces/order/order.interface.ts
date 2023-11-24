@@ -9,12 +9,20 @@ export enum OrderStatus {
   CANCEL = 'CANCEL',
 }
 
+export enum PaymentStatus{
+  PENDING = "PENDING",
+  SUCCESS = "SUCCESS",
+  FAIL="FAIL"
+}
+
 export interface IOrder {
   _id: string;
 
   code: string;
 
   status: OrderStatus;
+
+  paymentStatus: PaymentStatus,
 
   totalQuantity: number;
 

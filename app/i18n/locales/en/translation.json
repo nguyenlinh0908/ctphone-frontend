@@ -83,10 +83,12 @@
   "product_info": "Product info",
   "create_product_success": "Create product success",
   "create_product_fail": "Create product fail",
-  "deliverer_name":"Deliver name",
-  "delivery_date":"Delivery date",
-  "warehouse_receipt_info":"Warehouse receipt info",
-  "product":"Product",
-  "select_product":"Select product",
-  "product_unavailable":"Product unavailable"
+  "deliverer_name": "Deliver name",
+  "delivery_date": "Delivery date",
+  "warehouse_receipt_info": "Warehouse receipt info",
+  "product": "Product",
+  "select_product": "Select product",
+  "product_unavailable": "Product unavailable",
+  "payment_pending": "Awaiting payment",
+  "payment_success": "Payment success"
 }
