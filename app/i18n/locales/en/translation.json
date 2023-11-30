@@ -90,5 +90,15 @@
   "select_product": "Select product",
   "product_unavailable": "Product unavailable",
   "payment_pending": "Awaiting payment",
-  "payment_success": "Payment success"
+  "payment_success": "Payment success",
+  "delivery_address": "Delivery address",
+  "edit": "Edit",
+  "delete": "Delete",
+  "default_address": "Default delivery address",
+  "province": "Province",
+  "district": "District",
+  "ward": "Ward",
+  "home": "Home",
+  "company": "Company",
+  "set_default": "Set Default"
 }

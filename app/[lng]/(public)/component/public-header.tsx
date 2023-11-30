@@ -5,6 +5,7 @@ import {
   HomeOutlined,
   KeyOutlined,
   LoginOutlined,
+  PicLeftOutlined,
   ShoppingCartOutlined,
   SolutionOutlined,
   UserAddOutlined,
@@ -107,6 +108,16 @@ export default function PublicHeader() {
                         <>
                           <Link href={'/cart'}>
                             <ShoppingCartOutlined /> {t('cart')}
+                          </Link>
+                        </>
+                      ),
+                    },
+                    {
+                      key: 'deliveryAddress',
+                      label: (
+                        <>
+                          <Link href={'/delivery_address'}>
+                            <PicLeftOutlined /> {t('delivery_address')}
                           </Link>
                         </>
                       ),

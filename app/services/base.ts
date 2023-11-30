@@ -68,6 +68,16 @@ export const GATEWAY = {
   upload: {
     single_upload: '/upload',
   },
+  delivery_address: {
+    create: '/delivery-address',
+    profile: '/delivery-address/profile/me',
+    delete: '/delivery-address/:id',
+    provinces: '/delivery-address/location/p?depth=2',
+    districts: '/delivery-address/location/p/:id?depth=2',
+    wards: '/delivery-address/location/d/:id?depth=2',
+    update: '/delivery-address/:id',
+    find_one: '/delivery-address/:id',
+  },
 };
 
 let requestCheckCounter = 0;

@@ -90,5 +90,15 @@
   "select_product": "Chọn sản phẩm",
   "product_unavailable": "Sản phẩm không khả dụng",
   "payment_pending": "Chờ thanh toán",
-  "payment_success": "Thanh toán thành công"
+  "payment_success": "Thanh toán thành công",
+  "delivery_address": "Địa chỉ giao hàng",
+  "edit": "Chỉnh sửa",
+  "delete": "Xóa",
+  "default_address": "Địa chỉ mặc định",
+  "province": "Tỉnh thành",
+  "district": "Quận huyện",
+  "ward": "Phường xã",
+  "home": "Nhà",
+  "company": "Cơ quan",
+  "set_default": "Đặt làm mặc định"
 }
