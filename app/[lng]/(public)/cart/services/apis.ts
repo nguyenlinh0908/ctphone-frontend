@@ -1,12 +1,14 @@
 import { IResAPI } from '@interfaces/base-response.interface';
 import { IOrderItem } from '@interfaces/order/order-item.interface';
 import { ICreatePaymentVnpayUrl } from '@interfaces/payment/payment.interface';
+import { DeliveryAddressService } from '@services/delivery-address.service';
 import { OrderService } from '@services/order.service';
 import { PaymentService } from '@services/payment.service';
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 
 const orderService = new OrderService();
 const paymentService = new PaymentService();
+const deliveryAddressService = new DeliveryAddressService();
 
 export const useDeleteCartDetail = () => {
   const queryClient = useQueryClient();
@@ -31,4 +33,8 @@ export const useCheckout = () => {
 
 export const useCreatePaymentVnpayUrl = () => {
   return useMutation('createPaymentVnpayUrl', (data: ICreatePaymentVnpayUrl) => paymentService.createPaymentUrl(data));
+};
+
+export const useDefaultDeliveryAddress = () => {
+  return useQuery('defaultAddress', () => deliveryAddressService.defaultAddress());
 };

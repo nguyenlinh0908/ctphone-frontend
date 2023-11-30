@@ -57,4 +57,10 @@ export class DeliveryAddressService {
       url: GATEWAY.delivery_address.find_one.replace(':id', id),
     });
   }
+
+  defaultAddress(){
+    return this.deliveryAddressService.get<IResAPI<IDeliveryAddress>>({
+      url: GATEWAY.delivery_address.default
+    })
+  }
 }

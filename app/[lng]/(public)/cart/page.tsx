@@ -17,7 +17,8 @@ import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useCartDetail, useMyCart, useUpdateCart } from '../product/[id]/services/api';
-import { useCheckout, useCreatePaymentVnpayUrl, useDeleteCartDetail } from './services/apis';
+import { useCheckout, useCreatePaymentVnpayUrl, useDefaultDeliveryAddress, useDeleteCartDetail } from './services/apis';
+import { DeliveryAddressType } from '@interfaces/delivery_address/delivery_address.interface';
 
 export default function CartPage() {
   const { lng } = useParams();
@@ -35,6 +36,7 @@ export default function CartPage() {
     isSuccess: createPaymentVnpayUrlSuccess,
   } = useCreatePaymentVnpayUrl();
   const [paymentMethod, setPaymentMethod] = useState(0);
+  const { data: defaultAddressData } = useDefaultDeliveryAddress();
 
   useEffect(() => {
     if (createPaymentVnpayUrlSuccess) {
@@ -81,11 +83,15 @@ export default function CartPage() {
       title: t('photo'),
       dataIndex: 'photo',
       key: 'photo',
-      render: (text,record,idx) => (
+      render: (text, record, idx) => (
         <>
           <Image
             alt={`media${idx}`}
-            src={record.productId.media && record.productId.media.length > 0 ?  process.env.NEXT_PUBLIC_ACCESS_FILE + record.productId.media[0].url : vercelSvg}
+            src={
+              record.productId.media && record.productId.media.length > 0
+                ? process.env.NEXT_PUBLIC_ACCESS_FILE + record.productId.media[0].url
+                : vercelSvg
+            }
             width={80}
             height={80}
           />
@@ -160,7 +166,7 @@ export default function CartPage() {
   return (
     <>
       {contextHolder}
-      <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
+      <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }} className="my-3">
         <Col className="gutter-row" span={16}>
           <Space className="w-full" direction="vertical">
             <Table pagination={false} columns={columns} dataSource={cartDetail?.data} />
@@ -188,6 +194,40 @@ export default function CartPage() {
           </Space>
         </Col>
         <Col className="gutter-row" span={8}>
+          <div className="w-full bg-white p-5 rounded-md mb-3">
+            <div>
+              <div className="w-full flex justify-around items-center">
+                <h4 className="text-gray-400">Giao tới</h4>
+                <a href="/delivery_address">Thay đổi</a>
+              </div>
+              <div>
+                {defaultAddressData?.data ? (
+                  <>
+                    <div className="flex justify-start items-center gap-2">
+                      <p className="font-bold"> {defaultAddressData?.data.fullName}</p>
+                      <i>|</i>
+                      <p className="font-bold">{defaultAddressData?.data.phone}</p>
+                    </div>
+                    <div>
+                      <span
+                        className={`inline-block p-2 mr-3 font-bold rounded-md ${
+                          defaultAddressData?.data.type == DeliveryAddressType.HOME
+                            ? 'text-green-400'
+                            : 'text-yellow-400'
+                        }`}
+                      >
+                        {defaultAddressData?.data.type == DeliveryAddressType.HOME ? t('home') : t('company')}
+                      </span>
+                      {defaultAddressData?.data.address}, {defaultAddressData?.data.ward},{' '}
+                      {defaultAddressData?.data.district}, {defaultAddressData?.data.province}
+                    </div>
+                  </>
+                ) : (
+                  <h3 className="text-yellow-400">Chưa có địa chỉ giao hàng</h3>
+                )}
+              </div>
+            </div>
+          </div>
           <div className="w-full bg-white p-5 rounded-md">
             <div className="w-full flex justify-between mb-5 gap-3">
               <Input placeholder={t('coupon') || ''} />

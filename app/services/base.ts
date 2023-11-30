@@ -77,6 +77,7 @@ export const GATEWAY = {
     wards: '/delivery-address/location/d/:id?depth=2',
     update: '/delivery-address/:id',
     find_one: '/delivery-address/:id',
+    default:"/delivery-address/default/address"
   },
 };
 
