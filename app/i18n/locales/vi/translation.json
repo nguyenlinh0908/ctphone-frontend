@@ -100,5 +100,6 @@
   "ward": "Phường xã",
   "home": "Nhà",
   "company": "Cơ quan",
-  "set_default": "Đặt làm mặc định"
+  "set_default": "Đặt làm mặc định",
+  "select_delivery_date":"Chọn thời gian giao hàng"
 }

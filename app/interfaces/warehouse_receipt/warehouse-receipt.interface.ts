@@ -7,6 +7,7 @@ export interface IWarehouseReceiptInput {
 }
 
 export interface IWarehouseReceiptProductInput {
+  _id?: string;
   productId: string;
   name: string;
   amount: number;
@@ -21,12 +22,15 @@ export interface IWarehouseReceipt {
   totalAmount: number;
   accountId: string;
   status: WarehouseReceiptStatus;
+  details?: IWarehouseReceiptProductDetail[];
 }
 
 export interface IWarehouseReceiptProductDetail {
+  _id: string;
   productId: IProduct;
   quantity: number;
   amount: number;
+  product?: IProduct;
 }
 
 export enum WarehouseReceiptStatus {
@@ -38,4 +42,7 @@ export enum WarehouseReceiptStatus {
 export interface IUpdateWarehouseReceiptProductInput {
   warehouseReceiptId?: string;
   status?: WarehouseReceiptStatus;
+  delivererName?: string;
+  deliveryTime?: string;
+  products?: IWarehouseReceiptProductInput[];
 }

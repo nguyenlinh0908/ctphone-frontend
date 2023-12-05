@@ -61,9 +61,11 @@ export const GATEWAY = {
     create: '/warehouse-receipt',
     all: '/warehouse-receipt/all',
     detail: '/warehouse-receipt/:id/detail',
-    update: '/warehouse-receipt/:id/status',
+    update_status: '/warehouse-receipt/:id/status',
+    update: '/warehouse-receipt/:id',
     cost: '/warehouse-receipt/statistical/cost',
     cost_by_months: '/warehouse-receipt/statistical/cost/months',
+    find_one: "/warehouse-receipt/:id"
   },
   upload: {
     single_upload: '/upload',

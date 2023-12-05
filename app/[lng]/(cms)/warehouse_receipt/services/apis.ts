@@ -37,3 +37,21 @@ export const useUpdateStatusWarehouseReceipt = () => {
 export const useWarehouseReceiptDetail = (id: string) => {
   return useQuery(`warehouseReceiptDetail${id}`, () => warehouseReceiptService.detail(id), { enabled: !!id });
 };
+
+export const useWarehouseReceiptById = (id: string) => {
+  return useQuery(`warehouseReceipt${id}`, () => warehouseReceiptService.findOne(id), { enabled: !!id });
+};
+
+export const useUpdateWarehouseReceipt = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation(
+    'updateWarehouseReceipt',
+    (data: IUpdateWarehouseReceiptProductInput) => warehouseReceiptService.update(data),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('allWarehouseReceipt');
+      },
+    },
+  );
+};

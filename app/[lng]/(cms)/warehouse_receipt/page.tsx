@@ -6,7 +6,6 @@ import {
   EditOutlined,
   EyeOutlined,
   PlusOutlined,
-  StopOutlined,
 } from '@ant-design/icons';
 import { useTranslation } from '@i18n';
 import {
@@ -20,16 +19,18 @@ import { Button, DatePicker, Form, Input, InputNumber, Modal, Popconfirm, Select
 import { useForm } from 'antd/es/form/Form';
 import { ColumnsType } from 'antd/es/table';
 import { useParams } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAllProducts } from '../product/services/apis';
 import {
   useAllWarehouseReceipts,
   useCreateWarehouseReceipt,
   useUpdateStatusWarehouseReceipt,
+  useUpdateWarehouseReceipt,
+  useWarehouseReceiptById,
   useWarehouseReceiptDetail,
 } from './services/apis';
 import { formatPrice } from '@utils/string';
-import dayjs from 'dayjs'
+import dayjs from 'dayjs';
 
 export default function WarehouseReceiptPage() {
   const { lng } = useParams();
@@ -37,6 +38,7 @@ export default function WarehouseReceiptPage() {
   const [openModal, setOpenModal] = useState(false);
   const [openAddProductModal, setOpenAddProductModal] = useState(false);
   const [openDetailModal, setOpenDetailModal] = useState(false);
+  const [warehouseReceiptEditingId, setWarehouseReceiptEditingId] = useState('');
 
   const [form] = useForm<IWarehouseReceiptInput>();
   const [formAddProduct] = useForm<IWarehouseReceiptProductInput>();
@@ -51,6 +53,43 @@ export default function WarehouseReceiptPage() {
   const [viewWarehouseReceiptDetailId, setViewWarehouseReceiptDetailId] = useState('');
   const { data: warehouseReceiptDetail } = useWarehouseReceiptDetail(viewWarehouseReceiptDetailId);
   const { mutateAsync: updateStatusWarehouseReceiptMutateAsync } = useUpdateStatusWarehouseReceipt();
+  const {
+    data: warehouseReceiptEditingData,
+    isSuccess: getWarehouseReceiptEditingSuccess,
+  } = useWarehouseReceiptById(warehouseReceiptEditingId);
+  const { mutateAsync: updateWarehouseReceiptMutateAsync } = useUpdateWarehouseReceipt();
+
+  useEffect(() => {
+    form;
+    if (getWarehouseReceiptEditingSuccess) {
+      form.setFieldValue('delivererName', warehouseReceiptEditingData.data.delivererName);
+      form.setFieldValue('deliveryTime', dayjs(warehouseReceiptEditingData.data.deliveryTime));
+      if (warehouseReceiptEditingData.data.details && warehouseReceiptEditingData.data.details.length > 0) {
+        const products: IWarehouseReceiptProductInput[] = warehouseReceiptEditingData.data.details.map((i) => {
+          return {
+            _id: i._id,
+            productId: i.product?._id || '',
+            amount: i.amount,
+            quantity: i.quantity,
+            name: i.product?.name || '',
+          };
+        });
+        setWarehouseReceiptInput((pre) => {
+          return { ...pre, products };
+        });
+      }
+
+      setOpenModal(true);
+    }
+  }, [getWarehouseReceiptEditingSuccess]);
+
+  const handleDeleteWarehouseReceiptDetailEditing = (itemIdx: number) => {
+    setWarehouseReceiptInput((pre) => {
+      const products = pre.products;
+      products.splice(itemIdx, 1);
+      return { ...pre, products };
+    });
+  };
 
   const columns: ColumnsType<IWarehouseReceipt> = [
     {
@@ -69,12 +108,12 @@ export default function WarehouseReceiptPage() {
       title: t('delivery_date'),
       key: 'deliveryDate',
       width: '25%',
-      render: (text, record, index) => dayjs(record.deliveryTime).format("DD/MM/YYYY"),
+      render: (text, record, index) => dayjs(record.deliveryTime).format('DD/MM/YYYY'),
     },
     {
       title: t('status'),
       key: 'status',
-      width: '25%',
+      width: '10%',
       render: (text, record, index) => {
         switch (record.status) {
           case WarehouseReceiptStatus.PENDING:
@@ -108,6 +147,13 @@ export default function WarehouseReceiptPage() {
           <Button onClick={() => handleViewDetail(record._id)} type="primary" size="large" icon={<EyeOutlined />} />
           {record.status == WarehouseReceiptStatus.PENDING && (
             <>
+              <Button
+                className="bg-yellow-600 text-white hover:!text-white hover:!bg-yellow-500"
+                size="large"
+                icon={<EditOutlined />}
+                onClick={() => onClickEditing(record._id)}
+              />
+
               <Popconfirm
                 key={'1'}
                 title={t('change_order_status')}
@@ -163,7 +209,7 @@ export default function WarehouseReceiptPage() {
     {
       title: t('amount'),
       key: 'amount',
-      render: (text, record, index) => record.amount,
+      render: (text, record, index) => formatPrice(record.amount.toString()),
     },
     {
       title: t('action'),
@@ -173,8 +219,14 @@ export default function WarehouseReceiptPage() {
           type="primary"
           className="bg-red-600 text-white hover:!text-white hover:!bg-red-500"
           size="large"
-          icon={<StopOutlined />}
-          onClick={() => handleRemoveProductsInWarehouseReceiptInput(index)}
+          icon={<DeleteOutlined />}
+          onClick={() => {
+            if (warehouseReceiptEditingId == '') {
+              handleRemoveProductsInWarehouseReceiptInput(index);
+            } else {
+              handleDeleteWarehouseReceiptDetailEditing(index);
+            }
+          }}
         />
       ),
     },
@@ -236,23 +288,44 @@ export default function WarehouseReceiptPage() {
   };
 
   const handleRemoveProductsInWarehouseReceiptInput = (itemIdx: number) => {
-    setWarehouseReceiptInput({ ...warehouseReceiptInput, products: warehouseReceiptInput.products.slice(itemIdx, 1) });
+    warehouseReceiptInput.products.splice(itemIdx, 1);
+    setWarehouseReceiptInput({ ...warehouseReceiptInput, products: warehouseReceiptInput.products });
   };
 
   const handleCreateWarehouseReceipt = async () => {
     const warehouseReceiptValues = await form.validateFields();
-
-    createWarehouseReceiptAsync({ ...warehouseReceiptValues, products: warehouseReceiptInput.products })
-      .then((data) => {
-        form.resetFields();
-        message.success('success');
+    if (warehouseReceiptEditingId == '') {
+      createWarehouseReceiptAsync({ ...warehouseReceiptValues, products: warehouseReceiptInput.products })
+        .then((data) => {
+          form.resetFields();
+          message.success('success');
+        })
+        .catch(() => message.destroy('fail'));
+    } else {
+      updateWarehouseReceiptMutateAsync({
+        warehouseReceiptId: warehouseReceiptEditingId,
+        ...warehouseReceiptValues,
+        products: warehouseReceiptInput.products,
       })
-      .catch(() => message.destroy('fail'));
+        .then((data) => {
+          console.log('data :>> ', data);
+          message.success('success');
+        })
+        .catch((err) => {
+          console.log('error', err);
+          message.error(err);
+        })
+        .finally(() => {
+          setWarehouseReceiptEditingId('');
+          form.resetFields();
+        });
+    }
+
     setOpenModal(false);
+    setWarehouseReceiptEditingId('');
   };
 
   const handleViewDetail = (warehouseReceiptId: string) => {
-    console.log('object :>> ', warehouseReceiptId);
     setViewWarehouseReceiptDetailId(warehouseReceiptId);
     setOpenDetailModal(true);
   };
@@ -261,6 +334,11 @@ export default function WarehouseReceiptPage() {
     updateStatusWarehouseReceiptMutateAsync({ warehouseReceiptId, status })
       .then(() => message.success('update success'))
       .catch(() => message.error('update fail'));
+  };
+
+  const onClickEditing = (warehouseReceiptId: string) => {
+    if (warehouseReceiptEditingId != warehouseReceiptId) setWarehouseReceiptEditingId(warehouseReceiptId);
+    setOpenModal(true);
   };
 
   return (
@@ -275,7 +353,10 @@ export default function WarehouseReceiptPage() {
         centered
         open={openModal}
         onOk={handleCreateWarehouseReceipt}
-        onCancel={() => setOpenModal(false)}
+        onCancel={() => {
+          setOpenModal(false);
+          setWarehouseReceiptEditingId('');
+        }}
         width={1000}
       >
         <Form layout="vertical" form={form}>
@@ -283,7 +364,7 @@ export default function WarehouseReceiptPage() {
             <Input />
           </Form.Item>
           <Form.Item label={t('delivery_date')} name={'deliveryTime'}>
-            <DatePicker format={'DD/MM/YYYY'} />
+            <DatePicker format={'DD/MM/YYYY'} placeholder={t('select_delivery_date') || 'Chọn thời gian giao hàng'} />
           </Form.Item>
         </Form>
         <div className="w-full flex justify-end">
@@ -293,7 +374,9 @@ export default function WarehouseReceiptPage() {
         </div>
         <Table
           columns={columnsCreateForm}
-          dataSource={warehouseReceiptInput?.products ? warehouseReceiptInput.products : []}
+          dataSource={
+            warehouseReceiptInput && warehouseReceiptInput?.products.length > 0 ? warehouseReceiptInput.products : []
+          }
         />
       </Modal>
 

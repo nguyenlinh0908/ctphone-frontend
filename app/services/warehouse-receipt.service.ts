@@ -31,12 +31,28 @@ export class WarehouseReceiptService {
     });
   }
 
-  updateStatus(data: IUpdateWarehouseReceiptProductInput) {
+  findOne(warehouseReceiptId: string) {
+    return this.warehouseReceiptService.get<IResAPI<IWarehouseReceipt>>({
+      url: GATEWAY.warehouse_receipt.find_one.replace(':id', warehouseReceiptId),
+    });
+  }
+
+  update(data: IUpdateWarehouseReceiptProductInput){
     const id = data.warehouseReceiptId;
     delete data.warehouseReceiptId;
 
     return this.warehouseReceiptService.patch<IUpdateWarehouseReceiptProductInput, IResAPI<IWarehouseReceipt>>({
       url: GATEWAY.warehouse_receipt.update.replace(':id', id || ''),
+      data,
+    });
+  }
+
+  updateStatus(data: IUpdateWarehouseReceiptProductInput) {
+    const id = data.warehouseReceiptId;
+    delete data.warehouseReceiptId;
+
+    return this.warehouseReceiptService.patch<IUpdateWarehouseReceiptProductInput, IResAPI<IWarehouseReceipt>>({
+      url: GATEWAY.warehouse_receipt.update_status.replace(':id', id || ''),
       data,
     });
   }
