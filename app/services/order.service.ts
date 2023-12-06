@@ -45,6 +45,7 @@ export class OrderService {
   }
 
   getOrders(filter: IOrderFilter) {
+    if(filter?.status && filter.status == "all") delete filter.status
     return this.orderService.get<IResAPI<IOrder[]>>({ url: `${GATEWAY.order.find}${buildQueryString(filter)}` });
   }
 

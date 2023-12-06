@@ -387,7 +387,7 @@ export default function WarehouseReceiptPage() {
         onOk={handleAddProductsInWarehouseReceiptInput}
         onCancel={() => setOpenAddProductModal(false)}
       >
-        <Form form={formAddProduct}>
+        <Form form={formAddProduct} layout='vertical'>
           <Form.Item label={t('product')} name={'productId'}>
             <Select
               placeholder={t('select_product')}
@@ -404,7 +404,7 @@ export default function WarehouseReceiptPage() {
             <InputNumber min={0}></InputNumber>
           </Form.Item>
           <Form.Item label={t('amount')} name={'amount'}>
-            <InputNumber min={0}></InputNumber>
+            <InputNumber className="w-56" min={0}></InputNumber>
           </Form.Item>
         </Form>
       </Modal>

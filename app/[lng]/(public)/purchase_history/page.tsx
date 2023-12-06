@@ -192,7 +192,9 @@ export default function PurchaseHistoryPage() {
         <Table columns={columnsOrderDetail} dataSource={orderDetail?.data} />
       </Modal>
       <Tabs
-      tabBarStyle={{ width: '100%' }}
+        className="mt-3"
+        tabBarGutter={12}
+        tabBarStyle={{ width: '100%' }}
         type="card"
         size="large"
         defaultActiveKey="1"
