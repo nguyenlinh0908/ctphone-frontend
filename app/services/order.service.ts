@@ -45,9 +45,8 @@ export class OrderService {
   }
 
   getOrders(filter: IOrderFilter) {
-    console.log("filter",filter)
-    console.log("buildQueryString", buildQueryString(filter))
-    return this.orderService.get<IResAPI<IOrder[]>>({ url: `${GATEWAY.order.find}/${buildQueryString(filter)}` });
+    if(filter?.status && filter.status == "all") delete filter.status
+    return this.orderService.get<IResAPI<IOrder[]>>({ url: `${GATEWAY.order.find}${buildQueryString(filter)}` });
   }
 
   checkout(orderId: string) {
@@ -63,8 +62,8 @@ export class OrderService {
     });
   }
 
-  purchaseHistory() {
-    return this.orderService.get<IResAPI<IOrder[]>>({ url: `${GATEWAY.order.purchase_history}` });
+  purchaseHistory(filter: IOrderFilter) {
+    return this.orderService.get<IResAPI<IOrder[]>>({ url: `${GATEWAY.order.purchase_history}${buildQueryString(filter)}` });
   }
 
   detail(orderId: string) {

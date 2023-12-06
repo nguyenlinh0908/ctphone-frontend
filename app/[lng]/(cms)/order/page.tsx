@@ -7,6 +7,7 @@ import {
   DeleteOutlined,
   DropboxOutlined,
   EyeOutlined,
+  PrinterOutlined,
   ShoppingCartOutlined,
   StopOutlined,
 } from '@ant-design/icons';
@@ -60,10 +61,6 @@ export default function CmsOrderPage() {
   const [orderFilter, setOrderFilter] = useState<IOrderFilter>({});
   const { data: ordersData } = useOrders(orderFilter);
 
-  useEffect(() => {
-    console.log('orderFilter', orderFilter);
-  }, [orderFilter]);
-
   const nextOrderStatusSteps = [
     <ShoppingCartOutlined key="1" />,
     <ClockCircleOutlined key="1" />,
@@ -78,31 +75,26 @@ export default function CmsOrderPage() {
     {
       title: '#',
       key: 'index',
-      width: '5%',
       render: (text, record, index) => ++index,
     },
     {
       title: t('code'),
       key: 'code',
-      width: '20%',
       render: (text, record, index) => record.code,
     },
     {
       title: t('quantity'),
       key: 'totalQuantity',
       render: (text, record, index) => record.totalQuantity,
-      width: '10%',
     },
     {
       title: t('amount'),
       key: 'totalAmount',
-      width: '10%',
       render: (text, record, index) => formatPrice(record.totalAmountAfterDiscount.toString()),
     },
     {
       title: t('order_date'),
       key: 'createdAt',
-      width: '20%',
       render: (text, record, index) => timestampMongoToDate(String(record?.createdAt) || '', 'DD/MM/YYYY HH:mm:ss'),
     },
     {
@@ -113,7 +105,20 @@ export default function CmsOrderPage() {
         const orderStatusStepIdx = _.indexOf(orderStatusSteps, record.status);
         return (
           <span className={`text-bold ${orderStatusColors[orderStatusStepIdx]}`}>
-            {orderStatusTxt[orderStatusStepIdx]} ({t(`payment_${record.paymentStatus.toLowerCase()}`)})
+            {orderStatusTxt[orderStatusStepIdx]}
+          </span>
+        );
+      },
+    },
+    {
+      title: t('payment_status'),
+      key: 'paymentStatus',
+      align: 'center',
+      render: (text, record, index) => {
+        const orderStatusStepIdx = _.indexOf(orderStatusSteps, record.status);
+        return (
+          <span className={`text-bold ${orderStatusColors[orderStatusStepIdx]}`}>
+            {t(`payment_${record.paymentStatus.toLowerCase()}`)}
           </span>
         );
       },
@@ -166,6 +171,12 @@ export default function CmsOrderPage() {
               {orderStatusStepIdx <= 1 && (
                 <Button onClick={() => {}} type="primary" danger size="large" icon={<DeleteOutlined />} />
               )}
+              {/* <Button
+               className="bg-green-600 text-white hover:!text-white hover:!bg-green-500"
+                type="primary"
+                size="large"
+                icon={<PrinterOutlined />}
+              /> */}
             </Space>
           </>
         );
@@ -177,25 +188,21 @@ export default function CmsOrderPage() {
     {
       title: '#',
       key: 'index',
-      width: '5%',
       render: (text, record, index) => ++index,
     },
     {
       title: t('code'),
       key: 'code',
-      width: '20%',
       render: (text, record, index) => record.productId.name,
     },
     {
       title: t('quantity'),
       key: 'totalQuantity',
       render: (text, record, index) => record.quantity,
-      width: '10%',
     },
     {
       title: t('amount'),
       key: 'totalAmount',
-      width: '10%',
       render: (text, record, index) => formatPrice(record.amount.toString()),
     },
   ];
@@ -215,6 +222,11 @@ export default function CmsOrderPage() {
       key: 'address',
       label: t('address'),
       children: <p>{ownerOrderInfo?.data.address}</p>,
+    },
+    {
+      key: 'deliveryAddress',
+      label: t('delivery_address'),
+      children: <p>{`${orderInfo?.data?.deliveryAddress?.address}, ${orderInfo?.data?.deliveryAddress?.ward}, ${orderInfo?.data?.deliveryAddress?.district}, ${orderInfo?.data?.deliveryAddress?.province}`}</p>,
     },
   ];
 
@@ -285,23 +297,15 @@ export default function CmsOrderPage() {
           loading={false}
         />
         <Select
-          defaultValue={''}
+          defaultValue={'all'}
           style={{ width: 256 }}
           onChange={(statusValue: string) => {
-            if (statusValue != '') {
-              setOrderFilter((pre) => {
-                return { ...pre, status: statusValue };
-              });
-            } else {
-              setOrderFilter((pre) => {
-                const preValues = pre;
-                if (preValues?.status) delete preValues.status;
-                return preValues;
-              });
-            }
+            setOrderFilter((pre) => {
+              return { ...pre, status: statusValue };
+            });
           }}
           options={[
-            { value: '', label: 'Tất cả trạng thái' },
+            { value: 'all', label: 'Tất cả trạng thái' },
             { value: OrderStatus.SUCCESS, label: 'Hoàn thành' },
             { value: OrderStatus.PENDING, label: 'Chờ xác nhận' },
             { value: OrderStatus.PREPARES_PACKAGE, label: 'Đang chuẩn bị' },

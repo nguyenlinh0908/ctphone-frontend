@@ -102,5 +102,6 @@
   "company": "Company",
   "set_default": "Set Default",
   "select_delivery_date":"Select delivery date",
-  "dashboard":"Dashboard"
+  "dashboard":"Dashboard",
+  "payment_status":"Payment status"
 }

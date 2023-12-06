@@ -1,4 +1,5 @@
 import { IAccount } from '@interfaces/auth/auth.interface';
+import { IDeliveryAddress } from '@interfaces/delivery_address/delivery_address.interface';
 
 export enum OrderStatus {
   CART = 'CART',
@@ -31,6 +32,8 @@ export interface IOrder {
   totalAmountAfterDiscount: number;
 
   createdAt?: Date;
+
+  deliveryAddress?:IDeliveryAddress
 }
 
 export interface IOrderInfo {
@@ -51,6 +54,8 @@ export interface IOrderInfo {
   ownerId: IAccount;
 
   merchandiserId: IAccount;
+
+  deliveryAddress:IDeliveryAddress
 }
 
 export interface IOrderFilter {
