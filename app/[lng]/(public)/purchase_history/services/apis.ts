@@ -1,10 +1,11 @@
+import { IOrderFilter } from '@interfaces/order/order.interface';
 import { OrderService } from '@services/order.service';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 
 const orderService = new OrderService();
 
-export const usePurchaseHistory = () => {
-  return useQuery('purchaseHistory', () => orderService.purchaseHistory());
+export const usePurchaseHistory = (filter: IOrderFilter) => {
+  return useQuery(`purchaseHistory${filter.status}`, () => orderService.purchaseHistory(filter));
 };
 
 export const useOrderDetail = (orderId: string) => {
