@@ -12,22 +12,36 @@ import {
 } from '@ant-design/icons';
 import { useTranslation } from '@i18n';
 import { IOrderItem } from '@interfaces/order/order-item.interface';
-import { IOrder, OrderStatus } from '@interfaces/order/order.interface';
+import { IOrder, IOrderFilter, OrderStatus } from '@interfaces/order/order.interface';
 import { formatPrice, timestampMongoToDate } from '@utils/string';
-import { Button, Col, Descriptions, DescriptionsProps, Modal, Popconfirm, Row, Space, Table, message } from 'antd';
+import {
+  Button,
+  Col,
+  Descriptions,
+  DescriptionsProps,
+  Modal,
+  Popconfirm,
+  Row,
+  Select,
+  Space,
+  Table,
+  message,
+} from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import * as _ from 'lodash';
 import { useParams } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   orderStatusSteps,
   useConfirmOrder,
   useCustomerInfo,
   useOrderCms,
   useOrderInfo,
+  useOrders,
   useStaffInfo,
 } from './sevices/apis';
 import { useOrderDetail } from '@lng/(public)/purchase_history/services/apis';
+import Search from 'antd/es/input/Search';
 
 export default function CmsOrderPage() {
   const { lng } = useParams();
@@ -43,6 +57,12 @@ export default function CmsOrderPage() {
   const { data: orderInfo } = useOrderInfo(viewOrderId);
   const { data: ownerOrderInfo } = useCustomerInfo(orderInfo?.data?.ownerId?.userId || '');
   const { data: merchandiserOrderInfo } = useStaffInfo(orderInfo?.data?.merchandiserId?.userId || '');
+  const [orderFilter, setOrderFilter] = useState<IOrderFilter>({});
+  const { data: ordersData } = useOrders(orderFilter);
+
+  useEffect(() => {
+    console.log('orderFilter', orderFilter);
+  }, [orderFilter]);
 
   const nextOrderStatusSteps = [
     <ShoppingCartOutlined key="1" />,
@@ -115,7 +135,7 @@ export default function CmsOrderPage() {
           <>
             <Space size={'small'}>
               <Button onClick={() => handleViewDetail(record._id)} type="primary" size="large" icon={<EyeOutlined />} />
-              {record.status != OrderStatus.CANCEL ? (
+              {![OrderStatus.CANCEL, OrderStatus.SUCCESS].includes(record.status) ? (
                 <Popconfirm
                   title={t('change_order_status')}
                   description={t('do_want_change_order_status')}
@@ -133,13 +153,14 @@ export default function CmsOrderPage() {
                   />
                 </Popconfirm>
               ) : (
-                <Button
-                  disabled
-                  type="primary"
-                  className="bg-red-600 text-white hover:!text-white hover:!bg-red-500"
-                  size="large"
-                  icon={<StopOutlined />}
-                />
+                <></>
+                // <Button
+                //   disabled
+                //   type="primary"
+                //   className="bg-red-600 text-white hover:!text-white hover:!bg-red-500"
+                //   size="large"
+                //   icon={<StopOutlined />}
+                // />
               )}
 
               {orderStatusStepIdx <= 1 && (
@@ -256,7 +277,40 @@ export default function CmsOrderPage() {
         <Table columns={columnsOrderDetail} dataSource={orderDetail?.data} />
       </Modal>
 
-      <Table columns={columns} dataSource={orders?.data} />
+      <div className="w-full flex justify-left items-center gap-3 mb-3">
+        <Search
+          style={{ width: 320 }}
+          onSearch={(value: string) => setOrderFilter({...orderFilter, code: value.trim() })}
+          placeholder="Search"
+          loading={false}
+        />
+        <Select
+          defaultValue={''}
+          style={{ width: 256 }}
+          onChange={(statusValue: string) => {
+            if (statusValue != '') {
+              setOrderFilter((pre) => {
+                return { ...pre, status: statusValue };
+              });
+            } else {
+              setOrderFilter((pre) => {
+                const preValues = pre;
+                if (preValues?.status) delete preValues.status;
+                return preValues;
+              });
+            }
+          }}
+          options={[
+            { value: '', label: 'Tất cả trạng thái' },
+            { value: OrderStatus.SUCCESS, label: 'Hoàn thành' },
+            { value: OrderStatus.PENDING, label: 'Chờ xác nhận' },
+            { value: OrderStatus.PREPARES_PACKAGE, label: 'Đang chuẩn bị' },
+            { value: OrderStatus.IN_TRANSPORT, label: 'Đang vận chuyển' },
+            { value: OrderStatus.CANCEL, label: 'Hủy bỏ' },
+          ]}
+        />
+      </div>
+      <Table columns={columns} dataSource={ordersData?.data} />
     </>
   );
 }

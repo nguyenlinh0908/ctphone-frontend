@@ -9,10 +9,10 @@ export enum OrderStatus {
   CANCEL = 'CANCEL',
 }
 
-export enum PaymentStatus{
-  PENDING = "PENDING",
-  SUCCESS = "SUCCESS",
-  FAIL="FAIL"
+export enum PaymentStatus {
+  PENDING = 'PENDING',
+  SUCCESS = 'SUCCESS',
+  FAIL = 'FAIL',
 }
 
 export interface IOrder {
@@ -22,7 +22,7 @@ export interface IOrder {
 
   status: OrderStatus;
 
-  paymentStatus: PaymentStatus,
+  paymentStatus: PaymentStatus;
 
   totalQuantity: number;
 
@@ -51,4 +51,9 @@ export interface IOrderInfo {
   ownerId: IAccount;
 
   merchandiserId: IAccount;
+}
+
+export interface IOrderFilter {
+  status?: OrderStatus | string;
+  code?: string;
 }

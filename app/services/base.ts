@@ -53,6 +53,7 @@ export const GATEWAY = {
     quantity: '/order/statistical/quantity',
     revenue: '/order/statistical/revenue',
     revenue_by_months: '/order/statistical/revenue/months',
+    find:"/order"
   },
   payment: {
     vnpay_create_payment_url: '/payment/vnp/create_payment',

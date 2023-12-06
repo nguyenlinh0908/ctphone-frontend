@@ -101,5 +101,6 @@
   "home": "Home",
   "company": "Company",
   "set_default": "Set Default",
-  "select_delivery_date":"Select delivery date"
+  "select_delivery_date":"Select delivery date",
+  "dashboard":"Dashboard"
 }

@@ -1,8 +1,9 @@
 import { IQuantity, IResAPI, IRevenue } from '@interfaces/base-response.interface';
 import { IUpdateCart } from '@interfaces/order/create-cart.interface';
 import { IOrderItem } from '@interfaces/order/order-item.interface';
-import { IOrder, IOrderInfo, OrderStatus } from '@interfaces/order/order.interface';
+import { IOrder, IOrderFilter, IOrderInfo, OrderStatus } from '@interfaces/order/order.interface';
 import { BaseService, GATEWAY } from './base';
+import { buildQueryString } from '@utils/string';
 
 export class OrderService {
   private orderService: BaseService;
@@ -41,6 +42,12 @@ export class OrderService {
 
   getOrdersInCms() {
     return this.orderService.get<IResAPI<IOrder[]>>({ url: GATEWAY.order.cms.list });
+  }
+
+  getOrders(filter: IOrderFilter) {
+    console.log("filter",filter)
+    console.log("buildQueryString", buildQueryString(filter))
+    return this.orderService.get<IResAPI<IOrder[]>>({ url: `${GATEWAY.order.find}/${buildQueryString(filter)}` });
   }
 
   checkout(orderId: string) {

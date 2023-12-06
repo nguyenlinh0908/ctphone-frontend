@@ -1,6 +1,7 @@
 'use client';
 
 import {
+  DashboardOutlined,
   FieldTimeOutlined,
   HomeOutlined,
   KeyOutlined,
@@ -91,57 +92,79 @@ export default function PublicHeader() {
                 </>
               ),
               children: me
-                ? [
-                    {
-                      key: 'profile',
-                      label: (
-                        <>
-                          <Link href={'/profile'}>
-                            <SolutionOutlined /> {t('profile')}
-                          </Link>
-                        </>
-                      ),
-                    },
-                    {
-                      key: 'cart',
-                      label: (
-                        <>
-                          <Link href={'/cart'}>
-                            <ShoppingCartOutlined /> {t('cart')}
-                          </Link>
-                        </>
-                      ),
-                    },
-                    {
-                      key: 'deliveryAddress',
-                      label: (
-                        <>
-                          <Link href={'/delivery_address'}>
-                            <PicLeftOutlined /> {t('delivery_address')}
-                          </Link>
-                        </>
-                      ),
-                    },
-                    {
-                      key: 'purchaseHistory',
-                      label: (
-                        <>
-                          <Link href={'/purchase_history'}>
-                            <FieldTimeOutlined /> {t('purchase_history')}
-                          </Link>
-                        </>
-                      ),
-                    },
-                    {
-                      key: 'logout',
-                      label: (
-                        <>
-                          <LoginOutlined />
-                          {t('logout')}
-                        </>
-                      ),
-                    },
-                  ]
+                ? JSON.parse(me)?.roles.includes('CUSTOMER')
+                  ? [
+                      {
+                        key: 'profile',
+                        label: (
+                          <>
+                            <Link href={'/profile'}>
+                              <SolutionOutlined /> {t('profile')}
+                            </Link>
+                          </>
+                        ),
+                      },
+                      {
+                        key: 'cart',
+                        label: (
+                          <>
+                            <Link href={'/cart'}>
+                              <ShoppingCartOutlined /> {t('cart')}
+                            </Link>
+                          </>
+                        ),
+                      },
+                      {
+                        key: 'deliveryAddress',
+                        label: (
+                          <>
+                            <Link href={'/delivery_address'}>
+                              <PicLeftOutlined /> {t('delivery_address')}
+                            </Link>
+                          </>
+                        ),
+                      },
+                      {
+                        key: 'purchaseHistory',
+                        label: (
+                          <>
+                            <Link href={'/purchase_history'}>
+                              <FieldTimeOutlined /> {t('purchase_history')}
+                            </Link>
+                          </>
+                        ),
+                      },
+                      {
+                        key: 'logout',
+                        label: (
+                          <>
+                            <LoginOutlined />
+                            {t('logout')}
+                          </>
+                        ),
+                      },
+                    ]
+                  : [
+                      {
+                        key: 'profile',
+                        label: (
+                          <>
+                            <Link href={'/dashboard'}>
+                              <DashboardOutlined /> {t('dashboard')}
+                            </Link>
+                          </>
+                        ),
+                      },
+                      {
+                        key: 'logout',
+                        label: (
+                          <>
+                            <LoginOutlined />
+                            {t('logout')}
+                          </>
+                        ),
+                      },
+                    ]
                 : [
                     {
                       key: 'login',

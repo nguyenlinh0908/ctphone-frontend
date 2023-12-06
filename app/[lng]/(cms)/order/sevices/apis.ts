@@ -1,4 +1,4 @@
-import { OrderStatus } from '@interfaces/order/order.interface';
+import { IOrderFilter, OrderStatus } from '@interfaces/order/order.interface';
 import { CustomerService } from '@services/customer.service';
 import { OrderService } from '@services/order.service';
 import { StaffService } from '@services/staff.service';
@@ -38,4 +38,8 @@ export const useStaffInfo = (staffId: string) => {
 
 export const useOrderInfo = (orderId: string) => {
   return useQuery(`orderInfo${orderId}`, () => orderService.info(orderId), { enabled: !!orderId });
+};
+
+export const useOrders = (filter: IOrderFilter) => {
+  return useQuery(`order${JSON.stringify(filter)}`, () => orderService.getOrders(filter));
 };
