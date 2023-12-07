@@ -229,12 +229,12 @@ export default function CartPage() {
             </div>
           </div>
           <div className="w-full bg-white p-5 rounded-md">
-            <div className="w-full flex justify-between mb-5 gap-3">
+            {/* <div className="w-full flex justify-between mb-5 gap-3">
               <Input placeholder={t('coupon') || ''} />
               <Button className="w-full bg-[#AAAAAA]" type="text">
                 {t('apply')}
               </Button>
-            </div>
+            </div> */}
             <div className="mb-3">
               <table className="w-full table-auto">
                 <tbody>

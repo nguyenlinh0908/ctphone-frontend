@@ -103,5 +103,9 @@
   "set_default": "Set Default",
   "select_delivery_date":"Select delivery date",
   "dashboard":"Dashboard",
-  "payment_status":"Payment status"
+  "payment_status":"Payment status",
+  "search":"Search",
+  "print_order":"Print order",
+  "do_want_print_order":"Do you want to print order ?",
+  "amount_unit":"Amount Unit"
 }

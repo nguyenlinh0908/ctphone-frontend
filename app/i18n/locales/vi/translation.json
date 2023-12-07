@@ -103,5 +103,9 @@
   "set_default": "Đặt làm mặc định",
   "select_delivery_date":"Chọn thời gian giao hàng",
   "dashboard":"Dashboard",
-  "payment_status":"Trạng thái thanh toán"
+  "payment_status":"Trạng thái thanh toán",
+  "search":"Tìm kiếm",
+  "print_order":"In hóa đơn",
+  "do_want_print_order":"Bạn có muốn in hóa đơn ?",
+  "amount_unit":"Đơn giá"
 }

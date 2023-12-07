@@ -13,5 +13,7 @@ export interface IOrderItem {
 
   quantity: number;
 
+  amountUnit:number
+
   media?: IMedia[];
 }

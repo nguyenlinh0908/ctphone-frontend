@@ -95,25 +95,21 @@ export default function WarehouseReceiptPage() {
     {
       title: '#',
       key: 'index',
-      width: '5%',
       render: (text, record, index) => ++index,
     },
     {
       title: t('deliverer_name'),
       key: 'delivererName',
-      width: '25%',
       render: (text, record, index) => record.delivererName,
     },
     {
       title: t('delivery_date'),
       key: 'deliveryDate',
-      width: '25%',
       render: (text, record, index) => dayjs(record.deliveryTime).format('DD/MM/YYYY'),
     },
     {
       title: t('status'),
       key: 'status',
-      width: '10%',
       render: (text, record, index) => {
         switch (record.status) {
           case WarehouseReceiptStatus.PENDING:
@@ -130,13 +126,11 @@ export default function WarehouseReceiptPage() {
     {
       title: t('quantity'),
       key: 'totalQuantity',
-      width: '10%',
       render: (text, record, index) => record.totalQuantity,
     },
     {
       title: t('amount'),
       key: 'totalAmount',
-      width: '10%',
       render: (text, record, index) => formatPrice(record.totalAmount.toString()),
     },
     {
@@ -298,6 +292,7 @@ export default function WarehouseReceiptPage() {
       createWarehouseReceiptAsync({ ...warehouseReceiptValues, products: warehouseReceiptInput.products })
         .then((data) => {
           form.resetFields();
+          setWarehouseReceiptInput({products:[], delivererName:"", deliveryTime:""})
           message.success('success');
         })
         .catch(() => message.destroy('fail'));
@@ -309,6 +304,7 @@ export default function WarehouseReceiptPage() {
       })
         .then((data) => {
           console.log('data :>> ', data);
+          setWarehouseReceiptInput({products:[], delivererName:"", deliveryTime:""})
           message.success('success');
         })
         .catch((err) => {

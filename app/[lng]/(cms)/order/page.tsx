@@ -14,6 +14,7 @@ import {
 import { useTranslation } from '@i18n';
 import { IOrderItem } from '@interfaces/order/order-item.interface';
 import { IOrder, IOrderFilter, OrderStatus } from '@interfaces/order/order.interface';
+import { useOrderDetail } from '@lng/(public)/purchase_history/services/apis';
 import { formatPrice, timestampMongoToDate } from '@utils/string';
 import {
   Button,
@@ -28,10 +29,11 @@ import {
   Table,
   message,
 } from 'antd';
+import Search from 'antd/es/input/Search';
 import { ColumnsType } from 'antd/es/table';
 import * as _ from 'lodash';
-import { useParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useParams, useRouter } from 'next/navigation';
+import { useState } from 'react';
 import {
   orderStatusSteps,
   useConfirmOrder,
@@ -41,12 +43,11 @@ import {
   useOrders,
   useStaffInfo,
 } from './sevices/apis';
-import { useOrderDetail } from '@lng/(public)/purchase_history/services/apis';
-import Search from 'antd/es/input/Search';
 
 export default function CmsOrderPage() {
   const { lng } = useParams();
   const { t } = useTranslation(lng);
+  const router = useRouter();
   const {
     data: confirmOrder,
     mutateAsync: confirmOrderMutateAsync,
@@ -58,7 +59,7 @@ export default function CmsOrderPage() {
   const { data: orderInfo } = useOrderInfo(viewOrderId);
   const { data: ownerOrderInfo } = useCustomerInfo(orderInfo?.data?.ownerId?.userId || '');
   const { data: merchandiserOrderInfo } = useStaffInfo(orderInfo?.data?.merchandiserId?.userId || '');
-  const [orderFilter, setOrderFilter] = useState<IOrderFilter>({});
+  const [orderFilter, setOrderFilter] = useState<IOrderFilter>({ status: OrderStatus.PENDING });
   const { data: ordersData } = useOrders(orderFilter);
 
   const nextOrderStatusSteps = [
@@ -159,24 +160,30 @@ export default function CmsOrderPage() {
                 </Popconfirm>
               ) : (
                 <></>
-                // <Button
-                //   disabled
-                //   type="primary"
-                //   className="bg-red-600 text-white hover:!text-white hover:!bg-red-500"
-                //   size="large"
-                //   icon={<StopOutlined />}
-                // />
               )}
 
               {orderStatusStepIdx <= 1 && (
                 <Button onClick={() => {}} type="primary" danger size="large" icon={<DeleteOutlined />} />
               )}
-              {/* <Button
-               className="bg-green-600 text-white hover:!text-white hover:!bg-green-500"
-                type="primary"
-                size="large"
-                icon={<PrinterOutlined />}
-              /> */}
+              {record.status == OrderStatus.SUCCESS && (
+                <>
+                  <Popconfirm
+                    title={t('print_order')}
+                    description={t('do_want_print_order')}
+                    onConfirm={() => handlePrinter(record._id)}
+                    onCancel={() => {}}
+                    okText={t('yes')}
+                    cancelText={t('no')}
+                  >
+                    <Button
+                      className="bg-cyan-600 text-white hover:!text-white hover:!bg-cyan-500"
+                      type="primary"
+                      size="large"
+                      icon={<PrinterOutlined />}
+                    />
+                  </Popconfirm>
+                </>
+              )}
             </Space>
           </>
         );
@@ -226,7 +233,9 @@ export default function CmsOrderPage() {
     {
       key: 'deliveryAddress',
       label: t('delivery_address'),
-      children: <p>{`${orderInfo?.data?.deliveryAddress?.address}, ${orderInfo?.data?.deliveryAddress?.ward}, ${orderInfo?.data?.deliveryAddress?.district}, ${orderInfo?.data?.deliveryAddress?.province}`}</p>,
+      children: (
+        <p>{`${orderInfo?.data?.deliveryAddress?.address}, ${orderInfo?.data?.deliveryAddress?.ward}, ${orderInfo?.data?.deliveryAddress?.district}, ${orderInfo?.data?.deliveryAddress?.province}`}</p>
+      ),
     },
   ];
 
@@ -275,6 +284,10 @@ export default function CmsOrderPage() {
       });
   };
 
+  const handlePrinter = (orderId: string) => {
+    router.push(`/printer/${orderId}`);
+  };
+
   return (
     <>
       <Modal title={t('order_info')} centered open={isModalOpen} onOk={handleOk} onCancel={handleCancel} width={1000}>
@@ -292,12 +305,12 @@ export default function CmsOrderPage() {
       <div className="w-full flex justify-left items-center gap-3 mb-3">
         <Search
           style={{ width: 320 }}
-          onSearch={(value: string) => setOrderFilter({...orderFilter, code: value.trim() })}
-          placeholder="Search"
+          onSearch={(value: string) => setOrderFilter({ ...orderFilter, code: value.trim() })}
+          placeholder={t('search') || 'Tìm kiếm'}
           loading={false}
         />
         <Select
-          defaultValue={'all'}
+          defaultValue={OrderStatus.PENDING}
           style={{ width: 256 }}
           onChange={(statusValue: string) => {
             setOrderFilter((pre) => {
@@ -305,12 +318,12 @@ export default function CmsOrderPage() {
             });
           }}
           options={[
-            { value: 'all', label: 'Tất cả trạng thái' },
-            { value: OrderStatus.SUCCESS, label: 'Hoàn thành' },
             { value: OrderStatus.PENDING, label: 'Chờ xác nhận' },
             { value: OrderStatus.PREPARES_PACKAGE, label: 'Đang chuẩn bị' },
             { value: OrderStatus.IN_TRANSPORT, label: 'Đang vận chuyển' },
+            { value: OrderStatus.SUCCESS, label: 'Hoàn thành' },
             { value: OrderStatus.CANCEL, label: 'Hủy bỏ' },
+            { value: 'all', label: 'Tất cả trạng thái' },
           ]}
         />
       </div>
