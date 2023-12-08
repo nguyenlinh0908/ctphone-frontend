@@ -45,7 +45,7 @@ export class OrderService {
   }
 
   getOrders(filter: IOrderFilter) {
-    if(filter?.status && filter.status == "all") delete filter.status
+    if (filter?.status && filter.status == 'all') delete filter.status;
     return this.orderService.get<IResAPI<IOrder[]>>({ url: `${GATEWAY.order.find}${buildQueryString(filter)}` });
   }
 
@@ -63,15 +63,19 @@ export class OrderService {
   }
 
   purchaseHistory(filter: IOrderFilter) {
-    return this.orderService.get<IResAPI<IOrder[]>>({ url: `${GATEWAY.order.purchase_history}${buildQueryString(filter)}` });
+    return this.orderService.get<IResAPI<IOrder[]>>({
+      url: `${GATEWAY.order.purchase_history}${buildQueryString(filter)}`,
+    });
   }
 
   detail(orderId: string) {
     return this.orderService.get<IResAPI<IOrderItem[]>>({ url: `${GATEWAY.order.detail.replace(':id', orderId)}` });
   }
 
-  cancel(orderId: string) {
-    return this.orderService.patch<any, IResAPI<IOrder>>({ url: `${GATEWAY.order.cancel.replace(':id', orderId)}` });
+  cancel(orderId: string, note:string) {
+    return this.orderService.patch<any, IResAPI<IOrder>>({ url: `${GATEWAY.order.cancel.replace(':id', orderId)}`, data:JSON.stringify({
+      note
+    }) });
   }
 
   info(orderId: string) {

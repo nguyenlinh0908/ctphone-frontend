@@ -34,6 +34,8 @@ export interface IOrder {
   createdAt?: Date;
 
   deliveryAddress?:IDeliveryAddress
+
+  note?:string
 }
 
 export interface IOrderInfo {
@@ -56,6 +58,8 @@ export interface IOrderInfo {
   merchandiserId: IAccount;
 
   deliveryAddress:IDeliveryAddress
+
+  note?:string
 }
 
 export interface IOrderFilter {

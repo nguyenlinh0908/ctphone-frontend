@@ -107,5 +107,6 @@
   "search":"Tìm kiếm",
   "print_order":"In hóa đơn",
   "do_want_print_order":"Bạn có muốn in hóa đơn ?",
-  "amount_unit":"Đơn giá"
+  "amount_unit":"Đơn giá",
+  "note": "Ghi chú"
 }

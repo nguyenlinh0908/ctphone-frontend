@@ -6,12 +6,13 @@ import { IOrderItem } from '@interfaces/order/order-item.interface';
 import { IOrder, IOrderFilter, OrderStatus } from '@interfaces/order/order.interface';
 import { orderStatusSteps } from '@lng/(cms)/order/sevices/apis';
 import { formatPrice, timestampMongoToDate } from '@utils/string';
-import { Button, Modal, Popconfirm, Space, Tabs, TabsProps } from 'antd';
+import { Button, Modal, Popconfirm, Space, Tabs, TabsProps, message } from 'antd';
 import Table, { ColumnsType } from 'antd/es/table';
 import * as _ from 'lodash';
 import { useParams } from 'next/navigation';
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { useCancelOrder, useOrderDetail, usePurchaseHistory } from './services/apis';
+import NoteModal from '@lng/component/note-modal';
 
 export default function PurchaseHistoryPage() {
   const { lng } = useParams();
@@ -22,6 +23,9 @@ export default function PurchaseHistoryPage() {
   const { mutate: cancelOrderMutate } = useCancelOrder();
   const [purchaseHistoryFilter, setPurchaseHistoryFilter] = useState<IOrderFilter>({});
   const { data: purchaseHistory } = usePurchaseHistory(purchaseHistoryFilter);
+  const [isOpenNoteModal, setIsOpenNoteModal] = useState(false);
+  const [noteValue, setNoteValue] = useState('');
+  const { mutateAsync: cancelOrderMutateAsync } = useCancelOrder();
 
   const orderStatusTxt = ['', t('pending'), t('prepares_package'), t('in_transport'), t('success'), t('cancel')];
   const orderStatusColors = ['', 'text-yellow-600', 'text-cyan-600', 'text-blue-600', 'text-green-600', 'text-red-600'];
@@ -30,38 +34,32 @@ export default function PurchaseHistoryPage() {
     {
       title: '#',
       key: 'index',
-      width: '5%',
       render: (text, record, index) => ++index,
     },
     {
       title: t('code'),
       key: 'code',
-      width: '20%',
       render: (text, record, index) => record.code,
     },
     {
       title: t('quantity'),
       key: 'totalQuantity',
       render: (text, record, index) => record.totalQuantity,
-      width: '10%',
     },
     {
       title: t('amount'),
       key: 'totalAmount',
-      width: '10%',
       render: (text, record, index) => formatPrice(record.totalAmountAfterDiscount.toString()),
     },
     {
       title: t('order_date'),
       key: 'createdAt',
-      width: '20%',
       render: (text, record, index) => timestampMongoToDate(String(record?.createdAt) || '', 'DD/MM/YYYY HH:mm:ss'),
     },
     {
       title: t('status'),
       key: 'status',
       align: 'center',
-      width: '10%',
       render: (text, record, index) => {
         const orderStatusStepIdx = _.indexOf(orderStatusSteps, record.status);
         return (
@@ -91,12 +89,17 @@ export default function PurchaseHistoryPage() {
               {orderStatusStepIdx <= 1 && (
                 <Popconfirm
                   placement="right"
-                  onConfirm={() => handleCancelOrder(record._id)}
+                  onConfirm={() =>  handleShowNoteModal(record._id)}
                   okText="Yes"
                   cancelText="No"
                   title={t('do_want_cancel_order')}
                 >
-                  <Button type="primary" danger size="large" icon={<DeleteOutlined />} />
+                  <Button
+                    type="primary"
+                    danger
+                    size="large"
+                    icon={<DeleteOutlined />}
+                  />
                 </Popconfirm>
               )}
             </Space>
@@ -110,25 +113,21 @@ export default function PurchaseHistoryPage() {
     {
       title: '#',
       key: 'index',
-      width: '5%',
       render: (text, record, index) => ++index,
     },
     {
       title: t('code'),
       key: 'code',
-      width: '20%',
       render: (text, record, index) => record.productId.name,
     },
     {
       title: t('quantity'),
       key: 'totalQuantity',
       render: (text, record, index) => record.quantity,
-      width: '10%',
     },
     {
       title: t('amount'),
       key: 'totalAmount',
-      width: '10%',
       render: (text, record, index) => formatPrice(record.amount.toString()),
     },
   ];
@@ -166,7 +165,7 @@ export default function PurchaseHistoryPage() {
     },
   ];
   const handleCancelOrder = (orderId: string) => {
-    cancelOrderMutate(orderId);
+    cancelOrderMutate({ orderId, note: '' });
   };
 
   const handleViewDetail = (id: string) => {
@@ -186,8 +185,41 @@ export default function PurchaseHistoryPage() {
     setIsModalOpen(false);
   };
 
+  const handleShowNoteModal = (orderId: string) => {
+    setIsOpenNoteModal(true);
+    setViewOrderId(orderId);
+  };
+
+  const handleSubmitOrderNote = () => {
+    cancelOrderMutateAsync({ orderId: viewOrderId, note: noteValue })
+      .then((data) => message.success(t('success')))
+      .catch((err) => {
+        message.error(t('something_wrong'));
+      })
+      .finally(() => {
+        setIsOpenNoteModal(false);
+        setViewOrderId('');
+      });
+  };
+
+  const handleCancelOrderNoteModal = () => {
+    setIsOpenNoteModal(false);
+  };
+
+  const handleOnChangeNote = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    setNoteValue(e.target.value.trim());
+  };
+
   return (
     <>
+      <NoteModal
+        title={t('note')}
+        handleOk={handleSubmitOrderNote}
+        isOpen={isOpenNoteModal}
+        handleCancel={handleCancelOrderNoteModal}
+        handleOnChange={handleOnChangeNote}
+      />
+
       <Modal title={t('order_info')} centered open={isModalOpen} onOk={handleOk} onCancel={handleCancel} width={1000}>
         <Table columns={columnsOrderDetail} dataSource={orderDetail?.data} />
       </Modal>

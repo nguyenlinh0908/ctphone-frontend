@@ -1,4 +1,4 @@
-import { IOrderFilter } from '@interfaces/order/order.interface';
+import { IOrderFilter, OrderStatus } from '@interfaces/order/order.interface';
 import { OrderService } from '@services/order.service';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 
@@ -15,9 +15,16 @@ export const useOrderDetail = (orderId: string) => {
 export const useCancelOrder = () => {
   const queryClient = useQueryClient();
 
-  return useMutation('cancel', (orderId: string) => orderService.cancel(orderId), {
-    onSuccess: () => {
-      queryClient.invalidateQueries('purchaseHistory');
+  return useMutation(
+    'cancel',
+    ({ orderId, note }: { orderId: string; note: string }) => orderService.cancel(orderId, note),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(`purchaseHistoryundefined`);
+        queryClient.invalidateQueries(`purchaseHistory${OrderStatus.CANCEL}`);
+        queryClient.invalidateQueries(`cmsOrders${OrderStatus.SUCCESS}`);
+        queryClient.invalidateQueries(`cmsOrders${OrderStatus.CANCEL}`);
+      },
     },
-  });
+  );
 };

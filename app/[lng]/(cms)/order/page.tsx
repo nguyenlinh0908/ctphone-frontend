@@ -14,7 +14,7 @@ import {
 import { useTranslation } from '@i18n';
 import { IOrderItem } from '@interfaces/order/order-item.interface';
 import { IOrder, IOrderFilter, OrderStatus } from '@interfaces/order/order.interface';
-import { useOrderDetail } from '@lng/(public)/purchase_history/services/apis';
+import { useCancelOrder, useOrderDetail } from '@lng/(public)/purchase_history/services/apis';
 import { formatPrice, timestampMongoToDate } from '@utils/string';
 import {
   Button,
@@ -33,7 +33,7 @@ import Search from 'antd/es/input/Search';
 import { ColumnsType } from 'antd/es/table';
 import * as _ from 'lodash';
 import { useParams, useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import {
   orderStatusSteps,
   useConfirmOrder,
@@ -43,6 +43,7 @@ import {
   useOrders,
   useStaffInfo,
 } from './sevices/apis';
+import NoteModal from '@lng/component/note-modal';
 
 export default function CmsOrderPage() {
   const { lng } = useParams();
@@ -61,6 +62,13 @@ export default function CmsOrderPage() {
   const { data: merchandiserOrderInfo } = useStaffInfo(orderInfo?.data?.merchandiserId?.userId || '');
   const [orderFilter, setOrderFilter] = useState<IOrderFilter>({ status: OrderStatus.PENDING });
   const { data: ordersData } = useOrders(orderFilter);
+  const [isOpenNoteModal, setIsOpenNoteModal] = useState(false);
+  const [noteValue, setNoteValue] = useState('');
+  const { mutateAsync: cancelOrderMutateAsync } = useCancelOrder();
+
+  useEffect(() => {
+    console.log('orderFilter :>> ', orderFilter);
+  }, [orderFilter]);
 
   const nextOrderStatusSteps = [
     <ShoppingCartOutlined key="1" />,
@@ -162,10 +170,17 @@ export default function CmsOrderPage() {
                 <></>
               )}
 
-              {orderStatusStepIdx <= 1 && (
-                <Button onClick={() => {}} type="primary" danger size="large" icon={<DeleteOutlined />} />
+              {OrderStatus.SUCCESS == record.status && (
+                <Button
+                  onClick={() => handleShowNoteModal(record._id)}
+                  type="primary"
+                  danger
+                  size="large"
+                  icon={<DeleteOutlined />}
+                />
               )}
-              {record.status == OrderStatus.SUCCESS && (
+
+              {record.status == OrderStatus.PREPARES_PACKAGE && (
                 <>
                   <Popconfirm
                     title={t('print_order')}
@@ -237,6 +252,11 @@ export default function CmsOrderPage() {
         <p>{`${orderInfo?.data?.deliveryAddress?.address}, ${orderInfo?.data?.deliveryAddress?.ward}, ${orderInfo?.data?.deliveryAddress?.district}, ${orderInfo?.data?.deliveryAddress?.province}`}</p>
       ),
     },
+    {
+      key: 'note',
+      label: t('note'),
+      children: <p>{orderInfo?.data.note}</p>,
+    },
   ];
 
   const orderInfoItems: DescriptionsProps['items'] = [
@@ -288,8 +308,41 @@ export default function CmsOrderPage() {
     router.push(`/printer/${orderId}`);
   };
 
+  const handleShowNoteModal = (orderId: string) => {
+    setIsOpenNoteModal(true);
+    setViewOrderId(orderId);
+  };
+
+  const handleSubmitOrderNote = () => {
+    cancelOrderMutateAsync({ orderId: viewOrderId, note: noteValue })
+      .then((data) => message.success(t('success')))
+      .catch((err) => {
+        message.error(t('something_wrong'));
+      })
+      .finally(() => {
+        setIsOpenNoteModal(false);
+        setViewOrderId('');
+      });
+  };
+
+  const handleCancelOrderNoteModal = () => {
+    setIsOpenNoteModal(false);
+  };
+
+  const handleOnChangeNote = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    setNoteValue(e.target.value.trim());
+  };
+
   return (
     <>
+      <NoteModal
+        title={t('note') || ''}
+        handleOk={handleSubmitOrderNote}
+        isOpen={isOpenNoteModal}
+        handleCancel={handleCancelOrderNoteModal}
+        handleOnChange={handleOnChangeNote}
+      />
+
       <Modal title={t('order_info')} centered open={isModalOpen} onOk={handleOk} onCancel={handleCancel} width={1000}>
         <Row>
           <Col>

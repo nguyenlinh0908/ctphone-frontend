@@ -55,22 +55,24 @@ export default function CartPage() {
   };
 
   const handleCheckout = (orderId: string) => {
-    if (paymentMethod == 1) {
-      createPaymentVnpayMutate({ orderId, bankCode: '' });
-    } else {
-      checkoutMutateAsync(orderId)
-        .then(() => {
-          messageApi.open({
-            type: 'success',
-            content: t('order_success'),
-          });
-        })
-        .catch((err) =>
-          messageApi.open({
-            type: 'error',
-            content: t('something_wrong'),
-          }),
-        );
+    if (window.confirm('Xác nhận đặt hàng')) {
+      if (paymentMethod == 1) {
+        createPaymentVnpayMutate({ orderId, bankCode: '' });
+      } else {
+        checkoutMutateAsync(orderId)
+          .then(() => {
+            messageApi.open({
+              type: 'success',
+              content: t('order_success'),
+            });
+          })
+          .catch((err) =>
+            messageApi.open({
+              type: 'error',
+              content: t('something_wrong'),
+            }),
+          );
+      }
     }
   };
 

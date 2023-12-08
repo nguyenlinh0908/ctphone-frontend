@@ -22,12 +22,12 @@ export const useConfirmOrder = () => {
     ({ orderId, status }: { orderId: string; status: OrderStatus }) => orderService.changeOrderStatus(orderId, status),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(`cmsOrders${"all"}`)
-        queryClient.invalidateQueries(`cmsOrders${OrderStatus.SUCCESS}`)
-        queryClient.invalidateQueries(`cmsOrders${OrderStatus.CANCEL}`)
-        queryClient.invalidateQueries(`cmsOrders${OrderStatus.IN_TRANSPORT}`)
-        queryClient.invalidateQueries(`cmsOrders${OrderStatus.PENDING}`)
-        queryClient.invalidateQueries(`cmsOrders${OrderStatus.PREPARES_PACKAGE}`)
+        queryClient.invalidateQueries(`cmsOrders${'all'}`);
+        queryClient.invalidateQueries(`cmsOrders${OrderStatus.SUCCESS}`);
+        queryClient.invalidateQueries(`cmsOrders${OrderStatus.CANCEL}`);
+        queryClient.invalidateQueries(`cmsOrders${OrderStatus.IN_TRANSPORT}`);
+        queryClient.invalidateQueries(`cmsOrders${OrderStatus.PENDING}`);
+        queryClient.invalidateQueries(`cmsOrders${OrderStatus.PREPARES_PACKAGE}`);
       },
     },
   );
@@ -46,5 +46,5 @@ export const useOrderInfo = (orderId: string) => {
 };
 
 export const useOrders = (filter: IOrderFilter) => {
-  return useQuery(`cmsOrders${filter?.status ? filter.status : "all"}`, () => orderService.getOrders(filter));
+  return useQuery(`cmsOrders${filter?.code && filter.code}${filter?.status ? filter.status : 'all'}`, () => orderService.getOrders(filter));
 };
