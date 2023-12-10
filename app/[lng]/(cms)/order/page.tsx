@@ -15,7 +15,7 @@ import {
 import { useTranslation } from '@i18n';
 import { IOrderItem } from '@interfaces/order/order-item.interface';
 import { IOrder, IOrderFilter, OrderStatus } from '@interfaces/order/order.interface';
-import { useCancelOrder, useOrderDetail } from '@lng/(public)/purchase_history/services/apis';
+import { useCancelOrder, useOrderDetail } from '@lng/(public)/(no_banner)/purchase_history/services/apis';
 import { formatPrice, timestampMongoToDate } from '@utils/string';
 import {
   Button,

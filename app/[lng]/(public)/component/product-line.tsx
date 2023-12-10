@@ -45,7 +45,8 @@ export default function ProductLine({ title, products, categoryId }: IProductLin
                   enable={false}
                   romUnit={product.romUnit}
                   ramUnit={product.ramUnit}
-                  categoryId={product.categoryId} quantity={product.quantity}                  
+                  categoryId={product.categoryId} quantity={product.quantity}              
+                  startingPrice={product?.startingPrice}    
                 />
               </Col>
             );

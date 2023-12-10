@@ -100,6 +100,7 @@ export class BaseService {
         'Accept-Language': this.language,
       },
       timeout: 60000,
+      maxContentLength:10000000 //10mb
       // withCredentials: true,
     });
 

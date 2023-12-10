@@ -29,6 +29,8 @@ import { useAllCategories } from '../category/services/apis';
 import { useAllProducts, useCreateProduct, useUpdateProductStatus } from './services/apis';
 import { GATEWAY } from '@services/base';
 import { getCookie } from 'cookies-next';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 const getBase64 = (file: RcFile): Promise<string> =>
   new Promise((resolve, reject) => {
@@ -45,6 +47,28 @@ const uploadButton = (
   </div>
 );
 
+const toolbarOptions = [
+  ['bold', 'italic', 'underline', 'strike'], // toggled buttons
+  ['blockquote', 'code-block'],
+
+  [{ header: 1 }, { header: 2 }], // custom button values
+  [{ list: 'ordered' }, { list: 'bullet' }],
+  [{ script: 'sub' }, { script: 'super' }], // superscript/subscript
+  [{ indent: '-1' }, { indent: '+1' }], // outdent/indent
+  [{ direction: 'rtl' }], // text direction
+
+  [{ size: ['small', false, 'large', 'huge'] }], // custom dropdown
+  [{ header: [1, 2, 3, 4, 5, 6, false] }],
+
+  [{ color: [] }, { background: [] }], // dropdown with defaults from theme
+  [{ font: [] }],
+  [{ align: [] }],
+
+  ['clean'], // remove formatting button
+
+  ['link', 'image', 'video'], // link and image, video
+];
+
 export default function ProductPage() {
   const { lng } = useParams();
   const { t } = useTranslation(lng);
@@ -60,6 +84,10 @@ export default function ProductPage() {
   const { mutateAsync: createProductMutateAsync } = useCreateProduct();
   const [formatHex, setFormatHex] = useState<ColorPickerProps['format']>('hex');
   const [colorHex, setColorHex] = useState<Color | string>('#1677ff');
+  const [ramUnit, setRamUnit] = useState('GB');
+  const [romUnit, setRomUnit] = useState('GB');
+  const [description, setDescription] = useState('');
+
   const [form] = useForm();
 
   const columns: ColumnsType<IProduct> = [
@@ -83,7 +111,7 @@ export default function ProductPage() {
       title: t('quantity'),
       key: 'quantity',
       render: (text, record, index) => (
-        <span className={record.quantity < 5 ? "text-yellow-600" : ""}>{record.quantity}</span>
+        <span className={record.quantity < 5 ? 'text-yellow-600' : ''}>{record.quantity}</span>
       ),
     },
     {
@@ -178,8 +206,8 @@ export default function ProductPage() {
         values.colorCode = `#${typeof colorHex == 'string' ? colorHex : colorHex.toHex()}`;
       }
       const mediaIds = fileList.map((i) => i.response.data._id);
-
-      createProductMutateAsync({ ...values, mediaIds })
+      console.log('object :>> ', values, description);
+      createProductMutateAsync({ ...values, mediaIds, description, romUnit, ramUnit })
         .then(() => {
           message.success(t('create_product_success'));
           form.resetFields();
@@ -204,6 +232,10 @@ export default function ProductPage() {
         </Button>
       </div>
       <Modal
+        style={{
+          overflowY: 'auto', // Enable vertical scrolling
+          maxHeight: '100vh', // Set a maximum height if needed
+        }}
         title={t('product_info')}
         centered
         open={openModal}
@@ -229,48 +261,151 @@ export default function ProductPage() {
           {fileList.length >= 8 ? null : uploadButton}
         </Upload>
         <Form layout="vertical" form={form}>
-          <Form.Item>
-            <Form.Item label={'SKU'} name={'sku'}>
+          <div className="flex justify-start items-center gap-3">
+            <Form.Item
+              label={'SKU'}
+              name={'sku'}
+              rules={[
+                {
+                  required: true,
+                  message: 'Mã sku là bắt buộc',
+                },
+              ]}
+            >
               <Input />
             </Form.Item>
-            <Form.Item label={t('product_name')} name={'name'}>
-              <Input />
+            <Form.Item
+              label={t('product_name')}
+              name={'name'}
+              rules={[
+                {
+                  required: true,
+                  message: 'Tên sản phẩm là bắt buộc',
+                },
+              ]}
+            >
+              <Input className="!w-48" />
             </Form.Item>
             <Form.Item label={t('category_name')} name={'categoryId'}>
               <Select
+                className="!w-48"
                 value={parentCategoryId}
                 onChange={(e) => setParentCategoryId(e)}
                 options={allCategories?.data.map((category) => ({ label: category.name, value: category._id }))}
               />
             </Form.Item>
-          </Form.Item>
-          <Form.Item>
-            <Form.Item label={t('color_name')} name={'colorName'}>
+          </div>
+
+          <div className="flex justify-start items-center gap-3">
+            <Form.Item
+              label={t('color_name')}
+              name={'colorName'}
+              rules={[
+                {
+                  required: true,
+                  message: 'Tên màu sản phẩm là bắt buộc',
+                },
+              ]}
+            >
               <Input />
             </Form.Item>
-            <Form.Item label={t('color_code')} name={'colorCode'}>
+            <Form.Item
+              label={t('color_code')}
+              name={'colorCode'}
+              rules={[
+                {
+                  required: true,
+                  message: 'Mã màu sản phẩm là bắt buộc',
+                },
+              ]}
+            >
               <ColorPicker format={formatHex} value={colorHex} onChange={setColorHex} onFormatChange={setFormatHex} />
             </Form.Item>
-          </Form.Item>
-          <Form.Item label={t('price')} name="price">
-            <InputNumber />
-          </Form.Item>
-          <Form.Item>
-            <Form.Item label={'Ram'} name={'ram'}>
-              <InputNumber />
+          </div>
+
+          <div className="flex justify-start gap-3">
+            <Form.Item
+              label={t('price')}
+              name="price"
+              rules={[
+                {
+                  required: true,
+                  message: 'Giá bán sản phẩm là bắt buộc',
+                },
+              ]}
+            >
+              <InputNumber min={0} className="!w-64" />
+            </Form.Item>
+            <Form.Item label={t('starting_price')} name="startingPrice" rules={[{ required: false }]}>
+              <InputNumber min={0} className="!w-64" />
+            </Form.Item>
+          </div>
+
+          <div className="flex justify-start items-center gap-3">
+            <Form.Item label={'Ram'} name={'ram'} rules={[{ required: true, message: 'Số lượng ram là bắt buộc' }]}>
+              <InputNumber min={0} />
             </Form.Item>
             <Form.Item label={`${t('unit')} ram`} name={'ramUnit'}>
-              <Input />
+              <Select
+                className="!w-48"
+                defaultValue={ramUnit}
+                onChange={(e) => setRamUnit(e)}
+                options={[
+                  {
+                    value: 'MB',
+                    label: 'Megabyte (MB)',
+                  },
+                  {
+                    value: 'GB',
+                    label: 'Gigabyte (GB)',
+                  },
+                  {
+                    value: 'TB',
+                    label: 'Terabyte (TB)',
+                  },
+                ]}
+              />
             </Form.Item>
-          </Form.Item>
-          <Form.Item>
-            <Form.Item label={'Rom'} name={'rom'}>
-              <InputNumber />
+          </div>
+
+          <div className="flex justify-start items-center gap-3">
+            <Form.Item label={'Rom'} name={'rom'} rules={[{ required: true, message: 'Số lượng rom là bắt buộc' }]}>
+              <InputNumber min={0} />
             </Form.Item>
             <Form.Item label={`${t('unit')} rom`} name={'romUnit'}>
-              <Input />
+              <Select
+                className="!w-48"
+                defaultValue={romUnit}
+                onChange={(e) => setRomUnit(e)}
+                options={[
+                  {
+                    value: 'MB',
+                    label: 'Megabyte (MB)',
+                  },
+                  {
+                    value: 'GB',
+                    label: 'Gigabyte (GB)',
+                  },
+                  {
+                    value: 'TB',
+                    label: 'Terabyte (TB)',
+                  },
+                ]}
+              />
             </Form.Item>
-          </Form.Item>
+          </div>
+          <div>
+            <Form.Item name="description" label={t('description')} rules={[{ required: false }]}>
+              <ReactQuill
+                modules={{
+                  toolbar: toolbarOptions,
+                }}
+                theme="snow"
+                style={{ height: 256 }}
+                onChange={(value: string) => setDescription(value)}
+              />
+            </Form.Item>
+          </div>
         </Form>
       </Modal>
       <Table columns={columns} dataSource={allProducts?.data} />

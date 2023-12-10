@@ -4,7 +4,7 @@ import { useTranslation } from '@i18n';
 import { Descriptions } from 'antd';
 import DescriptionsItem from 'antd/es/descriptions/Item';
 import { useParams } from 'next/navigation';
-import { useProfile } from '../services/apis';
+import { useProfile } from '../../services/apis';
 import dayjs from 'dayjs';
 
 export default function ProfilePage() {

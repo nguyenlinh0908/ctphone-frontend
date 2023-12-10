@@ -2,8 +2,8 @@
 
 import { Empty } from 'antd';
 import { useSearchParams } from 'next/navigation';
-import ProductGrid from '../component/product-grid';
-import { useProducts } from '../services/apis';
+import ProductGrid from '../../component/product-grid';
+import { useProducts } from '../../services/apis';
 
 export default function SearchPage() {
   const searchParams = useSearchParams();

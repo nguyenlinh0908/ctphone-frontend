@@ -1,7 +1,7 @@
 'use client';
 
-import { useNavigationCategories, useProducts } from './services/apis';
-import ProductLine from './component/product-line';
+import { useNavigationCategories, useProducts } from '../services/apis';
+import ProductLine from '../component/product-line';
 
 export default function HomePage() {
   const { data: categories } = useNavigationCategories({ dept: 1 });

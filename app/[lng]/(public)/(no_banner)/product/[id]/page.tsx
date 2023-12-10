@@ -48,7 +48,10 @@ export default function ProductDetail() {
             </Col>
             <Col span={12}>
               <WrapperInfo name={product.data.name || ''} rate={'4.5'} />
-              <Prices price={product.data.price || ''} oldPrice={'40000000'} />
+              <Prices
+                price={product.data.price.toString() || ''}
+                oldPrice={product.data?.startingPrice ? product.data?.startingPrice.toString() : ''}
+              />
               {productsSuccess && <Attributes primaryProduct={product.data} products={products.data.data} />}
               <Space className="py-3" direction="vertical" style={{ width: '100%' }}>
                 <Button
@@ -60,11 +63,12 @@ export default function ProductDetail() {
                   block
                   style={{ height: 64 }}
                 >
-                  {product.data.enable ? t('buy_now'):t('product_unavailable')}
+                  {product.data.enable ? t('buy_now') : t('product_unavailable')}
                 </Button>
               </Space>
             </Col>
           </Row>
+          {product.data?.description && <div dangerouslySetInnerHTML={{ __html: product.data.description }} />}
         </>
       )}
     </>

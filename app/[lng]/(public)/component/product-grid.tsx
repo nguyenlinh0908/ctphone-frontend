@@ -30,7 +30,7 @@ export default function ProductGrid({ products, limit, totalRecords, handleChang
   const { t } = useTranslation(lng);
   return (
     <>
-      <Row className="mb-5" gutter={[64, 32]} align={'middle'} justify={'start'}>
+      <Row className="mb-5" gutter={[16, 16]} align={'middle'} justify={'start'}>
         {products.length > 0 &&
           products.map((product, idx) => {
             return (

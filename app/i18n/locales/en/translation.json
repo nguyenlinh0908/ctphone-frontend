@@ -108,5 +108,7 @@
   "print_order": "Print order",
   "do_want_print_order": "Do you want to print order ?",
   "amount_unit": "Amount Unit",
-  "note": "Note"
+  "note": "Note",
+  "starting_price":"Staring price",
+  "description":"Description"
 }

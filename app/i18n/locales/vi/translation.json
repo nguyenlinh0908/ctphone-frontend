@@ -108,5 +108,7 @@
   "print_order":"In hóa đơn",
   "do_want_print_order":"Bạn có muốn in hóa đơn ?",
   "amount_unit":"Đơn giá",
-  "note": "Ghi chú"
+  "note": "Ghi chú",
+  "starting_price":"Giá khởi điểm",
+  "description":"Mô tả"
 }

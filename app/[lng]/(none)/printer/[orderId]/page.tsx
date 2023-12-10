@@ -1,7 +1,7 @@
 'use client';
 
 import { useOrderInfo } from '@lng/(cms)/order/sevices/apis';
-import { useOrderDetail } from '@lng/(public)/purchase_history/services/apis';
+import { useOrderDetail } from '@lng/(public)/(no_banner)/purchase_history/services/apis';
 import { useParams } from 'next/navigation';
 import ctphoneLogo from '@public/logo-mobile.png';
 import { Descriptions } from 'antd';

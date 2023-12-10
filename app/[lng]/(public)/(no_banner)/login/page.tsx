@@ -1,79 +1,50 @@
 'use client';
 
-import { Row, Col, Image, Form, Input, Button, Checkbox, notification } from 'antd';
-import LoginBanner from '@public/login/VNU_M492_08 1.jpeg';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { ILoginInput, Role } from '@interfaces/auth/auth.interface';
-import { useEffect, useState } from 'react';
 import { useTranslation } from '@i18n';
-import { useLogin } from './services/apis';
+import { ILoginInput, Role } from '@interfaces/auth/auth.interface';
+import LoginBanner from '@public/login/VNU_M492_08 1.jpeg';
+import { Button, Checkbox, Col, Form, Image, Input, Row, message } from 'antd';
+import { useForm } from 'antd/es/form/Form';
 import { getCookie } from 'cookies-next';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+import { useLogin } from './services/apis';
 
-interface ILoginProps {
-  params: { lng: string };
-}
-
-export default function Login({ params: { lng } }: ILoginProps) {
-  const [loginInput, setLoginInput] = useState<ILoginInput>({ username: '', password: '' });
+export default function Login() {
   const router = useRouter();
-  const { t } = useTranslation(lng);
-  const openNotification = (message: string) => {
-    api.open({
-      message,
-      description: '',
-      duration: 1,
-    });
-  };
-  const {
-    data: loginData,
-    mutateAsync: loginAsync,
-    mutate: LoginMutate,
-    isSuccess: isLoginSuccess,
-    isError: isLoginError,
-  } = useLogin();
-  const [api, contextHolder] = notification.useNotification();
+  const params = useParams()
+
+  const { t } = useTranslation(params?.lng || "vi");
+  const [form] = useForm<ILoginInput>();
+
+  const { mutateAsync: loginAsync } = useLogin();
 
   useEffect(() => {
     const refreshToken = getCookie('refreshToken');
     if (refreshToken) router.push('/');
   }, [router]);
 
-  useEffect(() => {
-    if (isLoginSuccess) {
-      const roles = loginData.data.me.roles;
-      if (roles.includes(Role.ADMIN)) {
-        router.push('/dashboard');
-      } else {
-        router.push('/');
-      }
-    }
-    if (isLoginError) openNotification(t('login_fail'));
-  }, [isLoginSuccess, router, t, openNotification, isLoginError, loginData]);
+  const handleSubmit = async () => {
+    const values = await form.validateFields();
 
-  const handleInputChange = (e: any) => {
-    switch (e.target.name) {
-      case 'username': {
-        setLoginInput((preState) => {
-          return { ...preState, username: e.target.value };
-        });
-        break;
-      }
-      case 'password': {
-        setLoginInput({ ...loginInput, password: e.target.value });
-        break;
-      }
-      default:
-    }
-  };
-
-  const handleSubmit = () => {
-    LoginMutate(loginInput);
+    loginAsync(values)
+      .then((data) => {
+        const roles = data.data.me.roles;
+        message.success(t('success'));
+        if (roles.includes(Role.ADMIN)) {
+          router.push('/dashboard');
+        } else {
+          router.push('/');
+        }
+      })
+      .catch((err) => {
+        message.error(t('login_fail'));
+      });
   };
 
   return (
     <>
-      {contextHolder}
       <Row gutter={16}>
         <Col span={12}>
           <Image preview={false} className="w-50" src={LoginBanner.src} />
@@ -85,6 +56,7 @@ export default function Login({ params: { lng } }: ILoginProps) {
             initialValues={{
               remember: true,
             }}
+            form={form}
           >
             <h1>{t('login')}</h1>
             <Form.Item
@@ -92,15 +64,14 @@ export default function Login({ params: { lng } }: ILoginProps) {
               rules={[
                 {
                   required: true,
-                  message: t('required_username') && ' Please input your Username!',
+                  message: t('required_username') && 'Tên đăng nhập là bắt buộc',
                 },
               ]}
             >
               <Input
                 prefix={<UserOutlined className="site-form-item-icon p-3" />}
-                placeholder={t('username') && 'Username'}
+                placeholder={t('username') && 'Tên người dùng'}
                 name="username"
-                onChange={(e) => handleInputChange(e)}
               />
             </Form.Item>
             <Form.Item
@@ -108,16 +79,15 @@ export default function Login({ params: { lng } }: ILoginProps) {
               rules={[
                 {
                   required: true,
-                  message: t('required_password') && 'Please input your Password!',
+                  message: t('required_password') && 'Mật khẩu là bắt buộc',
                 },
               ]}
             >
               <Input
                 prefix={<LockOutlined className="site-form-item-icon p-3" />}
                 type="password"
-                placeholder={t('password') && 'Password'}
+                placeholder={t('password') && 'Mật khẩu'}
                 name="password"
-                onChange={(e) => handleInputChange(e)}
               />
             </Form.Item>
             <Form.Item>

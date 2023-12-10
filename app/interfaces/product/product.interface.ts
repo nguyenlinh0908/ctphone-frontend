@@ -8,7 +8,11 @@ export interface IProduct {
 
   name: string;
 
-  price: string;
+  price: number;
+
+  startingPrice?:number
+
+  description?:string
 
   enable: boolean;
 
@@ -55,6 +59,10 @@ export interface ICreateProductInput {
   name: string;
 
   price: string;
+
+  startingPrice?:string
+
+  description?:string
 
   sku: string;
 

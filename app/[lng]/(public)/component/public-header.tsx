@@ -20,6 +20,8 @@ import { getCookie } from 'cookies-next';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { useLogout, useNavigationCategories } from '../services/apis';
+import Image from 'next/image';
+import Logo from "@public/logo-mobile.png"
 
 export default function PublicHeader() {
   const { lng } = useParams();
@@ -59,7 +61,9 @@ export default function PublicHeader() {
         alignItems: 'center',
       }}
     >
-      <div className="demo-logo" />
+      <div className="demo-logo flex items-center" onClick={()=>router.push("/")}>
+          <Image width={64} src={Logo} alt={'logo'} />
+      </div>
       <Menu
         className="w-full"
         theme="dark"
@@ -68,14 +72,6 @@ export default function PublicHeader() {
         onClick={(key) => handleClickMenuItem(key)}
         items={
           categories && [
-            {
-              key: 'home',
-              label: (
-                <Link href={'/'}>
-                  <HomeOutlined />
-                </Link>
-              ),
-            },
             ...categories.data.map((category, idx) => ({
               key: category._id,
               label: (
