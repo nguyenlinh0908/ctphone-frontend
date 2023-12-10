@@ -33,9 +33,11 @@ export interface IOrder {
 
   createdAt?: Date;
 
-  deliveryAddress?:IDeliveryAddress
+  updatedAt?: Date;
 
-  note?:string
+  deliveryAddress?: IDeliveryAddress;
+
+  note?: string;
 }
 
 export interface IOrderInfo {
@@ -53,13 +55,15 @@ export interface IOrderInfo {
 
   createdAt?: Date;
 
+  updatedAt?: Date;
+
   ownerId: IAccount;
 
   merchandiserId: IAccount;
 
-  deliveryAddress:IDeliveryAddress
+  deliveryAddress: IDeliveryAddress;
 
-  note?:string
+  note?: string;
 }
 
 export interface IOrderFilter {

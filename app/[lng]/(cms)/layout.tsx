@@ -39,7 +39,7 @@ function getItem(label: React.ReactNode, key: React.Key, icon?: React.ReactNode,
 
 const items: MenuItem[] = [
   getItem(<Link href={'/dashboard'}>Tổng quan</Link>, 'dashboard', <PieChartOutlined />),
-  getItem(<Link href={'/staff'}>Nhân viên</Link>, 'staff', <DesktopOutlined />),
+  // getItem(<Link href={'/staff'}>Nhân viên</Link>, 'staff', <DesktopOutlined />),
   getItem(<Link href={'/order'}>Đơn bán hàng</Link>, 'order', <ShoppingCartOutlined />),
   getItem(<Link href={'/category'}>Danh mục</Link>, 'category', <SwitcherOutlined />),
   getItem(<Link href={'/product'}>Sản phẩm</Link>, 'product', <CoffeeOutlined />),

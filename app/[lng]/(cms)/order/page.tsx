@@ -10,6 +10,7 @@ import {
   PrinterOutlined,
   ShoppingCartOutlined,
   StopOutlined,
+  UndoOutlined,
 } from '@ant-design/icons';
 import { useTranslation } from '@i18n';
 import { IOrderItem } from '@interfaces/order/order-item.interface';
@@ -28,6 +29,7 @@ import {
   Space,
   Table,
   message,
+  Tooltip,
 } from 'antd';
 import Search from 'antd/es/input/Search';
 import { ColumnsType } from 'antd/es/table';
@@ -44,6 +46,7 @@ import {
   useStaffInfo,
 } from './sevices/apis';
 import NoteModal from '@lng/component/note-modal';
+import dayjs from 'dayjs';
 
 export default function CmsOrderPage() {
   const { lng } = useParams();
@@ -65,10 +68,6 @@ export default function CmsOrderPage() {
   const [isOpenNoteModal, setIsOpenNoteModal] = useState(false);
   const [noteValue, setNoteValue] = useState('');
   const { mutateAsync: cancelOrderMutateAsync } = useCancelOrder();
-
-  useEffect(() => {
-    console.log('orderFilter :>> ', orderFilter);
-  }, [orderFilter]);
 
   const nextOrderStatusSteps = [
     <ShoppingCartOutlined key="1" />,
@@ -144,11 +143,38 @@ export default function CmsOrderPage() {
         } else {
           nextOrderStatusStep = orderStatusSteps[orderStatusStepIdx + 1];
         }
+        const currentTimestamp = dayjs().valueOf();
+        const updatedAtTimestamp = dayjs(record?.updatedAt || new Date()).valueOf();
+        const aboutTimeChangedStatus = currentTimestamp - updatedAtTimestamp;
+        const allowRevertChangedStatusTime = process.env.NEXT_PUBLIC_ALLOW_REVERT_CHANGE_STATUS_TIME
+          ? +process.env.NEXT_PUBLIC_ALLOW_REVERT_CHANGE_STATUS_TIME
+          : 0;
+        const statusPositionIdx = orderStatusSteps.findIndex((item) => item == record.status);
+        const previousStatus = orderStatusSteps[statusPositionIdx - 1];
 
         return (
           <>
             <Space size={'small'}>
               <Button onClick={() => handleViewDetail(record._id)} type="primary" size="large" icon={<EyeOutlined />} />
+              {/* rollback status order when wrong action */}
+              {[
+                OrderStatus.PREPARES_PACKAGE,
+                OrderStatus.IN_TRANSPORT,
+                OrderStatus.SUCCESS,
+                OrderStatus.CANCEL,
+              ].includes(record.status) && aboutTimeChangedStatus < allowRevertChangedStatusTime ? (
+                <Tooltip title="Hoàn tác">
+                  <Button
+                    onClick={() => handleRollbackStatus(record._id, previousStatus)}
+                    className="bg-yellow-600 text-white hover:!text-white hover:!bg-yellow-500"
+                    type="primary"
+                    size="large"
+                    icon={<UndoOutlined />}
+                  />
+                </Tooltip>
+              ) : (
+                <></>
+              )}
               {![OrderStatus.CANCEL, OrderStatus.SUCCESS].includes(record.status) ? (
                 <Popconfirm
                   title={t('change_order_status')}
@@ -277,8 +303,6 @@ export default function CmsOrderPage() {
     },
   ];
 
-  const { data: orders, isSuccess } = useOrderCms();
-
   const handleViewDetail = (id: string) => {
     setViewOrderId(id);
     showModal();
@@ -297,7 +321,7 @@ export default function CmsOrderPage() {
   };
 
   const handleChangeStatus = (orderId: string, nextOrderStatus: OrderStatus) => {
-    confirmOrderMutateAsync({ orderId, status: nextOrderStatus })
+    confirmOrderMutateAsync({ orderId, status: nextOrderStatus, currentFilter: orderFilter })
       .then(() => message.success(t('update_order_status_success')))
       .catch((err) => {
         message.error(err.response.data.message);
@@ -331,6 +355,18 @@ export default function CmsOrderPage() {
 
   const handleOnChangeNote = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setNoteValue(e.target.value.trim());
+  };
+
+  const handleRollbackStatus = (orderId: string, status: OrderStatus) => {
+    if (window.confirm('Bạn có muốn hoàn tác trạng thái')) {
+      confirmOrderMutateAsync({ orderId, status, currentFilter: orderFilter })
+        .then(() => {
+          message.success('Hoàn tác trạng thái thành công');
+        })
+        .catch((err) => {
+          message.error('Hoàn tác trạng thái không thành công');
+        });
+    }
   };
 
   return (

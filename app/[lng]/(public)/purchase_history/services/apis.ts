@@ -20,6 +20,7 @@ export const useCancelOrder = () => {
     ({ orderId, note }: { orderId: string; note: string }) => orderService.cancel(orderId, note),
     {
       onSuccess: () => {
+        queryClient.invalidateQueries(["cmsOrders"])
         queryClient.invalidateQueries(`purchaseHistoryundefined`);
         queryClient.invalidateQueries(`purchaseHistory${OrderStatus.CANCEL}`);
         queryClient.invalidateQueries(`cmsOrders${OrderStatus.SUCCESS}`);
